@@ -19,13 +19,11 @@ public class LevelTwo : MonoBehaviour
     //objects in the scene
     private string[] objects = new string[] { "player" };
     public Button run;
-    public GameObject platformOne;
-    public GameObject platformTwo;
-    public GameObject fallingPlatformOne;
-    public GameObject fallingPlatformTwo;
-    public GameObject fallingPlatformThree;
-    public GameObject fallingPlatformFour;
     public GameObject player;
+    public GameObject fp1;
+    public GameObject fp2;
+    public GameObject fp3;
+    public GameObject fp4;
 
     //store coordinatees
     private Vector3 movingPlatformPos;
@@ -43,16 +41,18 @@ public class LevelTwo : MonoBehaviour
     //seperating the code into variables
     private string objectName;
     private string loopLength;
+    private string speedVarLength;
     private string coordinate;
 
     //levelComplete
     private bool partOneDone = false;
     private bool partTwoDone = false;
     private bool levelCompleted = false;
-    //private bool movingPlayerLeft = false;
+    private bool createSpeedVar = false;
+    private bool movingPlayerLeft = false;
     private bool movingPlayerRight = false;
-    private bool movingPlayerLeftPartTwo = false;
-    private bool movingPlayerRightPartTwo = false;
+    private bool movingPlayerLeftWithSpeed = false;
+    private bool movingPlayerRightWithSpeed = false;
 
     // Use this for initialization
     void Start()
@@ -66,53 +66,9 @@ public class LevelTwo : MonoBehaviour
 
     void Update()
     {
-        /*if (fallingPlatformOne.transform.position.y > 2)
-        {
-            fallingPlatformOne.transform.position += Vector3.down * 1f * Time.deltaTime;
-            fallingPlatformTwo.transform.position += Vector3.down * 0.8f * Time.deltaTime;
-            fallingPlatformThree.transform.position += Vector3.down * 0.6f * Time.deltaTime;
-            fallingPlatformFour.transform.position += Vector3.down * 0.4f * Time.deltaTime;
-        }
-        if (fallingPlatformOne.transform.position.y <= 2)
-        {
-            Destroy(fallingPlatformOne);
-        }*/
-
-
-
-        //Moving the player left/right: Part Two
-        //right
-        if (movingPlayerRight)
-        {
-            //Debug.Log((Convert.ToInt32(loopLength) + 1));
-            //Debug.Log(player.transform.position);
-            //Move up until for loop ends
-            if (player.transform.position.x < playerPos.x + 2f)
-            {
-                player.transform.position += Vector3.right * 1f * Time.deltaTime;
-            }
-            //When coordinate is met, set it to that coordinate (ensuring it's an int)
-            Debug.Log(player.transform.position.x >= playerPos.x + 2f);
-            if (player.transform.position.x >= playerPos.x + 2f)
-            {
-                player.transform.position = new Vector3(playerPos.x + 2f, player.transform.position.y, player.transform.position.z);
-                Debug.Log(player.transform.position);
-                movingPlayerRight = false;
-                playerPos.x = playerPos.x + 2f;
-                input.text = "";
-
-                //Check if the player is in the correct position
-                if (player.transform.position.x == -4f)
-                {
-                    partOneDone = true;
-                    Debug.Log("Part Two done! :D");
-                }
-            }
-        }
-
         //Moving the player left/right: Part Two
         //left
-        if (movingPlayerLeftPartTwo)
+        if (movingPlayerLeft)
         {
             //Move down until for loop ends
             if (player.transform.position.x > playerPos.x - (Convert.ToInt32(loopLength) + 1))
@@ -124,24 +80,28 @@ public class LevelTwo : MonoBehaviour
             if (player.transform.position.x <= playerPos.x - (Convert.ToInt32(loopLength) + 1))
             {
                 player.transform.position = new Vector3(playerPos.x - (Convert.ToInt32(loopLength) + 1), player.transform.position.y, player.transform.position.z);
-                movingPlayerLeftPartTwo = false;
+                movingPlayerLeft = false;
                 playerPos.x = playerPos.x - (Convert.ToInt32(loopLength) + 1);
                 Debug.Log(player.transform.position);
                 loopLength = "0";
                 input.text = "";
 
                 //Check if the player is in the correct position
-                if (player.transform.position.x == 3f)
+                if (player.transform.position.y <= 2f)
                 {
-                    partTwoDone = true;
-                    Debug.Log("Part Two done! :D");
+                    partOneDone = true;
+                    reset();
+                    input.text = "";
+                    movingPlayerLeft = false;
+                    Debug.Log("Part one done! :D");
                 }
             }
         }
 
         //right
-        if (movingPlayerRightPartTwo)
+        if (movingPlayerRight)
         {
+            Debug.Log("moving player to the right");
             //Debug.Log((Convert.ToInt32(loopLength) + 1));
             //Debug.Log(player.transform.position);
             //Move up until for loop ends
@@ -155,7 +115,42 @@ public class LevelTwo : MonoBehaviour
             {
                 player.transform.position = new Vector3(playerPos.x + (Convert.ToInt32(loopLength) + 1), player.transform.position.y, player.transform.position.z);
                 Debug.Log(player.transform.position);
-                movingPlayerRightPartTwo = false;
+                
+                playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
+                loopLength = "0";
+                input.text = "";
+
+                //Check if the player is in the correct position
+                if (player.transform.position.y <= 2f)
+                {
+                    Debug.Log("ddddd Part one done! :D");
+                    partOneDone = true;
+                    reset();
+                    input.text = "";
+                    movingPlayerRight = false;
+                    Debug.Log("part one done is: " + partOneDone);
+                }
+            }
+        }
+
+        //right
+        if (movingPlayerRightWithSpeed)
+        {
+            Debug.Log("moving player to the right");
+            //Debug.Log((Convert.ToInt32(loopLength) + 1));
+            //Debug.Log(player.transform.position);
+            //Move up until for loop ends
+            if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
+            {
+                player.transform.position += Vector3.right * Convert.ToInt32(speedVarLength) * Time.deltaTime;
+            }
+            //When coordinate is met, set it to that coordinate (ensuring it's an int)
+            Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
+            if (player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1))
+            {
+                player.transform.position = new Vector3(playerPos.x + (Convert.ToInt32(loopLength) + 1), player.transform.position.y, player.transform.position.z);
+                Debug.Log(player.transform.position);
+                movingPlayerRightWithSpeed = false;
                 playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
                 loopLength = "0";
                 input.text = "";
@@ -166,6 +161,17 @@ public class LevelTwo : MonoBehaviour
                     partTwoDone = true;
                     Debug.Log("Part Two done! :D");
                 }
+                //Check if the player is in the correct position
+                if (player.transform.position.y <= 2f)
+                {
+                    Debug.Log("ddddd Part one done! :D");
+                    partOneDone = true;
+                    reset();
+                    input.text = "";
+                    movingPlayerRight = false;
+                    Debug.Log("part one done is: " + partOneDone);
+                }
+
             }
         }
     }
@@ -174,53 +180,61 @@ public class LevelTwo : MonoBehaviour
     {
         Debug.Log("Button was clicked!");
 
-        if (movingPlayerRight == false && partOneDone == false)
+        if (movingPlayerRight == false && movingPlayerLeft == false)
         {
             movePlayer();
         }
-        if (partOneDone)
+        if(partOneDone)
         {
-            Debug.Log("part two");
-            movePlayerPartTwo();
+            Debug.Log("yes");
+            creatingSpeedVar();
+            //movePlayerWithSpeed();
+        }
+        if(partTwoDone)
+        {
+            movePlayerWithSpeed();
         }
     }
 
-    void movePlayer()
+    void creatingSpeedVar()
     {
         inputCopy = input.text;
-        Debug.Log("input copy inside player: " + inputCopy);
-        Debug.Log("Moving player! :D");
+        Debug.Log("Part Two! :D");
         inputCopy = Regex.Replace(inputCopy, @"\s", string.Empty);  //remove spaces
-        Debug.Log(objectName);
+
         if (input == null)
         {
             Debug.Log("Input field is empty");
         }
-
-        //Check if for loop if statement matches: moving player to the right
-        if (Regex.IsMatch(inputCopy, @"([a-zA-Z])+([.])+([x])+([+][=]||[=])+([2])+([;])"))    //match regex player.x+=2;
+        /*if (inputCopy.EndsWith(semicolon))                          //check for semicolon
         {
-            Debug.Log("moving right");
-            //Find the object name in the string
-            int objectNamePos = inputCopy.IndexOf("{");
-            objectName = inputCopy.Substring(objectNamePos + 1, inputCopy.Length - 7 - objectNamePos);
+            Debug.Log("Semicolon is here! :D");
+        }
+        else
+        {
+            Debug.Log("Are you missing a semicolon ;");
+        }*/
+        Debug.Log(inputCopy);
 
+        //Check if for loop if statement matches: moving platform going down
+        if (Regex.IsMatch(inputCopy, @"int[speed]*=\d+;"))    //match regex int speed = 3;
+        {
+            //Find the object name in the string
+            int objectNamePos = 2;
+            objectName = inputCopy.Substring(objectNamePos + 1, inputCopy.Length - 4 - objectNamePos);
             Debug.Log("object name: " + objectName);
 
-            //Check if correct variable name is used
-            if (inputCopy.Contains("player"))
-            {
-                Debug.Log("variable name exists! :D");
-                movingPlayerRight = true;
-            }
-            else
-            {
-                Debug.Log("variable name does not exist");
-            }
+            //Find how long the loop will run for in the string
+            int speedVarPosition = inputCopy.IndexOf(equals);
+            speedVarLength = inputCopy.Substring(speedVarPosition + 1, 1);
+
+            Debug.Log("loop length: " + speedVarLength);
+
+            partTwoDone = true;
         }
     }
 
-    void movePlayerPartTwo()
+    void movePlayer()
     {
         inputCopy = input.text;
         Debug.Log("Part Two! :D");
@@ -258,7 +272,7 @@ public class LevelTwo : MonoBehaviour
             if (inputCopy.Contains("player"))
             {
                 Debug.Log("variable name exists! :D");
-                movingPlayerLeftPartTwo = true;
+                movingPlayerLeft = true;
 
             }
             else
@@ -284,12 +298,82 @@ public class LevelTwo : MonoBehaviour
             if (inputCopy.Contains("player"))
             {
                 Debug.Log("variable name exists! :D");
-                movingPlayerRightPartTwo = true;
+                movingPlayerRight = true;
             }
             else
             {
                 Debug.Log("variable name does not exist");
             }
         }
+    }
+
+    void movePlayerWithSpeed()
+    {
+        inputCopy = input.text;
+        Debug.Log("Part Two! :D");
+        inputCopy = Regex.Replace(inputCopy, @"\s", string.Empty);  //remove spaces
+
+        if (input == null)
+        {
+            Debug.Log("Input field is empty");
+        }
+        /*if (inputCopy.EndsWith(semicolon))                          //check for semicolon
+        {
+            Debug.Log("Semicolon is here! :D");
+        }
+        else
+        {
+            Debug.Log("Are you missing a semicolon ;");
+        }*/
+        Debug.Log(inputCopy);
+
+        //Check if for loop if statement matches: moving platform going down
+        if (Regex.IsMatch(inputCopy, @"int[speed]*=\d+;for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{[\w]+\S\.([x])\+\=[1]\*speed;}"))    //match regex player.y+=100;
+        {
+            //Find the object name in the string
+            //Find how long the loop will run for in the string
+            int speedVarPosition = 9;
+            speedVarLength = inputCopy.Substring(speedVarPosition, 1);
+            Debug.Log("speed: " + speedVarLength);
+
+            //Find how long the loop will run for in the string
+            int loopLengthPos = inputCopy.IndexOf("<");
+            loopLength = inputCopy.Substring(loopLengthPos + 1, 1);
+
+            Debug.Log("loop length: " + loopLength);
+
+            //Check if correct variable name is used
+            if (inputCopy.Contains("player"))
+            {
+                Debug.Log("variable name exists! :D");
+                movingPlayerRightWithSpeed = true;
+            }
+            else
+            {
+                Debug.Log("variable name does not exist");
+            }
+        }
+    }
+
+    void reset()
+    {
+        player.transform.position = new Vector3(-8f, 8f, 0f);
+        player.transform.rotation = Quaternion.identity;
+
+        fp1.transform.position = new Vector3(-5.25f, 7f, 0f);
+        fp1.transform.rotation = Quaternion.identity;
+        Destroy(fp1.GetComponent<Rigidbody>());
+
+        fp2.transform.position = new Vector3(-3.25f, 7f, 0f);
+        fp2.transform.rotation = Quaternion.identity;
+        Destroy(fp2.GetComponent<Rigidbody>());
+
+        fp3.transform.position = new Vector3(-1.25f, 7f, 0f);
+        fp3.transform.rotation = Quaternion.identity;
+        Destroy(fp3.GetComponent<Rigidbody>());
+
+        fp4.transform.position = new Vector3(0.75f, 7f, 0f);
+        fp4.transform.rotation = Quaternion.identity;
+        Destroy(fp4.GetComponent<Rigidbody>());        
     }
 }
