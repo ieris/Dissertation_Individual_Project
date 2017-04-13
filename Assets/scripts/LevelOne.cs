@@ -6,46 +6,25 @@ using System;
 
 public class LevelOne : MonoBehaviour
 {
-    //Regular expressions used to restrict user input and check syntax
-
-    private Regex noSpaces = new Regex(@"/[\s\r\n]+/gim");
-    private Regex regexLevelOne = new Regex(@"/([a-zA-Z])+([.])+([x, y])+([+][=]||[=])+([0-9\d])+([;])/g");
-    private Regex regexLevelTwo = new Regex(@"/(\bfor\b)+\((\bvar\b)+( [a-zA-Z])+([:])+(\bint\b)+([=])+([0-9])+([;])+([a-zA-Z])+([<>=])+([0-9]\d)+([;])+([a-zA-Z])+([+][+])+([)])+([{])+([}])/g");
-
     //user input
     private InputField input;
     private string inputCopy;
 
     //objects in the scene
-    private string[] objects = new string[] { "player" };
     public Button run;
-    public GameObject platformOne;
-    public GameObject platformTwo;
-    public GameObject movingPlatform;
     public GameObject player;
 
     //store coordinatees
     private Vector3 movingPlatformPos;
     private Vector3 playerPos;
 
-    //split the string to check if object name exists
-    private string dot = ".";
-    private string equals = "=";
-    private string semicolon = ";";
-    private string enteredCoordinate;
-    private float coordinateFloat;
-    private float finalCoordinate;
-    private string[] array;
-
     //seperating the code into variables
     private string objectName;
     private string loopLength;
-    private string coordinate;
 
     //levelComplete
     private bool partOneDone = false;
     private bool partTwoDone = false;
-    private bool levelCompleted = false;
     //private bool movingPlayerLeft = false;
     private bool movingPlayerRight = false;
     private bool movingPlayerLeftPartTwo = false;
@@ -67,8 +46,6 @@ public class LevelOne : MonoBehaviour
         //right
         if (movingPlayerRight)
         {
-            //Debug.Log((Convert.ToInt32(loopLength) + 1));
-            //Debug.Log(player.transform.position);
             //Move up until for loop ends
             if (player.transform.position.x < playerPos.x + 2f)
             {
@@ -125,8 +102,6 @@ public class LevelOne : MonoBehaviour
         //right
         if (movingPlayerRightPartTwo)
         {
-            //Debug.Log((Convert.ToInt32(loopLength) + 1));
-            //Debug.Log(player.transform.position);
             //Move up until for loop ends
             if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
@@ -213,15 +188,6 @@ public class LevelOne : MonoBehaviour
         {
             Debug.Log("Input field is empty");
         }
-        /*if (inputCopy.EndsWith(semicolon))                          //check for semicolon
-        {
-            Debug.Log("Semicolon is here! :D");
-        }
-        else
-        {
-            Debug.Log("Are you missing a semicolon ;");
-        }*/
-        Debug.Log(inputCopy);
 
         //Check if for loop if statement matches: moving platform going down
         if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(\s*[\w]+\S\.([x])\-\-\;)*\s*}"))    //match regex player.y+=100;
@@ -242,7 +208,6 @@ public class LevelOne : MonoBehaviour
             {
                 Debug.Log("variable name exists! :D");
                 movingPlayerLeftPartTwo = true;
-
             }
             else
             {

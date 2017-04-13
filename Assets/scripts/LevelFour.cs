@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
-using System.Text.RegularExpressions;
+using UnityEngine.UI;
 using System;
+using System.Text.RegularExpressions;
 
-public class LevelThree : MonoBehaviour
+public class LevelFour : MonoBehaviour
 {
     //user input
     private InputField input;
@@ -14,8 +14,10 @@ public class LevelThree : MonoBehaviour
     public Button run;
     public GameObject platformOne;
     public GameObject platformTwo;
-    public GameObject movingPlatform;
+    public GameObject platformThree;
     public GameObject player;
+
+    private GameObject platformToMove;
 
     //store coordinatees
     private Vector3 movingPlatformPos;
@@ -24,34 +26,44 @@ public class LevelThree : MonoBehaviour
     //seperating the code into variables
     private string objectName;
     private string loopLength;
+    private string coordinate;
+    private string functionName;
+    private string intValue;
 
     //levelComplete
     private bool partOneDone = false;
     private bool partTwoDone = false;
+    private bool partThreeDone = false;
+    private bool partFourDone = false;
+    private bool movingPlayer = false;
+    private bool levelCompleted = false;
     private bool movingPlatformLower = false;
     private bool movingPlatformHigher = false;
     private bool movingPlayerLeft = false;
     private bool movingPlayerRight = false;
 
+    private int platformCounter = 0;
+
+
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         input = GetComponent<InputField>();
         run.onClick.AddListener(onRunClick);
 
         //Store original object coordinates
-        movingPlatformPos = movingPlatform.transform.position;
+        //movingPlatformPos = movingPlatform.transform.position;
         playerPos = player.transform.position;
     }
 
-    void Update ()
-    {   
+    void Update()
+    {
         //Moving the platform up/down: Part One
         //going down
-        if (movingPlatformLower)
+        /*if (movingPlatformLower)
         {
             //Move down until for loop ends
-            if (movingPlatform.transform.position.y >  movingPlatformPos.y - (Convert.ToInt32(loopLength) + 1))
+            if (movingPlatform.transform.position.y > movingPlatformPos.y - Convert.ToInt32(intValue))
             {
                 movingPlatform.transform.position += Vector3.down * 1f * Time.deltaTime;
             }
@@ -73,39 +85,48 @@ public class LevelThree : MonoBehaviour
                     Debug.Log("Part One done! :D");
                 }
             }
-        }
+        }*/
 
         //going up
-        if (movingPlatformHigher)
+        if (partTwoDone)
         {
+            Debug.Log("moving moving moving");
             //Move up until for loop ends
-            if (movingPlatform.transform.position.y < movingPlatformPos.y + (Convert.ToInt32(loopLength) + 1))
+            if (platformToMove.transform.position.y < movingPlatformPos.y + (Convert.ToInt32(intValue)))
             {
-                movingPlatform.transform.position += Vector3.up * 1f * Time.deltaTime;
+                platformToMove.transform.position += Vector3.up * 1f * Time.deltaTime;
             }
+
+            
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
-            Debug.Log(movingPlatform.transform.position.y >= movingPlatformPos.y + (Convert.ToInt32(loopLength) + 1));
-            if (movingPlatform.transform.position.y >= movingPlatformPos.y + (Convert.ToInt32(loopLength) + 1))
+            //Debug.Log(platformToMove.transform.position.y >= movingPlatformPos.y + (Convert.ToInt32(intValue)));
+            if (platformToMove.transform.position.y >= movingPlatformPos.y + (Convert.ToInt32(intValue)))
             {
-                movingPlatform.transform.position = new Vector3(movingPlatform.transform.position.x, movingPlatformPos.y + (Convert.ToInt32(loopLength) + 1), movingPlatform.transform.position.z);
-                Debug.Log(movingPlatform.transform.position);
-                movingPlatformHigher = false;
-                movingPlatformPos.y = movingPlatformPos.y + (Convert.ToInt32(loopLength) + 1);
-                loopLength = "0";
+                platformToMove.transform.position = new Vector3(platformToMove.transform.position.x, movingPlatformPos.y + (Convert.ToInt32(intValue)), platformToMove.transform.position.z);
+                Debug.Log(platformToMove.transform.position);
+                //movingPlatformHigher = false;
+                //movingPlatformPos.y = movingPlatformPos.y + (Convert.ToInt32(intValue));
+                intValue = "0";
                 input.text = "";
 
                 //Check if the movingPlatform is in the correct position
-                if (movingPlatform.transform.position.y == 7f)
+                if (platformToMove.transform.position.y == 9f)
                 {
-                    partOneDone = true;
+                    platformCounter++;
+                    partTwoDone = false;
                     Debug.Log("Part One done! :D");
                 }
+            }
+
+            if(platformCounter == 3)
+            {
+                partThreeDone = true;
             }
         }
 
         //Moving the player left/right: Part Two
         //left
-        if (movingPlayerLeft)
+        /*if (movingPlayerLeft)
         {
             //Move down until for loop ends
             if (player.transform.position.x > playerPos.x - (Convert.ToInt32(loopLength) + 1))
@@ -130,10 +151,10 @@ public class LevelThree : MonoBehaviour
                     Debug.Log("Part Two done! :D");
                 }
             }
-        }
+        }*/
 
         //right
-        if (movingPlayerRight)
+        if (partThreeDone && movingPlayer)
         {
             //Move up until for loop ends
             if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
@@ -144,7 +165,7 @@ public class LevelThree : MonoBehaviour
             Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
             if (player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
-                player.transform.position = new Vector3(playerPos.x + (Convert.ToInt32(loopLength) + 1), player.transform.position.y, movingPlatform.transform.position.z);
+                player.transform.position = new Vector3(playerPos.x + (Convert.ToInt32(loopLength) + 1), player.transform.position.y, player.transform.position.z);
                 Debug.Log(player.transform.position);
                 movingPlayerRight = false;
                 playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
@@ -152,10 +173,10 @@ public class LevelThree : MonoBehaviour
                 input.text = "";
 
                 //Check if the movingPlatform is in the correct position
-                if (movingPlatform.transform.position.x == 3f)
+                if (player.transform.position.x >= 4f)
                 {
-                    partTwoDone = true;
-                    Debug.Log("Part Two done! :D");
+                    partFourDone = true;
+                    Debug.Log("Complete!!!! :D");
                 }
             }
         }
@@ -163,22 +184,33 @@ public class LevelThree : MonoBehaviour
 
     void onRunClick()
     {
-        Debug.Log("Button was clicked!");        
+        Debug.Log("Button was clicked!");
 
-        if(movingPlatformHigher == false && movingPlatformLower == false)
+        if (partOneDone == false)
         {
-            moveMovingPlatform();            
+            makeFunction();
         }
-        if(partOneDone)
+        if (partOneDone)
         {
+            movePlatform();
+        }
+        if(partTwoDone && platformCounter < 3)
+        {
+            Debug.Log("part two and counter < 3");
+            movePlatform();
+            //partTwoDone = false;
+            //Debug.Log("Complete!");
+        }
+        if (partThreeDone)
+        {
+            Debug.Log("part three is done");
             movePlayer();
         }
     }
 
-    void moveMovingPlatform()
+    void makeFunction()
     {
         inputCopy = input.text;
-        Debug.Log("Moving platform! :D");
         inputCopy = Regex.Replace(inputCopy, @"\s", string.Empty);  //remove spaces
 
         if (input == null)
@@ -186,71 +218,106 @@ public class LevelThree : MonoBehaviour
             Debug.Log("Input field is empty");
         }
 
+        Debug.Log(inputCopy);
+
         //Check if for loop if statement matches: moving platform going down
-        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(\s*[\w]+\S\.([y])\-\-\;)*\s*}"))    //match regex movingPlatform.y+=100;
+        if (Regex.IsMatch(inputCopy, @"void[\w]+\([object]+[platform]+\,int\w\){for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{[platform]+\S\.([y])\+\+;}}"))    //match regex voidmoveUp(objectplatform,intx){for(inti=0;i<2;i++){platform.y++;}}
         {
-            //Find the object name in the string
-            int objectNamePos = inputCopy.IndexOf("{");
-            objectName = inputCopy.Substring(objectNamePos + 1, inputCopy.Length - 7 - objectNamePos);
-            Debug.Log("object name: " + objectName);
+            /*int objectNamePos = inputCopy.IndexOf("{");
+            objectName = inputCopy.Substring(objectNamePos + 1, inputCopy.Length - 7 - objectNamePos);*/
+
+            //Pick up the function name
+            int functionNamePos = 3;
+            int leftBracketPos = inputCopy.IndexOf("(");
+            functionName = inputCopy.Substring(functionNamePos + 1, leftBracketPos - functionNamePos - 1);
+
+            Debug.Log("function name: " + functionName);
+
             //Find how long the loop will run for in the string
             int loopLengthPos = inputCopy.IndexOf("<");
             loopLength = inputCopy.Substring(loopLengthPos + 1, 1);
-            
             Debug.Log("loop length: " + loopLength);
-
-            //Check if correct variable name is used
-            if (inputCopy.Contains("movingPlatform"))
-            {
-                Debug.Log("variable name exists! :D");
-                movingPlatformLower = true;
-            }
-            else
-            {
-                Debug.Log("variable name does not exist");
-            }
+            partOneDone = true;
+            input.text = "";
         }
-        //Check if for loop if statement matches: moving platform going up
-        else if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(\s*[\w]+\S\.([y])\+\+\;)*\s*}"))    //match regex movingPlatform.y=100;
+    }
+
+    void movePlatform()
+    {
+        inputCopy = input.text;
+        inputCopy = Regex.Replace(inputCopy, @"\s", string.Empty);  //remove spaces
+
+        Debug.Log("inside movePlatform function");
+        Debug.Log(inputCopy);
+        if (Regex.IsMatch(inputCopy, @"[\w]+\([\w]+\,\d\);"))    //match regex moveup(platformOne,5);
         {
-            //Find the object name in the string
-            int objectNamePos = inputCopy.IndexOf("{");
-            objectName = inputCopy.Substring(objectNamePos + 1, inputCopy.Length - 7 - objectNamePos);
-
-            //Find how long the loop will run for in the string
-            int loopLengthPos = inputCopy.IndexOf("<");
-            loopLength = inputCopy.Substring(loopLengthPos + 1, 1);
-
-            Debug.Log("object name: " + objectName);
-            Debug.Log("loop length: " + loopLength);
-
-            //Check if correct variable name is used
-            if (inputCopy.Contains("movingPlatform"))
+            Debug.Log("regex matches");
+            if(inputCopy.Contains(functionName))
             {
-                Debug.Log("variable name exists! :D");
-                movingPlatformHigher = true;
+                Debug.Log("function exists! :D");
+
+                //Find how long the loop will run for in the string
+                int intValuePos = inputCopy.IndexOf(")");
+                intValue = inputCopy.Substring(intValuePos - 1, 1);
+                Debug.Log("intValue: " + intValue);
+
+                if(inputCopy.Contains("platformOne") || inputCopy.Contains("platformTwo") || inputCopy.Contains("platformThree"))
+                {
+                    //Find the object player wants to move in the string                  
+                    int objectNamePos = inputCopy.IndexOf("(");
+                    objectName = inputCopy.Substring(objectNamePos + 1, inputCopy.Length - 5 - objectNamePos);
+                    Debug.Log("object to move is: " + objectName);
+
+                    if(inputCopy.Contains("platformOne") && platformCounter == 0)
+                    {
+                        platformToMove = platformOne;
+                        movingPlatformPos = platformToMove.transform.position;
+                        Debug.Log("platform to move eposition is 1: " + movingPlatformPos);
+                    }
+                    else if (inputCopy.Contains("platformTwo") && platformCounter == 1)
+                    {
+                        platformToMove = platformTwo;
+                        movingPlatformPos = platformToMove.transform.position;
+                        Debug.Log("platform to move eposition is 2: " + movingPlatformPos);
+                    }
+                    else if (inputCopy.Contains("platformThree") && platformCounter == 2)
+                    {
+                        platformToMove = platformThree;
+                        movingPlatformPos = platformToMove.transform.position;
+                        Debug.Log("platform to move eposition is 3: " + movingPlatformPos);
+                    }
+
+                    partTwoDone = true;
+                    input.text = "";
+                }
+                else
+                {
+                    Debug.Log("obect by that name does not exist in the scene");
+                }                
             }
             else
             {
-                Debug.Log("variable name does not exist");
-            }
+                Debug.Log("function does not exist");
+            }            
+        }
+        else
+        {
+            Debug.Log("does not match");
         }
     }
 
     void movePlayer()
     {
         inputCopy = input.text;
-        Debug.Log("input copy inside player: " + inputCopy);
-        Debug.Log("Moving player! :D");
         inputCopy = Regex.Replace(inputCopy, @"\s", string.Empty);  //remove spaces
-        Debug.Log(objectName);
+
         if (input == null)
         {
             Debug.Log("Input field is empty");
         }
 
         //Check if for loop if statement matches: moving platform going down
-        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(\s*[\w]+\S\.([x])\-\-\;)*\s*}"))    //match regex player.x--;
+        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(\s*[\w]+\S\.([x])\+\+\;)*\s*}"))    //match regex player.x--;
         {
             Debug.Log("moving left");
             //Find the object name in the string
@@ -271,7 +338,7 @@ public class LevelThree : MonoBehaviour
             if (inputCopy.Contains("player"))
             {
                 Debug.Log("variable name exists! :D");
-                movingPlayerLeft = true;
+                movingPlayer = true;
             }
             else
             {
@@ -279,7 +346,7 @@ public class LevelThree : MonoBehaviour
             }
         }
         //Check if for loop if statement matches: moving platform going down
-        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(\s*[\w]+\S\.([x])\+\+\;)*\s*}"))    //match regex player.x++;
+        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(\s*[\w]+\S\.([x])\+\+\;)*\s*}"))    //match regex player.x++;
         {
             Debug.Log("moving right");
             //Find the object name in the string
@@ -297,8 +364,7 @@ public class LevelThree : MonoBehaviour
             if (inputCopy.Contains("player"))
             {
                 Debug.Log("variable name exists! :D");
-                movingPlayerRight = true;
-
+                partThreeDone = true;
             }
             else
             {

@@ -73,6 +73,7 @@
     <Compile Include="Assets\scripts\FallingPlatformOne.cs" />
     <Compile Include="Assets\scripts\FallingPlatformThree.cs" />
     <Compile Include="Assets\scripts\FallingPlatformTwo.cs" />
+    <Compile Include="Assets\scripts\LevelFour.cs" />
     <Compile Include="Assets\scripts\LevelOne.cs" />
     <Compile Include="Assets\scripts\LevelThree.cs" />
     <Compile Include="Assets\scripts\LevelTwo.cs" />

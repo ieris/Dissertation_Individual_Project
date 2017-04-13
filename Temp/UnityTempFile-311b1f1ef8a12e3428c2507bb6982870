@@ -80,6 +80,7 @@ Assets/scripts/FallingPlatformFour.cs
 Assets/scripts/FallingPlatformOne.cs
 Assets/scripts/FallingPlatformThree.cs
 Assets/scripts/FallingPlatformTwo.cs
+Assets/scripts/LevelFour.cs
 Assets/scripts/LevelOne.cs
 Assets/scripts/LevelThree.cs
 Assets/scripts/LevelTwo.cs
