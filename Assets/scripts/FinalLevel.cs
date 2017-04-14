@@ -35,19 +35,16 @@ public class FinalLevel : MonoBehaviour
     private bool inputEntered = false;
     private bool partOneDone = false;
     private bool partTwoDone = false;
+    private bool partThreeDone = false;
     private bool movingPlayerRight = false;
     private bool movingPlayerRight2 = false;
+    private bool movingPlayerRight3 = false;
     private bool movingPlayerRightIfStatement = false;
     private bool movingPlayerRightIfStatement2 = false;
 
     void Start ()
     {
         input = GetComponent<InputField>();
-        //mpo = GetComponent<movingPlatformOne>();
-        //mpo = new movingPlatformOne();
-        //mpt = GetComponent<movingPlatformTwo>();
-        //mpt = new movingPlatformTwo();
-
         run.onClick.AddListener(onRunClick);
 
         //Store original object coordinates
@@ -92,9 +89,48 @@ public class FinalLevel : MonoBehaviour
                     partOneDone = true;
                     movingPlayerRight = false;
                     movingPlayerRightIfStatement = false;
+
+                    if (movingPlayerRightIfStatement2 || movingPlayerRight2)
+                    {
+                        //Destroy(player.GetComponent<Rigidbody>());
+                        movingPlayerRight2 = false;
+                        movingPlayerRightIfStatement2 = false;
+                        inputEntered = false;
+                        partTwoDone = true;
+                    }                                     
                 }
             }           
         }
+        if (movingPlayerRight3)
+        {
+            //stopPlatformOne = true;
+            Destroy(player.GetComponent<Rigidbody>());
+            Debug.Log("loop " + loopLength);
+            //Move player right until for loop ends
+            if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
+            {
+                player.transform.position += Vector3.right * 1f * Time.deltaTime;
+                //Destroy(player.GetComponent<Rigidbody>());
+            }
+            //Check if the player is in the correct position
+            //When coordinate is met, set it to that coordinate (ensuring it's an int)
+            Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
+            if (player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1))
+            {
+                player.AddComponent<Rigidbody>();
+                player.transform.position = new Vector3(playerPos.x + (Convert.ToInt32(loopLength) + 1), player.transform.position.y, player.transform.position.z);
+                Debug.Log(player.transform.position);
+
+                playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
+                loopLength = "0";
+                input.text = "";
+
+                inputEntered = false;
+                partThreeDone = true;
+                movingPlayerRight2 = false;
+                movingPlayerRightIfStatement2 = false;
+            }
+        }        
     }
 
     void onRunClick()
@@ -109,7 +145,10 @@ public class FinalLevel : MonoBehaviour
         {
             movePlayerPartTwo();
         }
-
+        if(partTwoDone)
+        {
+            movePlayerPartThree();
+        }
     }
 
     void movePlayer()
@@ -238,7 +277,7 @@ public class FinalLevel : MonoBehaviour
             if (objectToMove == "player")
             {
                 Debug.Log("let's move the player! :D");
-                movingPlayerRightIfStatement = true;
+                movingPlayerRightIfStatement2 = true;
             }
             else
             {
@@ -265,7 +304,48 @@ public class FinalLevel : MonoBehaviour
             if (inputCopy.Contains("player"))
             {
                 Debug.Log("variable name exists! :D");
-                movingPlayerRight = true;
+                movingPlayerRight2 = true;
+            }
+            else
+            {
+                Debug.Log("variable name does not exist");
+            }
+        }
+    }
+
+    void movePlayerPartThree()
+    {
+        inputCopy = input.text;
+        inputCopy = Regex.Replace(inputCopy, @"\s", string.Empty);  //remove spaces
+
+        Debug.Log(inputCopy);
+
+        if (input == null)
+        {
+            Debug.Log("Input field is empty");
+        }
+
+        //Check if for loop if moving player using a simple for loop
+        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(\s*[\w]+\S\.([x])\+\+\;)*\s*}"))    //match regex player.y=100;
+        {
+            inputEntered = true;
+            Debug.Log("Move player! :D");
+            //Find the object name in the string
+            int objectNamePos = inputCopy.IndexOf("{");
+            objectName = inputCopy.Substring(objectNamePos + 1, inputCopy.Length - 7 - objectNamePos);
+
+            //Find how long the loop will run for in the string
+            int loopLengthPos = inputCopy.IndexOf("<");
+            loopLength = inputCopy.Substring(loopLengthPos + 1, 1);
+
+            Debug.Log("object name: " + objectName);
+            Debug.Log("loop length: " + loopLength);
+
+            //Check if correct variable name is used
+            if (inputCopy.Contains("player"))
+            {
+                Debug.Log("variable name exists! :D");
+                movingPlayerRight3 = true;
             }
             else
             {
