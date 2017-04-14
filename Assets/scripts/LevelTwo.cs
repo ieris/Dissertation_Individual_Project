@@ -195,7 +195,7 @@ public class LevelTwo : MonoBehaviour
             int speedVarPosition = inputCopy.IndexOf("=");
             speedVarLength = inputCopy.Substring(speedVarPosition + 1, 1);
 
-            Debug.Log("loop length: " + speedVarLength);
+            Debug.Log("speed: " + speedVarLength);
             input.text = "";
             partTwoDone = true;
         }
@@ -276,13 +276,14 @@ public class LevelTwo : MonoBehaviour
         }
 
         //Check if for loop if statement matches: moving platform going down
-        if (Regex.IsMatch(inputCopy, @"int[speed]*=\d+;for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{[\w]+\S\.([x])\+\=[1]\*speed;}"))    //match regex player.y+=100;
+        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{[\w]+\S\.([x])\+\=[1]\*speed;}"))    //match regex player.y+=100;
         {
+            Debug.Log("3rd part");
             //Find the object name in the string
             //Find how long the loop will run for in the string
-            int speedVarPosition = 9;
+            /*int speedVarPosition = 9;
             speedVarLength = inputCopy.Substring(speedVarPosition, 1);
-            Debug.Log("speed: " + speedVarLength);
+            Debug.Log("speed: " + speedVarLength);*/
 
             //Find how long the loop will run for in the string
             int loopLengthPos = inputCopy.IndexOf("<");
@@ -300,6 +301,11 @@ public class LevelTwo : MonoBehaviour
             {
                 Debug.Log("variable name does not exist");
             }
+        }
+        else
+        {
+            Debug.Log("part 3 is not a match");
+
         }
     }
 
