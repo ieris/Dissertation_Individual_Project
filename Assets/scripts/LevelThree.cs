@@ -50,7 +50,6 @@ public class LevelThree : MonoBehaviour
         resetButton.onClick.AddListener(onResetClick);
         dismissErrorButton.onClick.AddListener(onDismissClick);
 
-
         //hide error/hint box
         errorBox.GetComponent<MeshRenderer>().enabled = false;
         errorTitle.GetComponent<Text>().enabled = false;
