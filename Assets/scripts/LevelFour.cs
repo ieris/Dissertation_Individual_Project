@@ -12,6 +12,7 @@ public class LevelFour : MonoBehaviour
 
     //objects in the scene
     public Button run;
+    public Button resetButton;
     public GameObject platformOne;
     public GameObject platformTwo;
     public GameObject platformThree;
@@ -50,6 +51,7 @@ public class LevelFour : MonoBehaviour
     {
         input = GetComponent<InputField>();
         run.onClick.AddListener(onRunClick);
+        resetButton.onClick.AddListener(onResetClick);
 
         //Store original object coordinates
         //movingPlatformPos = movingPlatform.transform.position;
@@ -207,6 +209,11 @@ public class LevelFour : MonoBehaviour
             Debug.Log("part three is done");
             movePlayer();
         }
+    }
+
+    void onResetClick()
+    {
+        Application.LoadLevel("LevelFour");
     }
 
     void makeFunction()

@@ -18,7 +18,7 @@ public class movingPlatformTwo : MonoBehaviour
     {
         if (colliding && player.transform.position.x >= -5.75f && player.transform.position.x < -4.75f)
         {
-            platformTwo.transform.position += Vector3.down * 0.2f * Time.deltaTime;
+            platformTwo.transform.position += Vector3.down * 0.05f * Time.deltaTime;
         }
     }
 

@@ -12,6 +12,7 @@ public class LevelThree : MonoBehaviour
 
     //objects in the scene
     public Button run;
+    public Button resetButton;
     public GameObject platformOne;
     public GameObject platformTwo;
     public GameObject movingPlatform;
@@ -38,6 +39,7 @@ public class LevelThree : MonoBehaviour
     {
         input = GetComponent<InputField>();
         run.onClick.AddListener(onRunClick);
+        resetButton.onClick.AddListener(onResetClick);
 
         //Store original object coordinates
         movingPlatformPos = movingPlatform.transform.position;
@@ -176,6 +178,11 @@ public class LevelThree : MonoBehaviour
         {
             movePlayer();
         }
+    }
+
+    void onResetClick()
+    {
+        Application.LoadLevel("LevelThree");
     }
 
     void moveMovingPlatform()

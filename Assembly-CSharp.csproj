@@ -57,7 +57,6 @@
      <Compile Include="Assets\scripts\levelTwo\FallingPlatformTwo.cs" />
      <Compile Include="Assets\scripts\movingPlatformOne.cs" />
      <Compile Include="Assets\scripts\movingPlatformTwo.cs" />
-     <Compile Include="Assets\scripts\uiScripts\resetButton.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

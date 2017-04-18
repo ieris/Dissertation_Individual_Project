@@ -12,6 +12,7 @@ public class LevelTwo : MonoBehaviour
 
     //objects in the scene
     public Button run;
+    public Button resetButton;
     public GameObject player;
     public GameObject fp1;
     public GameObject fp2;
@@ -39,6 +40,7 @@ public class LevelTwo : MonoBehaviour
     {
         input = GetComponent<InputField>();
         run.onClick.AddListener(onRunClick);
+        resetButton.onClick.AddListener(onResetClick);
 
         //Store original object coordinates
         playerPos = player.transform.position;
@@ -172,6 +174,11 @@ public class LevelTwo : MonoBehaviour
         {
             movePlayerWithSpeed();
         }
+    }
+
+    void onResetClick()
+    {
+        Application.LoadLevel("LevelTwo");
     }
 
     void creatingSpeedVar()

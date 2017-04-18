@@ -14,6 +14,7 @@ public class LevelFive : MonoBehaviour
     public GameObject platformOne;
     public GameObject player;
     public Button run;
+    public Button resetButton;
 
     //store coordinatees
     private Vector3 playerPos;
@@ -41,6 +42,7 @@ public class LevelFive : MonoBehaviour
     {
         input = GetComponent<InputField>();
         run.onClick.AddListener(onRunClick);
+        resetButton.onClick.AddListener(onResetClick);
 
         //Store original object coordinates
         playerPos = player.transform.position;
@@ -160,6 +162,11 @@ public class LevelFive : MonoBehaviour
         {
 
         }
+    }
+
+    void onResetClick()
+    {
+        Application.LoadLevel("LevelFive");
     }
 
     void movePlayer()

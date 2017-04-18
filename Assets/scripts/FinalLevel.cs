@@ -11,6 +11,7 @@ public class FinalLevel : MonoBehaviour
     private string inputCopy;
 
     public Button run;
+    public Button resetButton;
     public GameObject exit;
     public GameObject player;
     public GameObject platform;
@@ -46,6 +47,7 @@ public class FinalLevel : MonoBehaviour
     {
         input = GetComponent<InputField>();
         run.onClick.AddListener(onRunClick);
+        resetButton.onClick.AddListener(onResetClick);
 
         //Store original object coordinates
         playerPos = player.transform.position;
@@ -55,7 +57,7 @@ public class FinalLevel : MonoBehaviour
     {
         if(inputEntered == false)
         {
-            player.transform.position += Vector3.down * 0.2f * Time.deltaTime;
+            player.transform.position += Vector3.down * 0.1f * Time.deltaTime;
         }
 
         if (movingPlayerRight || movingPlayerRightIfStatement || movingPlayerRight2 || movingPlayerRightIfStatement2)
@@ -149,6 +151,11 @@ public class FinalLevel : MonoBehaviour
         {
             movePlayerPartThree();
         }
+    }
+
+    void onResetClick()
+    {
+        Application.LoadLevel("FinalLevel");
     }
 
     void movePlayer()

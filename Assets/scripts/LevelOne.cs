@@ -12,6 +12,7 @@ public class LevelOne : MonoBehaviour
 
     //objects in the scene
     public Button run;
+    public Button reset;
     public GameObject player;
 
     //store coordinatees
@@ -35,6 +36,7 @@ public class LevelOne : MonoBehaviour
     {
         input = GetComponent<InputField>();
         run.onClick.AddListener(onRunClick);
+        reset.onClick.AddListener(onResetClick);
 
         //Store original object coordinates
         playerPos = player.transform.position;
@@ -147,6 +149,11 @@ public class LevelOne : MonoBehaviour
             Debug.Log("part two");
             movePlayerPartTwo();
         }
+    }
+
+    void onResetClick()
+    {
+        Application.LoadLevel("LevelOne");
     }
 
     void movePlayer()
