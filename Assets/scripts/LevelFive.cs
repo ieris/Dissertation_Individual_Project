@@ -34,6 +34,7 @@ public class LevelFive : MonoBehaviour
     private bool movingPlayer = false;
     private bool movingPlayerLeft = false;
     private bool movingPlayerRight = false;
+    private bool platformReachedPosition = false;
 
 
     void Start ()
@@ -48,9 +49,9 @@ public class LevelFive : MonoBehaviour
 	void Update ()
     {
         //Move the platform back and forth
-        if (!back)
+        if (!back && platformReachedPosition == false)
         {
-            Debug.Log("right");
+            //Debug.Log("right");
             movingPlatform.transform.position += Vector3.right * 0.75f * Time.deltaTime;
 
             if (movingPlatform.transform.position.x >= -0.75f)
@@ -66,9 +67,9 @@ public class LevelFive : MonoBehaviour
                 //}              
             }
         }
-        if (back)
+        if (back && platformReachedPosition == false)
         {
-            Debug.Log("left");
+            //Debug.Log("left");
             movingPlatform.transform.position += Vector3.left * 0.75f * Time.deltaTime;
 
             if (movingPlatform.transform.position.x <= -7.75f)
@@ -78,9 +79,9 @@ public class LevelFive : MonoBehaviour
         }
 
         //Move the player on the platform back and forth
-        if (!playerBack && movingPlayer == false)
+        if (!playerBack && platformReachedPosition == false)
         {
-            Debug.Log("right");
+            //Debug.Log("right");
             player.transform.position += Vector3.right * 0.75f * Time.deltaTime;
 
             if(player.transform.position.x == platformOne.transform.position.x)
@@ -93,9 +94,9 @@ public class LevelFive : MonoBehaviour
 
             }
         }
-        if (playerBack && movingPlayer == false)
+        if (playerBack && platformReachedPosition == false)
         {
-            Debug.Log("left");
+            //Debug.Log("left");
             player.transform.position += Vector3.left * 0.75f * Time.deltaTime;
 
             if (player.transform.position.x <= -7.75f)
@@ -106,33 +107,39 @@ public class LevelFive : MonoBehaviour
 
         if(movingPlayer)
         {
-            Debug.Log("moving");
+            //Debug.Log("moving");
             //Moving platform position
-            if (movingPlatform.transform.position.x >= -1f)
+            if (movingPlatform.transform.position.x >= -0.78f)
             {
+                platformReachedPosition = true;
                 Debug.Log("platform reached position");
-                //Move up until for loop ends
-                if (player.transform.position.x < -0.75f + (Convert.ToInt32(loopLength) + 1))
-                {
-                    player.transform.position += Vector3.right * 5f * Time.deltaTime;
-                }
-                //When coordinate is met, set it to that coordinate (ensuring it's an int)
-                //Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
-                if (player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1))
-                {
-                    //player.transform.position = new Vector3(playerPos.x + (Convert.ToInt32(loopLength) + 1), player.transform.position.y, player.transform.position.z);
-                    //Debug.Log(player.transform.position);
+                //Move up until for loop ends                
+            }
+        }
+        if(platformReachedPosition)
+        {
+            movingPlatform.transform.position = new Vector3(-0.75f, movingPlatform.transform.position.y, movingPlatform.transform.position.z);
 
+            if (player.transform.position.x < -0.75f + (Convert.ToInt32(loopLength) + 1))
+            {
+                player.transform.position += Vector3.right * 5f * Time.deltaTime;
+                //Check if the player is in the correct position
+                if (player.transform.position.x >= 4f)
+                {
+                    Debug.Log("ddddd Finished! :D");
+                    partTwoDone = true;
+                    Application.LoadLevel("FinalLevel");
                     input.text = "";
-
-                    //Check if the player is in the correct position
-                    if (player.transform.position.y >= 4f)
-                    {
-                        Debug.Log("ddddd Finished! :D");
-                        partTwoDone = true;
-                        input.text = "";
-                    }
                 }
+            }
+            //When coordinate is met, set it to that coordinate (ensuring it's an int)
+            //Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
+            if (player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1))
+            {
+                //player.transform.position = new Vector3(playerPos.x + (Convert.ToInt32(loopLength) + 1), player.transform.position.y, player.transform.position.z);
+                //Debug.Log(player.transform.position);
+
+                input.text = "";
             }
         }
     }
@@ -194,6 +201,7 @@ public class LevelFive : MonoBehaviour
         //Check if for loop if statement matches: moving platform going up
         if (Regex.IsMatch(inputCopy, @"if\(([\w]+)\.[x][+]\1.width==[\w]+.x\){for\(int[\w]=0;i<\d;i\+\+\){[\w]+.x\+\+;}}"))    //match regex if(movingPlatform.x+movingPlatform.width==platformOne.x){for(inti=0;i<2;i++){player.x++;}}
         {
+            Debug.Log("MATCHES!");
             //If statement object
             int objectNamePos = inputCopy.IndexOf("(");
             int dotPos = inputCopy.IndexOf(".");
@@ -203,7 +211,7 @@ public class LevelFive : MonoBehaviour
             //If statement object2
             int objectNamePos2 = inputCopy.IndexOf("=");
             int bracketPos = inputCopy.IndexOf(")");
-            Debug.Log(bracketPos - 1);
+            //Debug.Log(bracketPos - 1);
             objectName2 = inputCopy.Substring(objectNamePos2 + 2, bracketPos - 4 - objectNamePos2);
             Debug.Log("object name 2: " + objectName2);
 

@@ -160,6 +160,14 @@ public class LevelFour : MonoBehaviour
             if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
                 player.transform.position += Vector3.right * 1f * Time.deltaTime;
+
+                //Check if the movingPlatform is in the correct position
+                if (player.transform.position.x >= 4f)
+                {
+                    partFourDone = true;
+                    Application.LoadLevel("LevelFive");
+                    Debug.Log("Complete!!!! :D");
+                }
             }
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
             Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
@@ -170,14 +178,7 @@ public class LevelFour : MonoBehaviour
                 movingPlayerRight = false;
                 playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
                 loopLength = "0";
-                input.text = "";
-
-                //Check if the movingPlatform is in the correct position
-                if (player.transform.position.x >= 4f)
-                {
-                    partFourDone = true;
-                    Debug.Log("Complete!!!! :D");
-                }
+                input.text = "";               
             }
         }
     }
@@ -221,7 +222,7 @@ public class LevelFour : MonoBehaviour
         Debug.Log(inputCopy);
 
         //Check if for loop if statement matches: moving platform going down
-        if (Regex.IsMatch(inputCopy, @"void[\w]+\([object]+[platform]+\,int\w\){for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{[platform]+\S\.([y])\+\+;}}"))    //match regex voidmoveUp(objectplatform,intx){for(inti=0;i<2;i++){platform.y++;}}
+        if (Regex.IsMatch(inputCopy, @"void[\w]+\([object]+[platform]+\,int(\w)\){for\(int(\w*)\s?=\s?[0]\s?\;\s*\2\s*[<]?=?\s*\1\s*\;((\s*\2([++])\5)|(\s*\2\s*=\s*\2\s*[+/*-]\s*[1-9]))\s*\)\s*{[platform]+\S\.([y])\+\+;}}"))    //match regex voidmoveUp(objectplatform,intx){for(inti=0;i<x;i++){platform.y++;}}
         {
             /*int objectNamePos = inputCopy.IndexOf("{");
             objectName = inputCopy.Substring(objectNamePos + 1, inputCopy.Length - 7 - objectNamePos);*/
@@ -268,19 +269,19 @@ public class LevelFour : MonoBehaviour
                     objectName = inputCopy.Substring(objectNamePos + 1, inputCopy.Length - 5 - objectNamePos);
                     Debug.Log("object to move is: " + objectName);
 
-                    if(inputCopy.Contains("platformOne") && platformCounter == 0)
+                    if(inputCopy.Contains("platformOne") && platformCounter < 3 && platformOne.transform.position.y != 9)
                     {
                         platformToMove = platformOne;
                         movingPlatformPos = platformToMove.transform.position;
                         Debug.Log("platform to move eposition is 1: " + movingPlatformPos);
                     }
-                    else if (inputCopy.Contains("platformTwo") && platformCounter == 1)
+                    else if (inputCopy.Contains("platformTwo") && platformCounter < 3 && platformTwo.transform.position.y != 9)
                     {
                         platformToMove = platformTwo;
                         movingPlatformPos = platformToMove.transform.position;
                         Debug.Log("platform to move eposition is 2: " + movingPlatformPos);
                     }
-                    else if (inputCopy.Contains("platformThree") && platformCounter == 2)
+                    else if (inputCopy.Contains("platformThree") && platformCounter < 3 && platformThree.transform.position.y != 9)
                     {
                         platformToMove = platformThree;
                         movingPlatformPos = platformToMove.transform.position;

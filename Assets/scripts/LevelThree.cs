@@ -111,6 +111,14 @@ public class LevelThree : MonoBehaviour
             if (player.transform.position.x > playerPos.x - (Convert.ToInt32(loopLength) + 1))
             {
                 player.transform.position += Vector3.left * 1f * Time.deltaTime;
+
+                //Check if the movingPlatform is in the correct position
+                if (player.transform.position.x >= 3f)
+                {
+                    partTwoDone = true;
+                    Application.LoadLevel("LevelFour");
+                    Debug.Log("Part Two done! :D");
+                }
             }
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
             Debug.Log(player.transform.position.x <= playerPos.x + (Convert.ToInt32(loopLength) + 1));
@@ -121,14 +129,7 @@ public class LevelThree : MonoBehaviour
                 playerPos.x = playerPos.x - (Convert.ToInt32(loopLength) + 1);
                 Debug.Log(player.transform.position);
                 loopLength = "0";
-                input.text = "";
-
-                //Check if the movingPlatform is in the correct position
-                if (player.transform.position.x == 3f)
-                {
-                    partTwoDone = true;
-                    Debug.Log("Part Two done! :D");
-                }
+                input.text = "";                
             }
         }
 
@@ -139,6 +140,15 @@ public class LevelThree : MonoBehaviour
             if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
                 player.transform.position += Vector3.right * 1f * Time.deltaTime;
+
+                //Check if the movingPlatform is in the correct position
+                if (player.transform.position.x >= 3f)
+                {
+                    partTwoDone = true;
+                    Application.LoadLevel("LevelFour");
+                    Debug.Log("Part Two done! :D");
+                }
+
             }
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
             Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
@@ -150,13 +160,6 @@ public class LevelThree : MonoBehaviour
                 playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
                 loopLength = "0";
                 input.text = "";
-
-                //Check if the movingPlatform is in the correct position
-                if (movingPlatform.transform.position.x == 3f)
-                {
-                    partTwoDone = true;
-                    Debug.Log("Part Two done! :D");
-                }
             }
         }
     }

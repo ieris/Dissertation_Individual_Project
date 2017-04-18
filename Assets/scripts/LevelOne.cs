@@ -78,6 +78,14 @@ public class LevelOne : MonoBehaviour
             if (player.transform.position.x > playerPos.x - (Convert.ToInt32(loopLength) + 1))
             {
                 player.transform.position += Vector3.left * 1f * Time.deltaTime;
+
+                //Check if the player is in the exit position
+                if (player.transform.position.x >= 3f)
+                {
+                    partTwoDone = true;
+                    Application.LoadLevel("LevelTwo");
+                    Debug.Log("Finished! :D");
+                }
             }
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
             Debug.Log(player.transform.position.x <= playerPos.x + (Convert.ToInt32(loopLength) + 1));
@@ -90,12 +98,7 @@ public class LevelOne : MonoBehaviour
                 loopLength = "0";
                 input.text = "";
 
-                //Check if the player is in the correct position
-                if (player.transform.position.x == 3f)
-                {
-                    partTwoDone = true;
-                    Debug.Log("Part Two done! :D");
-                }
+                
             }
         }
 
@@ -106,6 +109,14 @@ public class LevelOne : MonoBehaviour
             if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
                 player.transform.position += Vector3.right * 1f * Time.deltaTime;
+
+                //Check if the player is in the correct position
+                if (player.transform.position.x >= 3f)
+                {
+                    partTwoDone = true;
+                    Application.LoadLevel("LevelTwo");
+                    Debug.Log("Finished! :D");
+                }
             }
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
             Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
@@ -118,12 +129,7 @@ public class LevelOne : MonoBehaviour
                 loopLength = "0";
                 input.text = "";
 
-                //Check if the player is in the correct position
-                if (player.transform.position.x == 3f)
-                {
-                    partTwoDone = true;
-                    Debug.Log("Part Two done! :D");
-                }
+                
             }
         }
     }

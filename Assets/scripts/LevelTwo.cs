@@ -119,6 +119,14 @@ public class LevelTwo : MonoBehaviour
             if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
                 player.transform.position += Vector3.right * Convert.ToInt32(speedVarLength) * Time.deltaTime;
+
+                //Check if the player is in the correct position
+                if (player.transform.position.x >= 3f)
+                {
+                    partTwoDone = true;
+                    Application.LoadLevel("LevelThree");
+                    Debug.Log("Part Two done! :D");
+                }
             }
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
             Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
@@ -130,13 +138,7 @@ public class LevelTwo : MonoBehaviour
                 playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
                 loopLength = "0";
                 input.text = "";
-
-                //Check if the player is in the correct position
-                if (player.transform.position.x == 3f)
-                {
-                    partTwoDone = true;
-                    Debug.Log("Part Two done! :D");
-                }
+                
                 //Check if the player is in the correct position
                 if (player.transform.position.y <= 2f)
                 {
