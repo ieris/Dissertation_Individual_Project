@@ -236,6 +236,18 @@ public class LevelOne : MonoBehaviour
 
             errorMessage.text = "Are you missing a semicolon?";
         }
+        else if (Regex.IsMatch(inputCopy, @"([a-zA-Z])+([.])+([x])+([+][=]||[=])+([2])+([;])") == false)
+        {
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Expression does not match.";
+        }
 
         //Check if for loop if statement matches: moving player to the right
         if (Regex.IsMatch(inputCopy, @"([a-zA-Z])+([.])+([x])+([+][=]||[=])+([2])+([;])"))    //match regex player.x+=2;
@@ -253,32 +265,6 @@ public class LevelOne : MonoBehaviour
                 Debug.Log("variable name exists! :D");
                 movingPlayerRight = true;
             }
-            /*else
-            {
-                Debug.Log("variable name does not exist");
-
-                //show error/hint box
-                errorBox.GetComponent<MeshRenderer>().enabled = true;
-                errorTitle.GetComponent<Text>().enabled = true;
-                errorTitleUnderline.GetComponent<Text>().enabled = true;
-                errorMessage.GetComponent<Text>().enabled = true;
-                dismissErrorButton.GetComponent<Button>().enabled = true;
-                dissmissErrorButtonText.GetComponent<Text>().enabled = true;
-
-                errorMessage.text = "Variable name does not exist";
-            }*/
-        }
-        else
-        {
-            //show error/hint box
-            errorBox.GetComponent<MeshRenderer>().enabled = true;
-            errorTitle.GetComponent<Text>().enabled = true;
-            errorTitleUnderline.GetComponent<Text>().enabled = true;
-            errorMessage.GetComponent<Text>().enabled = true;
-            dismissErrorButton.GetComponent<Button>().enabled = true;
-            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
-
-            errorMessage.text = "Expression does not match.";
         }
     }
 
@@ -313,7 +299,20 @@ public class LevelOne : MonoBehaviour
             dissmissErrorButtonText.GetComponent<Text>().enabled = true;
 
             errorMessage.text = "Are you missing a curly bracket?";
-        }        
+        }
+        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(\s*[\w]+\S\.([x])\-\-\;)*\s*}") == false)    //match regex player.y+=100;
+        && (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(\s*[\w]+\S\.([x])\+\+\;)*\s*}") == false))    //match regex player.y+=100;
+        {
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Expression does not match.";
+        }
 
         //Check if for loop if statement matches: moving platform going down
         if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(\s*[\w]+\S\.([x])\-\-\;)*\s*}"))    //match regex player.y+=100;
@@ -334,21 +333,6 @@ public class LevelOne : MonoBehaviour
             {
                 Debug.Log("variable name exists! :D");
                 movingPlayerLeftPartTwo = true;
-            }
-            else
-            {
-                Debug.Log("variable name does not exist");
-
-                //show error/hint box
-                errorBox.GetComponent<MeshRenderer>().enabled = true;
-                errorTitle.GetComponent<Text>().enabled = true;
-                errorTitleUnderline.GetComponent<Text>().enabled = true;
-                errorMessage.GetComponent<Text>().enabled = true;
-                dismissErrorButton.GetComponent<Button>().enabled = true;
-                dissmissErrorButtonText.GetComponent<Text>().enabled = true;
-
-                errorMessage.text = "Variable name does not exist.";
-
             }
         }
         //Check if for loop if statement matches: moving platform going up
@@ -371,32 +355,6 @@ public class LevelOne : MonoBehaviour
                 Debug.Log("variable name exists! :D");
                 movingPlayerRightPartTwo = true;
             }
-            else
-            {
-                Debug.Log("variable name does not exist");
-
-                //show error/hint box
-                errorBox.GetComponent<MeshRenderer>().enabled = true;
-                errorTitle.GetComponent<Text>().enabled = true;
-                errorTitleUnderline.GetComponent<Text>().enabled = true;
-                errorMessage.GetComponent<Text>().enabled = true;
-                dismissErrorButton.GetComponent<Button>().enabled = true;
-                dissmissErrorButtonText.GetComponent<Text>().enabled = true;
-
-                errorMessage.text = "Variable name does not exist.";
-            }
-        }
-        else
-        {
-            //show error/hint box
-            errorBox.GetComponent<MeshRenderer>().enabled = true;
-            errorTitle.GetComponent<Text>().enabled = true;
-            errorTitleUnderline.GetComponent<Text>().enabled = true;
-            errorMessage.GetComponent<Text>().enabled = true;
-            dismissErrorButton.GetComponent<Button>().enabled = true;
-            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
-
-            errorMessage.text = "Expression does not match.";
         }
     }  
 }
