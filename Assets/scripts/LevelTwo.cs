@@ -22,6 +22,14 @@ public class LevelTwo : MonoBehaviour
     //store coordinatees
     private Vector3 playerPos;
 
+    //error prompting objects
+    public GameObject errorBox;
+    public Text errorTitle;
+    public Text errorTitleUnderline;
+    public Text errorMessage;
+    public Button dismissErrorButton;
+    public Text dissmissErrorButtonText;
+
     //seperating the code into variables
     private string objectName;
     private string loopLength;
@@ -41,6 +49,15 @@ public class LevelTwo : MonoBehaviour
         input = GetComponent<InputField>();
         run.onClick.AddListener(onRunClick);
         resetButton.onClick.AddListener(onResetClick);
+        dismissErrorButton.onClick.AddListener(onDismissClick);
+
+        //hide error/hint box
+        errorBox.GetComponent<MeshRenderer>().enabled = false;
+        errorTitle.GetComponent<Text>().enabled = false;
+        errorTitleUnderline.GetComponent<Text>().enabled = false;
+        errorMessage.GetComponent<Text>().enabled = false;
+        dismissErrorButton.GetComponent<Button>().enabled = false;
+        dissmissErrorButtonText.GetComponent<Text>().enabled = false;
 
         //Store original object coordinates
         playerPos = player.transform.position;
@@ -158,6 +175,14 @@ public class LevelTwo : MonoBehaviour
 
     void onRunClick()
     {
+        //hide error/hint box
+        errorBox.GetComponent<MeshRenderer>().enabled = false;
+        errorTitle.GetComponent<Text>().enabled = false;
+        errorTitleUnderline.GetComponent<Text>().enabled = false;
+        errorMessage.GetComponent<Text>().enabled = false;
+        dismissErrorButton.GetComponent<Button>().enabled = false;
+        dissmissErrorButtonText.GetComponent<Text>().enabled = false;
+
         Debug.Log("Button was clicked!");
 
         if (movingPlayerRight == false && movingPlayerLeft == false)
@@ -181,15 +206,74 @@ public class LevelTwo : MonoBehaviour
         Application.LoadLevel("LevelTwo");
     }
 
+    void onDismissClick()
+    {
+        //hide error/hint box
+        errorBox.GetComponent<MeshRenderer>().enabled = false;
+        errorTitle.GetComponent<Text>().enabled = false;
+        errorTitleUnderline.GetComponent<Text>().enabled = false;
+        errorMessage.GetComponent<Text>().enabled = false;
+        dismissErrorButton.GetComponent<Button>().enabled = false;
+        dissmissErrorButtonText.GetComponent<Text>().enabled = false;
+    }
+
     void creatingSpeedVar()
     {
         inputCopy = input.text;
         Debug.Log("Part Two! :D");
         inputCopy = Regex.Replace(inputCopy, @"\s", string.Empty);  //remove spaces
 
-        if (input == null)
+        if (inputCopy == "")
         {
             Debug.Log("Input field is empty");
+
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Input field is empty.";
+        }
+        else if (!inputCopy.Contains("speed"))
+        {
+            Debug.Log("The variable 'speed' does not exist");
+
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "The variable 'speed' is missing.";
+        }
+        else if (inputCopy.Substring(inputCopy.Length - 1, 1) != ";")
+        {
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Are you missing a semicolon?";
+        }
+        else if (Regex.IsMatch(inputCopy, @"int[speed]*=\d+;") == false)
+        {
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Expression does not match.";
         }
 
         //Check if for loop if statement matches: moving platform going down
@@ -216,13 +300,62 @@ public class LevelTwo : MonoBehaviour
         Debug.Log("Part Two! :D");
         inputCopy = Regex.Replace(inputCopy, @"\s", string.Empty);  //remove spaces
 
-        if (input == null)
+        if (inputCopy == "")
         {
             Debug.Log("Input field is empty");
+
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Input field is empty.";
+        }
+        else if (!inputCopy.Contains("player"))
+        {
+            Debug.Log("variable name does not exist");
+
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "The variable 'player' is missing.";
+        }
+        else if (inputCopy.Substring(inputCopy.Length - 1, 1) != "}")
+        {
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Are you missing a curly bracket?";
+        }
+        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\-\-\;)*\s*}")) == false 
+        && (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\+\+\;)*\s*}")) == false)
+        {
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Expression does not match.";
         }
 
         //Check if for loop if statement matches: moving platform going down
-        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(\s*[\w]+\S\.([x])\-\-\;)*\s*}"))    //match regex player.y+=100;
+        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\-\-\;)*\s*}"))    //match regex player.y+=100;
         {
             //Find the object name in the string
             int objectNamePos = inputCopy.IndexOf("{");
@@ -232,22 +365,11 @@ public class LevelTwo : MonoBehaviour
             //Find how long the loop will run for in the string
             int loopLengthPos = inputCopy.IndexOf("<");
             loopLength = inputCopy.Substring(loopLengthPos + 1, 1);
-
+            movingPlayerLeft = true;
             Debug.Log("loop length: " + loopLength);
-
-            //Check if correct variable name is used
-            if (inputCopy.Contains("player"))
-            {
-                Debug.Log("variable name exists! :D");
-                movingPlayerLeft = true;
-            }
-            else
-            {
-                Debug.Log("variable name does not exist");
-            }
         }
         //Check if for loop if statement matches: moving platform going up
-        else if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(\s*[\w]+\S\.([x])\+\+\;)*\s*}"))    //match regex player.y=100;
+        else if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\+\+\;)*\s*}"))    //match regex player.y=100;
         {
             //Find the object name in the string
             int objectNamePos = inputCopy.IndexOf("{");
@@ -259,17 +381,7 @@ public class LevelTwo : MonoBehaviour
 
             Debug.Log("object name: " + objectName);
             Debug.Log("loop length: " + loopLength);
-
-            //Check if correct variable name is used
-            if (inputCopy.Contains("player"))
-            {
-                Debug.Log("variable name exists! :D");
-                movingPlayerRight = true;
-            }
-            else
-            {
-                Debug.Log("variable name does not exist");
-            }
+            movingPlayerRight = true;
         }
     }
 
@@ -279,42 +391,83 @@ public class LevelTwo : MonoBehaviour
         Debug.Log("Part Two! :D");
         inputCopy = Regex.Replace(inputCopy, @"\s", string.Empty);  //remove spaces
 
-        if (input == null)
+        /*if (inputCopy == "")
         {
             Debug.Log("Input field is empty");
+
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Input field is empty.";
+        }
+        else */if (!inputCopy.Contains("player"))
+        {
+            Debug.Log("variable name does not exist");
+
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "The variable 'player' is missing.";
+        }
+        else if (!inputCopy.Contains("speed"))
+        {
+            Debug.Log("The variable 'speed' is missing.");
+
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "The variable 'speed' is missing.";
+        }
+        else if (inputCopy.Substring(inputCopy.Length - 1, 1) != "}")
+        {
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Are you missing a curly bracket?";
+        }
+        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{player\.([x])\+\=[1]\*speed;}")) == false)
+        {
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Expression does not match.";
         }
 
         //Check if for loop if statement matches: moving platform going down
-        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{[\w]+\S\.([x])\+\=[1]\*speed;}"))    //match regex player.y+=100;
+        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{player\.([x])\+\=[1]\*speed;}"))    //match regex player.y+=100;
         {
             Debug.Log("3rd part");
-            //Find the object name in the string
-            //Find how long the loop will run for in the string
-            /*int speedVarPosition = 9;
-            speedVarLength = inputCopy.Substring(speedVarPosition, 1);
-            Debug.Log("speed: " + speedVarLength);*/
 
             //Find how long the loop will run for in the string
             int loopLengthPos = inputCopy.IndexOf("<");
             loopLength = inputCopy.Substring(loopLengthPos + 1, 1);
-
+            movingPlayerRightWithSpeed = true;
             Debug.Log("loop length: " + loopLength);
-
-            //Check if correct variable name is used
-            if (inputCopy.Contains("player"))
-            {
-                Debug.Log("variable name exists! :D");
-                movingPlayerRightWithSpeed = true;
-            }
-            else
-            {
-                Debug.Log("variable name does not exist");
-            }
-        }
-        else
-        {
-            Debug.Log("part 3 is not a match");
-
         }
     }
 
@@ -337,6 +490,14 @@ public class LevelTwo : MonoBehaviour
 
         fp4.transform.position = new Vector3(0.75f, 7f, 0f);
         fp4.transform.rotation = Quaternion.identity;
-        Destroy(fp4.GetComponent<Rigidbody>());        
+        Destroy(fp4.GetComponent<Rigidbody>());
+
+        //hide error/hint box
+        errorBox.GetComponent<MeshRenderer>().enabled = false;
+        errorTitle.GetComponent<Text>().enabled = false;
+        errorTitleUnderline.GetComponent<Text>().enabled = false;
+        errorMessage.GetComponent<Text>().enabled = false;
+        dismissErrorButton.GetComponent<Button>().enabled = false;
+        dissmissErrorButtonText.GetComponent<Text>().enabled = false;
     }
 }

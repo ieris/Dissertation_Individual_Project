@@ -150,15 +150,21 @@ public class LevelOne : MonoBehaviour
                 movingPlayerRightPartTwo = false;
                 playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
                 loopLength = "0";
-                input.text = "";
-
-                
+                input.text = "";                
             }
         }
     }
 
     void onRunClick()
     {
+        //hide error/hint box
+        errorBox.GetComponent<MeshRenderer>().enabled = false;
+        errorTitle.GetComponent<Text>().enabled = false;
+        errorTitleUnderline.GetComponent<Text>().enabled = false;
+        errorMessage.GetComponent<Text>().enabled = false;
+        dismissErrorButton.GetComponent<Button>().enabled = false;
+        dissmissErrorButtonText.GetComponent<Text>().enabled = false;
+
         Debug.Log("Button was clicked!");
 
         if (movingPlayerRight == false && partOneDone == false)
@@ -236,7 +242,7 @@ public class LevelOne : MonoBehaviour
 
             errorMessage.text = "Are you missing a semicolon?";
         }
-        else if (Regex.IsMatch(inputCopy, @"([a-zA-Z])+([.])+([x])+([+][=]||[=])+([2])+([;])") == false)
+        else if (Regex.IsMatch(inputCopy, @"(player)+([.])+([x])+([+][=]||[=])+([2])+([;])") == false)
         {
             //show error/hint box
             errorBox.GetComponent<MeshRenderer>().enabled = true;
@@ -250,7 +256,7 @@ public class LevelOne : MonoBehaviour
         }
 
         //Check if for loop if statement matches: moving player to the right
-        if (Regex.IsMatch(inputCopy, @"([a-zA-Z])+([.])+([x])+([+][=]||[=])+([2])+([;])"))    //match regex player.x+=2;
+        if (Regex.IsMatch(inputCopy, @"(player)+([.])+([x])+([+][=]||[=])+([2])+([;])"))    //match regex player.x+=2;
         {
             Debug.Log("moving right");
             //Find the object name in the string
@@ -300,8 +306,8 @@ public class LevelOne : MonoBehaviour
 
             errorMessage.text = "Are you missing a curly bracket?";
         }
-        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(\s*[\w]+\S\.([x])\-\-\;)*\s*}") == false)    //match regex player.y+=100;
-        && (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(\s*[\w]+\S\.([x])\+\+\;)*\s*}") == false))    //match regex player.y+=100;
+        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\-\-\;)*\s*}") == false)    //match regex player.y+=100;
+        && (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\+\+\;)*\s*}") == false))    //match regex player.y+=100;
         {
             //show error/hint box
             errorBox.GetComponent<MeshRenderer>().enabled = true;
@@ -315,7 +321,7 @@ public class LevelOne : MonoBehaviour
         }
 
         //Check if for loop if statement matches: moving platform going down
-        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(\s*[\w]+\S\.([x])\-\-\;)*\s*}"))    //match regex player.y+=100;
+        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\-\-\;)*\s*}"))    //match regex player.y+=100;
         {
             //Find the object name in the string
             int objectNamePos = inputCopy.IndexOf("{");
@@ -336,7 +342,7 @@ public class LevelOne : MonoBehaviour
             }
         }
         //Check if for loop if statement matches: moving platform going up
-        else if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(\s*[\w]+\S\.([x])\+\+\;)*\s*}"))    //match regex player.y=100;
+        else if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\+\+\;)*\s*}"))    //match regex player.y=100;
         {
             //Find the object name in the string
             int objectNamePos = inputCopy.IndexOf("{");
