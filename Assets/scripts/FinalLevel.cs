@@ -24,11 +24,24 @@ public class FinalLevel : MonoBehaviour
     //store coordinatees
     private Vector3 playerPos;
 
+    //error prompting objects
+    public GameObject errorBox;
+    public Text errorTitle;
+    public Text errorTitleUnderline;
+    public Text errorMessage;
+    public Button dismissErrorButton;
+    public Text dissmissErrorButtonText;
+
     //seperating the code into variables
     private string objectName;
     private string objectName2;
     private string objectToMove;
     private string loopLength;
+
+    //platform movement back and forth
+    private bool movingPlatformOneBool = true;
+    private bool movingPlatformTwoBool = false;
+    private bool playerBool = false;
 
     //levelComplete
     public bool stopPlatformOne = false;
@@ -48,6 +61,15 @@ public class FinalLevel : MonoBehaviour
         input = GetComponent<InputField>();
         run.onClick.AddListener(onRunClick);
         resetButton.onClick.AddListener(onResetClick);
+        dismissErrorButton.onClick.AddListener(onDismissClick);
+
+        //hide error/hint box
+        errorBox.GetComponent<MeshRenderer>().enabled = false;
+        errorTitle.GetComponent<Text>().enabled = false;
+        errorTitleUnderline.GetComponent<Text>().enabled = false;
+        errorMessage.GetComponent<Text>().enabled = false;
+        dismissErrorButton.GetComponent<Button>().enabled = false;
+        dissmissErrorButtonText.GetComponent<Text>().enabled = false;
 
         //Store original object coordinates
         playerPos = player.transform.position;
@@ -55,9 +77,85 @@ public class FinalLevel : MonoBehaviour
 	
 	void Update ()
     {
-        if(inputEntered == false)
+        if (movingPlatformOneBool)
         {
-            player.transform.position += Vector3.down * 0.1f * Time.deltaTime;
+            //Debug.Log("left");
+            movingPlatformOne.transform.position += Vector3.down * 0.75f * Time.deltaTime;
+
+            if (movingPlatformOne.transform.position.y <= 4.5f)
+            {
+                Debug.Log("go up now");
+                movingPlatformOneBool = false;
+            }
+        }
+
+        //Move the player on the platform back and forth
+        if (!movingPlatformOneBool)
+        {
+            //Debug.Log("right");
+            movingPlatformOne.transform.position += Vector3.up * 0.75f * Time.deltaTime;
+
+            if (movingPlatformOne.transform.position.y >= 9.25f)
+            {
+                Debug.Log("go down now");
+                movingPlatformOneBool = true;
+
+            }
+        }
+        if (movingPlatformTwoBool)
+        {
+            //Debug.Log("left");
+            movingPlatformOne.transform.position += Vector3.down * 0.75f * Time.deltaTime;
+
+            if (movingPlatformOne.transform.position.y <= 4.5f)
+            {
+                Debug.Log("go up now");
+                movingPlatformTwoBool = false;
+            }
+        }
+
+        //Move the player on the platform back and forth
+        if (!movingPlatformTwoBool)
+        {
+            //Debug.Log("right");
+            movingPlatformOne.transform.position += Vector3.up * 0.75f * Time.deltaTime;
+
+            if (movingPlatformOne.transform.position.y >= 2.25f)
+            {
+                Debug.Log("go down now");
+                movingPlatformTwoBool = true;
+
+            }
+        }
+        if (playerBool)
+        {
+            //Debug.Log("left");
+            player.transform.position += Vector3.down * 0.75f * Time.deltaTime;
+
+            if (player.transform.position.y <= 9.25f)
+            {
+                Debug.Log("go up now");
+                playerBool = false;
+            }
+        }
+
+        //Move the player on the platform back and forth
+        if (!playerBool)
+        {
+            //Debug.Log("right");
+            player.transform.position += Vector3.up * 0.75f * Time.deltaTime;
+
+            if (player.transform.position.y >= 4.5f)
+            {
+                Debug.Log("go down now");
+                playerBool = true;
+
+            }
+        }
+
+        if (inputEntered == false)
+        {
+            //player.transform.position += Vector3.down * 0.75f * Time.deltaTime;
         }
 
         if (movingPlayerRight || movingPlayerRightIfStatement || movingPlayerRight2 || movingPlayerRightIfStatement2)
@@ -137,6 +235,14 @@ public class FinalLevel : MonoBehaviour
 
     void onRunClick()
     {
+        //hide error/hint box
+        errorBox.GetComponent<MeshRenderer>().enabled = false;
+        errorTitle.GetComponent<Text>().enabled = false;
+        errorTitleUnderline.GetComponent<Text>().enabled = false;
+        errorMessage.GetComponent<Text>().enabled = false;
+        dismissErrorButton.GetComponent<Button>().enabled = false;
+        dissmissErrorButtonText.GetComponent<Text>().enabled = false;
+
         Debug.Log("Button was clicked!");
 
         if(movingPlayerRight == false && movingPlayerRightIfStatement == false)
@@ -156,6 +262,17 @@ public class FinalLevel : MonoBehaviour
     void onResetClick()
     {
         Application.LoadLevel("FinalLevel");
+    }
+
+    void onDismissClick()
+    {
+        //hide error/hint box
+        errorBox.GetComponent<MeshRenderer>().enabled = false;
+        errorTitle.GetComponent<Text>().enabled = false;
+        errorTitleUnderline.GetComponent<Text>().enabled = false;
+        errorMessage.GetComponent<Text>().enabled = false;
+        dismissErrorButton.GetComponent<Button>().enabled = false;
+        dissmissErrorButtonText.GetComponent<Text>().enabled = false;
     }
 
     void movePlayer()

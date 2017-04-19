@@ -19,7 +19,7 @@ public class movingPlatformOne : MonoBehaviour
 	    if(colliding && player.transform.position.x == -7.75f)
         {
             Debug.Log("is colliding? : " + colliding);
-            platformOne.transform.position += Vector3.down * 0.05f * Time.deltaTime;
+            platformOne.transform.position += Vector3.down * 0.75f * Time.deltaTime;
         }
 	}
 
