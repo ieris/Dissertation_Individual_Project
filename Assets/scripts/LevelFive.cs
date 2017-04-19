@@ -40,10 +40,13 @@ public class LevelFive : MonoBehaviour
     private bool playerBack = false;
     private bool partOneDone = false;
     private bool partTwoDone = false;
+    private bool partThreeDone = false;
     private bool movingPlayer = false;
+    private bool movingPlayerPartTwo = false;
     private bool movingPlayerLeft = false;
     private bool movingPlayerRight = false;
     private bool platformReachedPosition = false;
+    private bool runClicked = false;
 
 
     void Start ()
@@ -135,22 +138,31 @@ public class LevelFive : MonoBehaviour
                 //Move up until for loop ends                
             }
         }
+        if(movingPlayerPartTwo)
+        {
+            if(player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
+            {
+                player.transform.position += Vector3.right * 1f * Time.deltaTime;
+            }
+
+            if(player.transform.position.x >= 4f)
+            {
+                partThreeDone = true;
+                Application.LoadLevel("FinalLevel");
+                input.text = "";
+            }
+        }
+
         if(platformReachedPosition)
         {
             movingPlatform.transform.position = new Vector3(-0.75f, movingPlatform.transform.position.y, movingPlatform.transform.position.z);
 
             if (player.transform.position.x < -0.75f + (Convert.ToInt32(loopLength) + 1))
             {
-                player.transform.position += Vector3.right * 5f * Time.deltaTime;
-                //Check if the player is in the correct position
-                if (player.transform.position.x >= 4f)
-                {
-                    Debug.Log("ddddd Finished! :D");
-                    partTwoDone = true;
-                    Application.LoadLevel("FinalLevel");
-                    input.text = "";
-                }
+                player.transform.position += Vector3.right * 1f * Time.deltaTime;
+                partTwoDone = true;
             }
+
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
             //Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
             if (player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1))
@@ -158,13 +170,30 @@ public class LevelFive : MonoBehaviour
                 //player.transform.position = new Vector3(playerPos.x + (Convert.ToInt32(loopLength) + 1), player.transform.position.y, player.transform.position.z);
                 //Debug.Log(player.transform.position);
 
-                input.text = "";
+                playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
+                Debug.Log("player position: " + playerPos.x);
+                if (player.transform.position.x >= 4f)
+                {
+                    partThreeDone = true;
+                    Application.LoadLevel("FinalLevel");
+                    input.text = "";
+                }
             }
         }
     }
 
     void onRunClick()
     {
+        runClicked = true;
+
+        //hide error/hint box
+        errorBox.GetComponent<MeshRenderer>().enabled = false;
+        errorTitle.GetComponent<Text>().enabled = false;
+        errorTitleUnderline.GetComponent<Text>().enabled = false;
+        errorMessage.GetComponent<Text>().enabled = false;
+        dismissErrorButton.GetComponent<Button>().enabled = false;
+        dissmissErrorButtonText.GetComponent<Text>().enabled = false;
+
         Debug.Log("Button was clicked!");
 
         if (partOneDone == false)
@@ -175,9 +204,9 @@ public class LevelFive : MonoBehaviour
         {
             movingPlayer = true;
         }
-        if (partTwoDone)
+        if (partTwoDone && runClicked)
         {
-
+            movePlayerPartTwo();
         }
     }
 
@@ -286,7 +315,7 @@ public class LevelFive : MonoBehaviour
 
             errorMessage.text = "Are you missing a curly bracket?";
         }
-        else if ((Regex.IsMatch(inputCopy, @"void[\w]+\([object]+[platform]+\,int(\w)\){for\(int(\w*)\s?=\s?[0]\s?\;\s*\2\s*[<]?=?\s*\1\s*\;((\s*\2([++])\5)|(\s*\2\s*=\s*\2\s*[+/*-]\s*[1-9]))\s*\)\s*{[platform]+\S\.([y])\+\+;}}") == false))
+        else if ((Regex.IsMatch(inputCopy, @"if\(([\w]+)\.[x][+]\1.width==[\w]+.x\){for\(int[\w]=0;i<\d;i\+\+\){[\w]+.x\+\+;}}") == false))
         {
             //show error/hint box
             errorBox.GetComponent<MeshRenderer>().enabled = true;
@@ -352,17 +381,35 @@ public class LevelFive : MonoBehaviour
             Debug.Log("object to move: " + objectToMove);
             Debug.Log("object name2: " + objectName2);
             Debug.Log("loop length: " + loopLength);
+            partOneDone = true;
+        }
+        runClicked = false;
+    }
 
-            //Check if correct variable name is used
-            if (objectToMove == "player")
-            {
-                Debug.Log("let's move the player! :D");
-                partOneDone = true;
-            }
-            else
-            {
-                Debug.Log("cannot move this");
-            }
+    void movePlayerPartTwo()
+    {
+        inputCopy = input.text;
+        inputCopy = Regex.Replace(inputCopy, @"\s", string.Empty);  //remove spaces
+
+        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\+\+\;)*\s*}"))    //match regex if(movingPlatform.x+movingPlatform.width==platformOne.x){for(inti=0;i<2;i++){player.x++;}}
+        {
+            Debug.Log("moving right again");
+            //Find the object name in the string
+            int objectNamePos = inputCopy.IndexOf("{");
+            Debug.Log(objectNamePos);
+            objectName = inputCopy.Substring(objectNamePos + 1, inputCopy.Length - 7 - objectNamePos);
+            Debug.Log(objectName);
+
+            //Find how long the loop will run for in the string
+            int loopLengthPos = inputCopy.IndexOf("<");
+            Debug.Log(loopLength);
+            loopLength = inputCopy.Substring(loopLengthPos + 1, 1);
+            Debug.Log(loopLength);
+
+            Debug.Log("object name: " + objectName);
+            Debug.Log("loop length: " + loopLength);
+            movingPlayerPartTwo = true;
+            runClicked = false;
         }
     }
 }
