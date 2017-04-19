@@ -21,6 +21,14 @@ public class LevelFive : MonoBehaviour
 
     private float timer = 1f;
 
+    //error prompting objects
+    public GameObject errorBox;
+    public Text errorTitle;
+    public Text errorTitleUnderline;
+    public Text errorMessage;
+    public Button dismissErrorButton;
+    public Text dissmissErrorButtonText;
+
     //seperating the code into variables
     private string objectName;
     private string objectName2;
@@ -43,6 +51,15 @@ public class LevelFive : MonoBehaviour
         input = GetComponent<InputField>();
         run.onClick.AddListener(onRunClick);
         resetButton.onClick.AddListener(onResetClick);
+        dismissErrorButton.onClick.AddListener(onDismissClick);
+
+        //hide error/hint box
+        errorBox.GetComponent<MeshRenderer>().enabled = false;
+        errorTitle.GetComponent<Text>().enabled = false;
+        errorTitleUnderline.GetComponent<Text>().enabled = false;
+        errorMessage.GetComponent<Text>().enabled = false;
+        dismissErrorButton.GetComponent<Button>().enabled = false;
+        dissmissErrorButtonText.GetComponent<Text>().enabled = false;
 
         //Store original object coordinates
         playerPos = player.transform.position;
@@ -169,15 +186,117 @@ public class LevelFive : MonoBehaviour
         Application.LoadLevel("LevelFive");
     }
 
+    void onDismissClick()
+    {
+        //hide error/hint box
+        errorBox.GetComponent<MeshRenderer>().enabled = false;
+        errorTitle.GetComponent<Text>().enabled = false;
+        errorTitleUnderline.GetComponent<Text>().enabled = false;
+        errorMessage.GetComponent<Text>().enabled = false;
+        dismissErrorButton.GetComponent<Button>().enabled = false;
+        dissmissErrorButtonText.GetComponent<Text>().enabled = false;
+    }
+
     void movePlayer()
     {
         inputCopy = input.text;
         Debug.Log("Part Two! :D");
         inputCopy = Regex.Replace(inputCopy, @"\s", string.Empty);  //remove spaces
 
-        if (input == null)
+        if (inputCopy == "")
         {
             Debug.Log("Input field is empty");
+
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Input field is empty.";
+
+        }
+        else if (inputCopy.Length < 4)
+        {
+            Debug.Log("The function is unfinished");
+
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "The function is unfinished.";
+        }
+        else if (inputCopy.Contains("movingPlatform") == false)
+        {
+            Debug.Log("variable name does not exist");
+
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "The variable type 'movingPlatform' is missing.";
+        }
+        else if (inputCopy.Contains("platformOne") == false)
+        {
+            Debug.Log("variable name does not exist");
+
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "The variable type 'platformOne' is missing.";
+        }
+        else if (inputCopy.Contains("player") == false)
+        {
+            Debug.Log("variable name does not exist");
+
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "The variable type 'player' is missing.";
+        }
+        else if (inputCopy.Substring(inputCopy.Length - 1, 1) != "}")
+        {
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Are you missing a curly bracket?";
+        }
+        else if ((Regex.IsMatch(inputCopy, @"void[\w]+\([object]+[platform]+\,int(\w)\){for\(int(\w*)\s?=\s?[0]\s?\;\s*\2\s*[<]?=?\s*\1\s*\;((\s*\2([++])\5)|(\s*\2\s*=\s*\2\s*[+/*-]\s*[1-9]))\s*\)\s*{[platform]+\S\.([y])\+\+;}}") == false))
+        {
+            //show error/hint box
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Expression does not match.";
         }
 
         //Check if for loop if statement matches: moving platform going down
