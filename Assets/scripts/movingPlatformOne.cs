@@ -2,46 +2,57 @@
 using System.Collections;
 
 public class movingPlatformOne : MonoBehaviour
-{
-    FinalLevel fl;    
+{ 
     public GameObject player;
     public GameObject platformOne;
     public bool colliding = false;
+    public bool playerGoUp = false;
 
-    public void Start ()
+	void Update ()
     {
-        //fl = GetComponent<FinalLevel>();
-        //fl = new FinalLevel();
-    }
-	
-	public void Update ()
-    {
-	    if(colliding && player.transform.position.x == -7.75f)
+        Debug.Log(colliding);
+        if (colliding && player.transform.position.x == -7.75f)
         {
-            Debug.Log("is colliding? : " + colliding);
-            platformOne.transform.position += Vector3.down * 0.75f * Time.deltaTime;
+            if (!playerGoUp)
+            {
+                //Debug.Log("left");
+                platformOne.transform.position += Vector3.down * 0.75f * Time.deltaTime;
+                player.transform.position += Vector3.down * 0.75f * Time.deltaTime;
+
+                if (player.transform.position.y <= 6.75f)
+                {
+                    Debug.Log("go up now");
+                    playerGoUp = true;
+                }
+            }
+
+            //Move the player on the platform back and forth
+            if (playerGoUp)
+            {
+                //Debug.Log("right");
+                platformOne.transform.position += Vector3.up * 0.75f * Time.deltaTime;
+                player.transform.position += Vector3.up * 0.75f * Time.deltaTime;
+
+                if (player.transform.position.y >= 13.75f)
+                {
+                    Debug.Log("go down now");
+                    playerGoUp = false;
+                }
+            }
         }
-	}
+    }
 
     public void OnCollisionEnter(Collision col)
     {
         Debug.Log(name + " collided");
         if (col.gameObject.tag == "movingPlatformOne")
         {
-            //platform = col.gameObject;
-            //platform.AddComponent<Rigidbody>();
             colliding = true;
-            //Debug.Log(platformOne.transform.position);
-            //Debug.Log("Collided One! :D");
         }
     }
 
     public void OnCollisionExit(Collision col)
     {
-        //if (col.gameObject.tag == "movingPlatformOne")
-        //{
-            //platform = col.gameObject;
-            colliding = false;
-        //}
+        colliding = false;
     }
 }
