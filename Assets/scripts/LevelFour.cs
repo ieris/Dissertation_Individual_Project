@@ -50,7 +50,7 @@ public class LevelFour : MonoBehaviour
     private bool movingPlatformHigher = false;
     private bool movingPlayerLeft = false;
     private bool movingPlayerRight = false;
-
+    private bool runClicked = false;
     private int platformCounter = 0;
 
 
@@ -203,24 +203,25 @@ public class LevelFour : MonoBehaviour
 
     void onRunClick()
     {
+        runClicked = true;
         Debug.Log("Button was clicked!");
 
-        if (partOneDone == false)
+        if (partOneDone == false && runClicked)
         {
             makeFunction();
         }
-        if (partOneDone)
+        if (partOneDone && runClicked)
         {
             movePlatform();
         }
-        if(partTwoDone && platformCounter < 3)
+        if(partTwoDone && platformCounter < 3 && runClicked)
         {
             Debug.Log("part two and counter < 3");
             movePlatform();
             //partTwoDone = false;
             //Debug.Log("Complete!");
         }
-        if (partThreeDone)
+        if (partThreeDone && runClicked)
         {
             Debug.Log("part three is done");
             movePlayer();
@@ -366,6 +367,8 @@ public class LevelFour : MonoBehaviour
             partOneDone = true;
             input.text = "";
         }
+
+        runClicked = false;
     }
 
     void movePlatform()
@@ -498,6 +501,7 @@ public class LevelFour : MonoBehaviour
                 }
             }
         }
+        runClicked = false;
     }
 
     void movePlayer()
@@ -589,5 +593,7 @@ public class LevelFour : MonoBehaviour
                 Debug.Log("variable name does not exist");
             }
         }*/
+
+        runClicked = false;
     }
 }
