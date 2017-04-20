@@ -96,6 +96,11 @@ public class FinalLevel : MonoBehaviour
                 Destroy(player.GetComponent<Rigidbody>());
                 Debug.Log("loop " + loopLength);
                 //Move player right until for loop ends
+
+                if (Convert.ToInt32(loopLength) > 2)
+                {
+                    loopLength = "2";
+                }
                 if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
                 {
                     player.transform.position += Vector3.right * 1f * Time.deltaTime;
