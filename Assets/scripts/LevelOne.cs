@@ -6,6 +6,9 @@ using System;
 
 public class LevelOne : MonoBehaviour
 {
+    //Tutorial references
+    levelOneTutorial tutorial;
+
     //user input
     private InputField input;
     private string inputCopy;
@@ -42,6 +45,7 @@ public class LevelOne : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        tutorial = GetComponent<levelOneTutorial>();
         input = GetComponent<InputField>();
         run.onClick.AddListener(onRunClick);
         reset.onClick.AddListener(onResetClick);
@@ -57,6 +61,9 @@ public class LevelOne : MonoBehaviour
         errorMessage.GetComponent<Text>().enabled = false;
         dismissErrorButton.GetComponent<Button>().enabled = false;
         dissmissErrorButtonText.GetComponent<Text>().enabled = false;
+
+        //tutorial pop-ups
+        levelOneTutorial.taskOne = true;
     }
 
     void Update()
@@ -83,8 +90,14 @@ public class LevelOne : MonoBehaviour
                 //Check if the player is in the correct position
                 if (player.transform.position.x == -4f)
                 {
-                    partOneDone = true;
+                    levelOneTutorial.taskOne = false;
+                    levelOneTutorial.hide = true;
+                    partOneDone = true;                 
                     Debug.Log("Part Two done! :D");
+
+                    //tutorial pop-ups
+                    levelOneTutorial.taskTwo = true;
+                    levelOneTutorial.hide = false;
                 }
             }
         }
@@ -150,7 +163,7 @@ public class LevelOne : MonoBehaviour
                 movingPlayerRightPartTwo = false;
                 playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
                 loopLength = "0";
-                input.text = "";                
+                input.text = "";             
             }
         }
     }
@@ -359,7 +372,7 @@ public class LevelOne : MonoBehaviour
             if (inputCopy.Contains("player"))
             {
                 Debug.Log("variable name exists! :D");
-                movingPlayerRightPartTwo = true;
+                movingPlayerRightPartTwo = true;                
             }
         }
     }  
