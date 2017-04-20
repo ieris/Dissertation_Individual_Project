@@ -77,6 +77,10 @@ public class FinalLevel : MonoBehaviour
 	
 	void Update ()
     {
+        if(movingPlatformOne.transform.position.y == movingPlatformTwo.transform.position.y)
+        {
+            Debug.Log("NOW!");
+        }
         if (inputEntered == false)
         {
             //player.transform.position += Vector3.down * 0.75f * Time.deltaTime;
@@ -84,7 +88,7 @@ public class FinalLevel : MonoBehaviour
 
         if (movingPlayerRight || movingPlayerRightIfStatement || movingPlayerRight2 || movingPlayerRightIfStatement2)
         {
-            if((movingPlatformOne.transform.position.y <= movingPlatformTwo.transform.position.y) || (movingPlatformTwo.transform.position.y <= platform.transform.position.y))
+            if(((movingPlatformOne.transform.position.y <= movingPlatformTwo.transform.position.y) && (movingPlatformOne.transform.position.y > 6.49f)) || ((movingPlatformTwo.transform.position.y <= platform.transform.position.y) && (movingPlatformTwo.transform.position.y > 3.24f)))
             {
                 inputEntered = true;
                 //stopPlatformOne = true;
@@ -93,7 +97,8 @@ public class FinalLevel : MonoBehaviour
                 //Move player right until for loop ends
                 if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
                 {
-                    player.transform.position += Vector3.right * 1f * Time.deltaTime;                   
+                    player.transform.position += Vector3.right * 1f * Time.deltaTime;
+                                       
                     //Destroy(player.GetComponent<Rigidbody>());
                 }
                 //Check if the player is in the correct position

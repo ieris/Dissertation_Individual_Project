@@ -3,22 +3,41 @@ using System.Collections;
 
 public class movingPlatformTwo : MonoBehaviour
 {
-    FinalLevel fl;
     public GameObject player;
     public GameObject platformTwo;
     public static bool colliding = false;
-
-    void Start()
-    {
-        /*fl = GetComponent<FinalLevel>();
-        fl = new FinalLevel();*/
-    }
+    public bool playerGoUp = false;
 
     void Update()
     {
-        if (colliding && player.transform.position.x >= -5.75f && player.transform.position.x < -4.75f)
+        Debug.Log(colliding);
+        if (colliding && player.transform.position.x == -4.75f)
         {
-            platformTwo.transform.position += Vector3.down * 0.5f * Time.deltaTime;
+            if (!playerGoUp)
+            {
+                platformTwo.transform.position += Vector3.down * 0.75f * Time.deltaTime;
+                player.transform.position += Vector3.down * 0.75f * Time.deltaTime;
+
+                if (player.transform.position.y <= 6.75f)
+                {
+                    Debug.Log("go up now");
+                    playerGoUp = true;
+                }
+            }
+
+            //Move the player on the platform back and forth
+            if (playerGoUp)
+            {
+                //Debug.Log("right");
+                platformTwo.transform.position += Vector3.up * 0.75f * Time.deltaTime;
+                player.transform.position += Vector3.up * 0.75f * Time.deltaTime;
+
+                if (player.transform.position.y >= 11f)
+                {
+                    Debug.Log("go down now");
+                    playerGoUp = false;
+                }
+            }
         }
     }
 
@@ -27,8 +46,6 @@ public class movingPlatformTwo : MonoBehaviour
         Debug.Log(name + " collided");
         if (col.gameObject.tag == "movingPlatformTwo")
         {
-            //platform = col.gameObject;
-            //platform.AddComponent<Rigidbody>();
             colliding = true;
             Debug.Log(platformTwo.transform.position);
             Debug.Log("Collided Two! :D");
@@ -37,10 +54,6 @@ public class movingPlatformTwo : MonoBehaviour
 
     void OnCollisionExit(Collision col)
     {
-        //if (col.gameObject.tag == "movingPlatformTwo")
-        //{
-            //platform = col.gameObject;
-            colliding = false;
-        //}
+        colliding = false;
     }
 }
