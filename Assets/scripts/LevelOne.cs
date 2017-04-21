@@ -45,16 +45,18 @@ public class LevelOne : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        tutorial = GetComponent<levelOneTutorial>();
+        tutorial = GameObject.FindObjectOfType(typeof(levelOneTutorial)) as levelOneTutorial;
         input = GetComponent<InputField>();
+        input.Select();
+        input.ActivateInputField();
         run.onClick.AddListener(onRunClick);
         reset.onClick.AddListener(onResetClick);
-        dismissErrorButton.onClick.AddListener(onDismissClick);
+        dismissErrorButton.onClick.AddListener(onDismissClick);            
 
         //Store original object coordinates
         playerPos = player.transform.position;
 
-        //hide error/hint box
+        //hide error elements
         errorBox.GetComponent<MeshRenderer>().enabled = false;
         errorTitle.GetComponent<Text>().enabled = false;
         errorTitleUnderline.GetComponent<Text>().enabled = false;
@@ -63,7 +65,7 @@ public class LevelOne : MonoBehaviour
         dissmissErrorButtonText.GetComponent<Text>().enabled = false;
 
         //tutorial pop-ups
-        levelOneTutorial.taskOne = true;
+        tutorial.taskOne();
     }
 
     void Update()
@@ -75,7 +77,8 @@ public class LevelOne : MonoBehaviour
             //Move up until for loop ends
             if (player.transform.position.x < playerPos.x + 2f)
             {
-                player.transform.position += Vector3.right * 1f * Time.deltaTime;
+                //player.transform.position += Vector3.right * 1f * Time.deltaTime;
+                player.transform.position = new Vector3(player.transform.position.x + 2, player.transform.position.y, player.transform.position.z);
             }
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
             Debug.Log(player.transform.position.x >= playerPos.x + 2f);
@@ -90,14 +93,13 @@ public class LevelOne : MonoBehaviour
                 //Check if the player is in the correct position
                 if (player.transform.position.x == -4f)
                 {
-                    levelOneTutorial.taskOne = false;
-                    levelOneTutorial.hide = true;
-                    partOneDone = true;                 
                     Debug.Log("Part Two done! :D");
 
                     //tutorial pop-ups
-                    levelOneTutorial.taskTwo = true;
-                    levelOneTutorial.hide = false;
+                    //tutorial.tutorialCounter = 0;
+                    partOneDone = true;
+                    tutorial.hideTutorial();
+                    tutorial.taskTwo();
                 }
             }
         }
@@ -112,7 +114,7 @@ public class LevelOne : MonoBehaviour
                 player.transform.position += Vector3.left * 1f * Time.deltaTime;
 
                 //Check if the player is in the exit position
-                if (player.transform.position.x >= 3f)
+                if (player.transform.position.x >= 2f)
                 {
                     partTwoDone = true;
                     Application.LoadLevel("LevelTwo");
@@ -143,7 +145,7 @@ public class LevelOne : MonoBehaviour
                 player.transform.position += Vector3.right * 1f * Time.deltaTime;
 
                 //Check if the player is in the correct position
-                if (player.transform.position.x >= 3f)
+                if (player.transform.position.x >= 2f)
                 {
                     partTwoDone = true;
                     Application.LoadLevel("LevelTwo");
