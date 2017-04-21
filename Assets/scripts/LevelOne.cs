@@ -13,6 +13,13 @@ public class LevelOne : MonoBehaviour
     private InputField input;
     private string inputCopy;
 
+    //correct answer
+    public GameObject correctAnswerBox;
+    public Text correctAnswerText;
+    public Button correctAnswerDismissButton;
+    public Text correctAnswerDismissButtonText;
+    private float correctAnswerTimer = 2f;
+
     //objects in the scene
     public Button run;
     public Button reset;
@@ -51,7 +58,8 @@ public class LevelOne : MonoBehaviour
         input.ActivateInputField();
         run.onClick.AddListener(onRunClick);
         reset.onClick.AddListener(onResetClick);
-        dismissErrorButton.onClick.AddListener(onDismissClick);            
+        dismissErrorButton.onClick.AddListener(onDismissClick);
+        correctAnswerDismissButton.onClick.AddListener(onCorrectAnswerDismiss);
 
         //Store original object coordinates
         playerPos = player.transform.position;
@@ -64,12 +72,62 @@ public class LevelOne : MonoBehaviour
         dismissErrorButton.GetComponent<Button>().enabled = false;
         dissmissErrorButtonText.GetComponent<Text>().enabled = false;
 
+        //correct answer
+        correctAnswerBox.GetComponent<MeshRenderer>().enabled = false;
+        correctAnswerText.GetComponent<Text>().enabled = false;
+        correctAnswerDismissButton.GetComponent<Image>().enabled = false;
+        correctAnswerDismissButtonText.GetComponent<Text>().enabled = false;
+
         //tutorial pop-ups
         tutorial.taskOne();
     }
 
     void Update()
     {
+        if(partOneDone)
+        {
+            if (correctAnswerTimer >= 0f)
+            {
+                correctAnswerTimer -= Time.deltaTime;
+
+                //show correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = true;
+                correctAnswerText.GetComponent<Text>().enabled = true;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = true;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = true;
+            }
+            else
+            {
+                //hide correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = false;
+                correctAnswerText.GetComponent<Text>().enabled = false;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = false;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = false;
+            }
+        }
+
+        if(partTwoDone)
+        {
+            if (correctAnswerTimer >= 0f)
+            {
+                correctAnswerTimer -= Time.deltaTime;
+
+                //show correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = true;
+                correctAnswerText.GetComponent<Text>().enabled = true;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = true;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = true;
+            }
+            else
+            {
+                //hide correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = false;
+                correctAnswerText.GetComponent<Text>().enabled = false;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = false;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = false;
+            }
+        }
+
         //Moving the player left/right: Part Two
         //right
         if (movingPlayerRight)
@@ -79,11 +137,13 @@ public class LevelOne : MonoBehaviour
             {
                 //player.transform.position += Vector3.right * 1f * Time.deltaTime;
                 player.transform.position = new Vector3(player.transform.position.x + 2, player.transform.position.y, player.transform.position.z);
+                correctAnswerTimer = 2f;
             }
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
             Debug.Log(player.transform.position.x >= playerPos.x + 2f);
             if (player.transform.position.x >= playerPos.x + 2f)
             {
+                input.GetComponent<InputField>().interactable = true;
                 player.transform.position = new Vector3(playerPos.x + 2f, player.transform.position.y, player.transform.position.z);
                 Debug.Log(player.transform.position);
                 movingPlayerRight = false;
@@ -95,8 +155,8 @@ public class LevelOne : MonoBehaviour
                 {
                     Debug.Log("Part Two done! :D");
 
-                    //tutorial pop-ups
-                    //tutorial.tutorialCounter = 0;
+                    //tutorial pop-ups                                      
+                    //input.GetComponent<InputField>().interactable = false;
                     partOneDone = true;
                     tutorial.hideTutorial();
                     tutorial.taskTwo();
@@ -108,15 +168,19 @@ public class LevelOne : MonoBehaviour
         //left
         if (movingPlayerLeftPartTwo)
         {
+            input.GetComponent<InputField>().interactable = false;
+
             //Move down until for loop ends
             if (player.transform.position.x > playerPos.x - (Convert.ToInt32(loopLength) + 1))
             {
                 player.transform.position += Vector3.left * 1f * Time.deltaTime;
+                correctAnswerTimer = 2f;
 
                 //Check if the player is in the exit position
                 if (player.transform.position.x >= 2f)
                 {
-                    partTwoDone = true;
+                    input.GetComponent<InputField>().interactable = true;
+                    partTwoDone = true;                    
                     Application.LoadLevel("LevelTwo");
                     Debug.Log("Finished! :D");
                 }
@@ -125,24 +189,26 @@ public class LevelOne : MonoBehaviour
             Debug.Log(player.transform.position.x <= playerPos.x + (Convert.ToInt32(loopLength) + 1));
             if (player.transform.position.x <= playerPos.x - (Convert.ToInt32(loopLength) + 1))
             {
+                input.GetComponent<InputField>().interactable = true;
                 player.transform.position = new Vector3(playerPos.x - (Convert.ToInt32(loopLength) + 1), player.transform.position.y, player.transform.position.z);
                 movingPlayerLeftPartTwo = false;
                 playerPos.x = playerPos.x - (Convert.ToInt32(loopLength) + 1);
                 Debug.Log(player.transform.position);
                 loopLength = "0";
-                input.text = "";
-
-                
+                //input.text = "";                
             }
         }
 
         //right
         if (movingPlayerRightPartTwo)
         {
+            input.GetComponent<InputField>().interactable = false;
+
             //Move up until for loop ends
             if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
                 player.transform.position += Vector3.right * 1f * Time.deltaTime;
+                correctAnswerTimer = 2f;
 
                 //Check if the player is in the correct position
                 if (player.transform.position.x >= 2f)
@@ -160,12 +226,13 @@ public class LevelOne : MonoBehaviour
             Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
             if (player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
+                input.GetComponent<InputField>().interactable = true;
                 player.transform.position = new Vector3(playerPos.x + (Convert.ToInt32(loopLength) + 1), player.transform.position.y, player.transform.position.z);
                 Debug.Log(player.transform.position);
                 movingPlayerRightPartTwo = false;
                 playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
                 loopLength = "0";
-                input.text = "";             
+                //input.text = "";             
             }
         }
     }
@@ -207,6 +274,11 @@ public class LevelOne : MonoBehaviour
         errorMessage.GetComponent<Text>().enabled = false;
         dismissErrorButton.GetComponent<Button>().enabled = false;
         dissmissErrorButtonText.GetComponent<Text>().enabled = false;
+    }
+
+    void onCorrectAnswerDismiss()
+    {
+        correctAnswerTimer = 0f;
     }
 
     void movePlayer()
