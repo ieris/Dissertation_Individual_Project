@@ -90,6 +90,8 @@ Assets/scripts/levelTwo/FallingPlatformTwo.cs
 Assets/scripts/movingPlatformOne.cs
 Assets/scripts/movingPlatformTwo.cs
 Assets/scripts/tutorials/levelOneTutorial.cs
+Assets/scripts/tutorials/levelThreeTutorial.cs
+Assets/scripts/tutorials/levelTwoTutorial.cs
 -r:"C:\Program Files\Unity5.2.0\Editor\Data\MonoBleedingEdge\lib\mono\unity\System.Runtime.Serialization.dll"
 -r:"C:\Program Files\Unity5.2.0\Editor\Data\MonoBleedingEdge\lib\mono\unity\System.Xml.Linq.dll"
 -r:"C:\Program Files\Unity5.2.0\Editor\Data\MonoBleedingEdge\lib\mono\unity\UnityScript.dll"
