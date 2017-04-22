@@ -6,6 +6,9 @@ using System.Text.RegularExpressions;
 
 public class LevelFour : MonoBehaviour
 {
+    //Tutorial references
+    levelFourTutorial tutorial;
+
     //user input
     private InputField input;
     private string inputCopy;
@@ -39,6 +42,13 @@ public class LevelFour : MonoBehaviour
     private string functionName;
     private string intValue;
 
+    //correct answer
+    public GameObject correctAnswerBox;
+    public Text correctAnswerText;
+    public Button correctAnswerDismissButton;
+    public Text correctAnswerDismissButtonText;
+
+    private float correctAnswerTimer = 2f;
     //levelComplete
     private bool partOneDone = false;
     private bool partTwoDone = false;
@@ -57,10 +67,12 @@ public class LevelFour : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        tutorial = GameObject.FindObjectOfType(typeof(levelFourTutorial)) as levelFourTutorial;
         input = GetComponent<InputField>();
         run.onClick.AddListener(onRunClick);
         resetButton.onClick.AddListener(onResetClick);
         dismissErrorButton.onClick.AddListener(onDismissClick);
+        correctAnswerDismissButton.onClick.AddListener(onCorrectAnswerDismiss);
 
         //hide error/hint box
         errorBox.GetComponent<MeshRenderer>().enabled = false;
@@ -71,12 +83,71 @@ public class LevelFour : MonoBehaviour
         dissmissErrorButtonText.GetComponent<Text>().enabled = false;
 
         //Store original object coordinates
-        //movingPlatformPos = movingPlatform.transform.position;
         playerPos = player.transform.position;
+
+        //correct answer
+        correctAnswerBox.GetComponent<MeshRenderer>().enabled = false;
+        correctAnswerText.GetComponent<Text>().enabled = false;
+        correctAnswerDismissButton.GetComponent<Image>().enabled = false;
+        correctAnswerDismissButtonText.GetComponent<Text>().enabled = false;
+
+        //tutorial pop-ups
+        tutorial.tutorialCounter0();
     }
 
     void Update()
     {
+        if (partOneDone)
+        {
+            if (correctAnswerTimer >= 0f)
+            {
+                correctAnswerTimer -= Time.deltaTime;
+
+                //input.GetComponent<InputField>().interactable = false;
+
+                //show correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = true;
+                correctAnswerText.GetComponent<Text>().enabled = true;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = true;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = true;
+            }
+            else
+            {
+                //input.GetComponent<InputField>().interactable = true;
+
+                //hide correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = false;
+                correctAnswerText.GetComponent<Text>().enabled = false;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = false;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = false;
+            }
+        }
+        if(partTwoDone)
+        {
+            if (correctAnswerTimer >= 0f)
+            {
+                correctAnswerTimer -= Time.deltaTime;
+
+                input.GetComponent<InputField>().interactable = false;
+
+                //show correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = true;
+                correctAnswerText.GetComponent<Text>().enabled = true;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = true;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = true;
+            }
+            else
+            {
+                input.GetComponent<InputField>().interactable = true;
+
+                //hide correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = false;
+                correctAnswerText.GetComponent<Text>().enabled = false;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = false;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = false;
+            }
+        }
+
         //Moving the platform up/down: Part One
         //going down
         /*if (movingPlatformLower)
@@ -114,22 +185,43 @@ public class LevelFour : MonoBehaviour
             if (platformToMove.transform.position.y < movingPlatformPos.y + (Convert.ToInt32(intValue)))
             {
                 platformToMove.transform.position += Vector3.up * 1f * Time.deltaTime;
+                input.GetComponent<InputField>().interactable = false;
             }
             
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
             //Debug.Log(platformToMove.transform.position.y >= movingPlatformPos.y + (Convert.ToInt32(intValue)));
             if (platformToMove.transform.position.y >= movingPlatformPos.y + (Convert.ToInt32(intValue)))
             {
+                input.GetComponent<InputField>().interactable = true;
                 platformToMove.transform.position = new Vector3(platformToMove.transform.position.x, movingPlatformPos.y + (Convert.ToInt32(intValue)), platformToMove.transform.position.z);
                 Debug.Log(platformToMove.transform.position);
                 //movingPlatformHigher = false;
                 //movingPlatformPos.y = movingPlatformPos.y + (Convert.ToInt32(intValue));
                 intValue = "0";
-                input.text = "";
+                //input.text = "";
 
                 //Check if the movingPlatform is in the correct position
                 if (platformToMove.transform.position.y == 9f)
                 {
+                    if(platformCounter == 0)
+                    {
+                        tutorial.taskTwo();
+                    }
+                    if (platformCounter == 1)
+                    {
+                        tutorial.taskThree();
+                    }
+                    if(platformCounter >= 2)
+                    {
+                        if(tutorial.taskThreeActive)
+                        {
+                            tutorial.taskThreeAnswer();
+                        }
+                        else
+                        {
+                            tutorial.taskThree();
+                        }
+                    }
                     platformCounter++;
                     partTwoDone = false;
                     Debug.Log("Part One done! :D");
@@ -139,6 +231,7 @@ public class LevelFour : MonoBehaviour
             if(platformCounter == 3)
             {
                 partThreeDone = true;
+                tutorial.taskFour();
             }
         }
 
@@ -178,6 +271,7 @@ public class LevelFour : MonoBehaviour
             if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
                 player.transform.position += Vector3.right * 1f * Time.deltaTime;
+                input.GetComponent<InputField>().interactable = false;
 
                 //Check if the movingPlatform is in the correct position
                 if (player.transform.position.x >= 4f)
@@ -191,6 +285,7 @@ public class LevelFour : MonoBehaviour
             Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
             if (player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
+                input.GetComponent<InputField>().interactable = true;
                 player.transform.position = new Vector3(playerPos.x + (Convert.ToInt32(loopLength) + 1), player.transform.position.y, player.transform.position.z);
                 Debug.Log(player.transform.position);
                 movingPlayerRight = false;
@@ -242,6 +337,11 @@ public class LevelFour : MonoBehaviour
         errorMessage.GetComponent<Text>().enabled = false;
         dismissErrorButton.GetComponent<Button>().enabled = false;
         dissmissErrorButtonText.GetComponent<Text>().enabled = false;
+    }
+
+    void onCorrectAnswerDismiss()
+    {
+        correctAnswerTimer = 0f;
     }
 
     void makeFunction()
@@ -365,6 +465,24 @@ public class LevelFour : MonoBehaviour
             loopLength = inputCopy.Substring(loopLengthPos + 1, 1);
             Debug.Log("loop length: " + loopLength);
             partOneDone = true;
+            //tutorial.taskTwo();           
+            //if(tutorial.tas)
+            if(tutorial.taskThreeActive)
+            {
+                Debug.Log("task three is active = task three");
+                tutorial.taskThree();
+            }
+            else if(tutorial.taskThreeAnswerActive)
+            {
+                Debug.Log("task three answer is active = task three answer");
+                tutorial.taskThreeAnswer();
+            }
+            else if (!tutorial.taskThreeActive)
+            {
+                Debug.Log("task three is not active = task two");
+                tutorial.taskTwo();
+            }
+            correctAnswerTimer = 2f;
             input.text = "";
         }
 
@@ -484,7 +602,27 @@ public class LevelFour : MonoBehaviour
                         Debug.Log("platform to move eposition is 3: " + movingPlatformPos);
                     }
 
-                    partTwoDone = true;
+                    if (platformCounter == 0)
+                    {
+                        tutorial.taskTwo();
+                    }
+                    if (platformCounter == 1)
+                    {
+                        tutorial.taskThree();
+                    }
+                    if (platformCounter >= 2)
+                    {
+                        if (tutorial.taskThreeActive)
+                        {
+                            tutorial.taskThreeAnswer();
+                        }
+                        else
+                        {
+                            tutorial.taskThree();
+                        }
+                    }
+                    correctAnswerTimer = 2f;
+                    tutorial.taskTwo();
                     input.text = "";
                 }
                 else
@@ -566,6 +704,7 @@ public class LevelFour : MonoBehaviour
             Debug.Log("object name: " + objectName);
             Debug.Log("loop length: " + loopLength);
             movingPlayer = true;
+            correctAnswerTimer = 2f;
         }
         //Check if for loop if statement matches: moving platform going down
         /*if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\+\+\;)*\s*}"))    //match regex player.x++;
