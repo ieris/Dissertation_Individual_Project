@@ -98,6 +98,11 @@ public class LevelTwo : MonoBehaviour
                 correctAnswerText.GetComponent<Text>().enabled = true;
                 correctAnswerDismissButton.GetComponent<Image>().enabled = true;
                 correctAnswerDismissButtonText.GetComponent<Text>().enabled = true;
+
+                errorBox.GetComponent<MeshRenderer>().enabled = false;
+                errorTitle.GetComponent<Text>().enabled = false;
+                errorTitleUnderline.GetComponent<Text>().enabled = false;
+                errorMessage.GetComponent<Text>().enabled = false;
             }
             else
             {
@@ -124,10 +129,10 @@ public class LevelTwo : MonoBehaviour
                 correctAnswerDismissButtonText.GetComponent<Text>().enabled = true;
                 correctAnswerText.text = "Correct!";
 
-                if(correctAnswerTimer < 2.5f)
-                {
-                    correctAnswerText.text = "Variable created.";
-                }
+                errorBox.GetComponent<MeshRenderer>().enabled = false;
+                errorTitle.GetComponent<Text>().enabled = false;
+                errorTitleUnderline.GetComponent<Text>().enabled = false;
+                errorMessage.GetComponent<Text>().enabled = false;
             }
             else
             {
@@ -152,6 +157,11 @@ public class LevelTwo : MonoBehaviour
                 correctAnswerDismissButton.GetComponent<Image>().enabled = true;
                 correctAnswerDismissButtonText.GetComponent<Text>().enabled = true;
                 correctAnswerText.text = "Correct!";
+
+                errorBox.GetComponent<MeshRenderer>().enabled = false;
+                errorTitle.GetComponent<Text>().enabled = false;
+                errorTitleUnderline.GetComponent<Text>().enabled = false;
+                errorMessage.GetComponent<Text>().enabled = false;
             }
             else
             {
@@ -206,12 +216,14 @@ public class LevelTwo : MonoBehaviour
             if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
                 player.transform.position += Vector3.right * 1f * Time.deltaTime;
+                input.GetComponent<InputField>().interactable = false;
                 //correctAnswerTimer = 2f;
             }
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
             Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
             if (player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
+                input.GetComponent<InputField>().interactable = true;
                 player.transform.position = new Vector3(playerPos.x + (Convert.ToInt32(loopLength) + 1), player.transform.position.y, player.transform.position.z);
                 Debug.Log(player.transform.position);
                 
@@ -244,7 +256,7 @@ public class LevelTwo : MonoBehaviour
             if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
                 player.transform.position += Vector3.right * Convert.ToInt32(speedVarLength) * Time.deltaTime;
-                correctAnswerTimer = 2f;
+                //correctAnswerTimer = 2f;
 
                 //Check if the player is in the correct position
                 if (player.transform.position.x >= 3f)
@@ -271,7 +283,7 @@ public class LevelTwo : MonoBehaviour
                 if (player.transform.position.y <= 2f)
                 {
                     Debug.Log("ddddd Part one done! :D");
-                    partOneDone = true;
+                    partTwoDone = true;
                     reset();
                     tutorial.hideTutorial();
                     tutorial.taskTwo();
@@ -301,16 +313,18 @@ public class LevelTwo : MonoBehaviour
         {
             movePlayer();
         }
-        if(partOneDone && runClicked)
+        if (partTwoDone && runClicked)
+        {
+            movePlayerWithSpeed();
+        }
+        if (partOneDone && runClicked)
         {
             Debug.Log("yes");
             creatingSpeedVar();
             //movePlayerWithSpeed();
+            Debug.Log(partOneDone && runClicked);
         }
-        if(partTwoDone && runClicked)
-        {
-            movePlayerWithSpeed();
-        }
+        
     }
 
     void onResetClick()
@@ -413,7 +427,8 @@ public class LevelTwo : MonoBehaviour
             tutorial.taskThree();
             partTwoDone = true;
             runClicked = false;
-        }        
+        }
+        runClicked = false;
     }
 
     void movePlayer()
@@ -509,7 +524,6 @@ public class LevelTwo : MonoBehaviour
             correctAnswerTimer = 2f;
             runClicked = false;
         }
-        runClicked = false;
     }
 
     void movePlayerWithSpeed()

@@ -20,21 +20,21 @@ public class levelThreeTutorial : MonoBehaviour
     void Start()
     {
         //hide tutorial box
-        tutorialBox.GetComponent<MeshRenderer>().enabled = false;
+        tutorialBox.GetComponent<MeshRenderer>().enabled = true;
         tutorialBoxTwo.GetComponent<MeshRenderer>().enabled = false;
 
-        tutorialTitle.GetComponent<Text>().enabled = false;
-        tutorialUnderline.GetComponent<Text>().enabled = false;
-        tutorialMessage.GetComponent<Text>().enabled = false;
+        tutorialTitle.GetComponent<Text>().enabled = true;
+        tutorialUnderline.GetComponent<Text>().enabled = true;
+        tutorialMessage.GetComponent<Text>().enabled = true;
 
         //hide tutorial elements
-        dismissTutorialButton.GetComponent<Image>().enabled = false;
-        dismissTutorialButtonText.GetComponent<Text>().enabled = false;
+        dismissTutorialButton.GetComponent<Image>().enabled = true;
+        dismissTutorialButtonText.GetComponent<Text>().enabled = true;
 
         hintButton.onClick.AddListener(onHintClick);
         dismissTutorialButton.onClick.AddListener(onDismissTutorialClick);
 
-        tutorialMessage.text = "";
+        tutorialMessage.text = "Oh, looks like someone moved the platform up. Let's get it back down so we can cross:\n\nfor(int i = 0; i < 4; i++)\n{\n\tmovingPlatform.y--;\n}\n\n";
     }
 
     void onDismissTutorialClick()

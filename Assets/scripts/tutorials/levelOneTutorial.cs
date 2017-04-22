@@ -26,21 +26,21 @@ public class levelOneTutorial : MonoBehaviour
     void Start ()
     {
         //hide tutorial box
-        tutorialBox.GetComponent<MeshRenderer>().enabled = false;
+        tutorialBox.GetComponent<MeshRenderer>().enabled = true;
         tutorialBoxTwo.GetComponent<MeshRenderer>().enabled = false;
 
         tutorialCounterText.GetComponent<Text>().enabled = false;
-        tutorialTitle.GetComponent<Text>().enabled = false;
-        tutorialUnderline.GetComponent<Text>().enabled = false;
-        tutorialMessage.GetComponent<Text>().enabled = false;
+        tutorialTitle.GetComponent<Text>().enabled = true;
+        tutorialUnderline.GetComponent<Text>().enabled = true;
+        tutorialMessage.GetComponent<Text>().enabled = true;
 
-        tutorialImage.GetComponent<Image>().enabled = false;
+        tutorialImage.GetComponent<Image>().enabled = true;
 
         //hide tutorial elements
         previousButton.GetComponent<Image>().enabled = false;
         nextButton.GetComponent<Image>().enabled = false;
-        dismissTutorialButton.GetComponent<Image>().enabled = false;
-        dismissTutorialButtonText.GetComponent<Text>().enabled = false;
+        dismissTutorialButton.GetComponent<Image>().enabled = true;
+        dismissTutorialButtonText.GetComponent<Text>().enabled = true;
 
         hintButton.onClick.AddListener(onHintClick);
         nextButton.onClick.AddListener(onNextButtonClick);
@@ -159,6 +159,7 @@ public class levelOneTutorial : MonoBehaviour
 
     public void taskOne()
     {
+        Debug.Log("task One");
         taskOneActive = true;
 
         //show tutorial box
@@ -171,6 +172,7 @@ public class levelOneTutorial : MonoBehaviour
         tutorialImage.GetComponent<Image>().enabled = true;
 
         tutorialMessage.text = "Try to move the box to the x axis by 2 units using:\n\nbox.x += 2;";
+        Debug.Log("task One22");
     }
 
     public void taskTwo()
