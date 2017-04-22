@@ -6,9 +6,19 @@ using System;
 
 public class LevelTwo : MonoBehaviour
 {
+    //Tutorial references
+    levelTwoTutorial tutorial;
+
     //user input
     private InputField input;
     private string inputCopy;
+
+    //correct answer
+    public GameObject correctAnswerBox;
+    public Text correctAnswerText;
+    public Button correctAnswerDismissButton;
+    public Text correctAnswerDismissButtonText;
+    private float correctAnswerTimer = 2f;
 
     //objects in the scene
     public Button run;
@@ -42,14 +52,17 @@ public class LevelTwo : MonoBehaviour
     private bool movingPlayerRight = false;
     private bool movingPlayerLeftWithSpeed = false;
     private bool movingPlayerRightWithSpeed = false;
+    private bool runClicked = false;
 
     // Use this for initialization
     void Start()
     {
+        tutorial = GameObject.FindObjectOfType(typeof(levelTwoTutorial)) as levelTwoTutorial;
         input = GetComponent<InputField>();
         run.onClick.AddListener(onRunClick);
         resetButton.onClick.AddListener(onResetClick);
         dismissErrorButton.onClick.AddListener(onDismissClick);
+        correctAnswerDismissButton.onClick.AddListener(onCorrectAnswerDismiss);
 
         //hide error/hint box
         errorBox.GetComponent<MeshRenderer>().enabled = false;
@@ -61,10 +74,95 @@ public class LevelTwo : MonoBehaviour
 
         //Store original object coordinates
         playerPos = player.transform.position;
+
+        //correct answer
+        correctAnswerBox.GetComponent<MeshRenderer>().enabled = false;
+        correctAnswerText.GetComponent<Text>().enabled = false;
+        correctAnswerDismissButton.GetComponent<Image>().enabled = false;
+        correctAnswerDismissButtonText.GetComponent<Text>().enabled = false;
+
+        //tutorial pop-ups
+        tutorial.taskOne();
     }
 
     void Update()
     {
+        if (movingPlayerLeft || movingPlayerRight)
+        {
+            if (correctAnswerTimer >= 0f)
+            {
+                correctAnswerTimer -= Time.deltaTime;
+
+                //show correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = true;
+                correctAnswerText.GetComponent<Text>().enabled = true;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = true;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = true;
+            }
+            else
+            {
+                //hide correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = false;
+                correctAnswerText.GetComponent<Text>().enabled = false;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = false;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = false;
+            }
+        }
+
+        if (partOneDone)
+        {
+            if (correctAnswerTimer >= 0f)
+            {
+                correctAnswerTimer -= Time.deltaTime;
+
+                input.GetComponent<InputField>().interactable = false;
+
+                //show correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = true;
+                correctAnswerText.GetComponent<Text>().enabled = true;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = true;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = true;
+                correctAnswerText.text = "Correct!";
+
+                if(correctAnswerTimer < 2.5f)
+                {
+                    correctAnswerText.text = "Variable created.";
+                }
+            }
+            else
+            {
+                input.GetComponent<InputField>().interactable = true;
+
+                //hide correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = false;
+                correctAnswerText.GetComponent<Text>().enabled = false;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = false;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = false;
+            }
+        }
+        if (partTwoDone)
+        {
+            if (correctAnswerTimer >= 0f)
+            {
+                correctAnswerTimer -= Time.deltaTime;
+
+                //show correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = true;
+                correctAnswerText.GetComponent<Text>().enabled = true;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = true;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = true;
+                correctAnswerText.text = "Correct!";
+            }
+            else
+            {
+                //hide correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = false;
+                correctAnswerText.GetComponent<Text>().enabled = false;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = false;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = false;
+            }
+        }
+
         //Moving the player left/right: Part Two
         //left
         if (movingPlayerLeft)
@@ -73,11 +171,12 @@ public class LevelTwo : MonoBehaviour
             if (player.transform.position.x > playerPos.x - (Convert.ToInt32(loopLength) + 1))
             {
                 player.transform.position += Vector3.left * 1f * Time.deltaTime;
+                //correctAnswerTimer = 2f;
             }
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
             Debug.Log(player.transform.position.x <= playerPos.x + (Convert.ToInt32(loopLength) + 1));
             if (player.transform.position.x <= playerPos.x - (Convert.ToInt32(loopLength) + 1))
-            {
+            {              
                 player.transform.position = new Vector3(playerPos.x - (Convert.ToInt32(loopLength) + 1), player.transform.position.y, player.transform.position.z);
                 movingPlayerLeft = false;
                 playerPos.x = playerPos.x - (Convert.ToInt32(loopLength) + 1);
@@ -87,12 +186,15 @@ public class LevelTwo : MonoBehaviour
 
                 //Check if the player is in the correct position
                 if (player.transform.position.y <= 2f)
-                {
+                {                   
                     partOneDone = true;
+                    tutorial.hideTutorial();
+                    tutorial.taskTwo();
                     reset();
-                    input.text = "";
+                    runClicked = false;
                     movingPlayerLeft = false;
                     Debug.Log("Part one done! :D");
+                    input.text = "";
                 }
             }
         }
@@ -104,6 +206,7 @@ public class LevelTwo : MonoBehaviour
             if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
                 player.transform.position += Vector3.right * 1f * Time.deltaTime;
+                //correctAnswerTimer = 2f;
             }
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
             Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
@@ -115,16 +218,19 @@ public class LevelTwo : MonoBehaviour
                 playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
                 loopLength = "0";
                 input.text = "";
+                inputCopy = "";
 
                 //Check if the player is in the correct position
                 if (player.transform.position.y <= 2f)
                 {
                     Debug.Log("ddddd Part one done! :D");
-                    partOneDone = true;
-                    reset();
-                    input.text = "";
-                    movingPlayerRight = false;
+                    partOneDone = true;                  
+                    reset();                  
                     Debug.Log("part one done is: " + partOneDone);
+                    tutorial.taskTwo();
+                    input.text = "";
+                    runClicked = false;
+                    movingPlayerRight = false;
                 }
             }
         }
@@ -138,11 +244,13 @@ public class LevelTwo : MonoBehaviour
             if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
                 player.transform.position += Vector3.right * Convert.ToInt32(speedVarLength) * Time.deltaTime;
+                correctAnswerTimer = 2f;
 
                 //Check if the player is in the correct position
                 if (player.transform.position.x >= 3f)
                 {
                     partTwoDone = true;
+                    //tutorial.taskThree();
                     Application.LoadLevel("LevelThree");
                     Debug.Log("Part Two done! :D");
                 }
@@ -157,14 +265,16 @@ public class LevelTwo : MonoBehaviour
                 playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
                 loopLength = "0";
                 input.text = "";
-                
+                inputCopy = "";
+
                 //Check if the player is in the correct position
                 if (player.transform.position.y <= 2f)
                 {
                     Debug.Log("ddddd Part one done! :D");
                     partOneDone = true;
                     reset();
-                    input.text = "";
+                    tutorial.hideTutorial();
+                    tutorial.taskTwo();
                     movingPlayerRight = false;
                     Debug.Log("part one done is: " + partOneDone);
                 }
@@ -175,6 +285,8 @@ public class LevelTwo : MonoBehaviour
 
     void onRunClick()
     {
+        runClicked = true;
+
         //hide error/hint box
         errorBox.GetComponent<MeshRenderer>().enabled = false;
         errorTitle.GetComponent<Text>().enabled = false;
@@ -185,17 +297,17 @@ public class LevelTwo : MonoBehaviour
 
         Debug.Log("Button was clicked!");
 
-        if (movingPlayerRight == false && movingPlayerLeft == false)
+        if (!partOneDone && runClicked)
         {
             movePlayer();
         }
-        if(partOneDone)
+        if(partOneDone && runClicked)
         {
             Debug.Log("yes");
             creatingSpeedVar();
             //movePlayerWithSpeed();
         }
-        if(partTwoDone)
+        if(partTwoDone && runClicked)
         {
             movePlayerWithSpeed();
         }
@@ -217,9 +329,15 @@ public class LevelTwo : MonoBehaviour
         dissmissErrorButtonText.GetComponent<Text>().enabled = false;
     }
 
+    void onCorrectAnswerDismiss()
+    {
+        correctAnswerTimer = 0f;
+    }
+
     void creatingSpeedVar()
     {
         inputCopy = input.text;
+        Debug.Log(inputCopy);
         Debug.Log("Part Two! :D");
         inputCopy = Regex.Replace(inputCopy, @"\s", string.Empty);  //remove spaces
 
@@ -290,8 +408,12 @@ public class LevelTwo : MonoBehaviour
 
             Debug.Log("speed: " + speedVarLength);
             input.text = "";
+            inputCopy = "";
+            correctAnswerTimer = 5f;
+            tutorial.taskThree();
             partTwoDone = true;
-        }
+            runClicked = false;
+        }        
     }
 
     void movePlayer()
@@ -366,6 +488,8 @@ public class LevelTwo : MonoBehaviour
             int loopLengthPos = inputCopy.IndexOf("<");
             loopLength = inputCopy.Substring(loopLengthPos + 1, 1);
             movingPlayerLeft = true;
+            correctAnswerTimer = 2f;
+            runClicked = false;
             Debug.Log("loop length: " + loopLength);
         }
         //Check if for loop if statement matches: moving platform going up
@@ -382,7 +506,10 @@ public class LevelTwo : MonoBehaviour
             Debug.Log("object name: " + objectName);
             Debug.Log("loop length: " + loopLength);
             movingPlayerRight = true;
+            correctAnswerTimer = 2f;
+            runClicked = false;
         }
+        runClicked = false;
     }
 
     void movePlayerWithSpeed()
@@ -391,7 +518,7 @@ public class LevelTwo : MonoBehaviour
         Debug.Log("Part Two! :D");
         inputCopy = Regex.Replace(inputCopy, @"\s", string.Empty);  //remove spaces
 
-        /*if (inputCopy == "")
+        if (inputCopy == "")
         {
             Debug.Log("Input field is empty");
 
@@ -405,7 +532,7 @@ public class LevelTwo : MonoBehaviour
 
             errorMessage.text = "Input field is empty.";
         }
-        else */if (!inputCopy.Contains("player"))
+        else if (!inputCopy.Contains("player"))
         {
             Debug.Log("variable name does not exist");
 
@@ -468,7 +595,9 @@ public class LevelTwo : MonoBehaviour
             loopLength = inputCopy.Substring(loopLengthPos + 1, 1);
             movingPlayerRightWithSpeed = true;
             Debug.Log("loop length: " + loopLength);
-        }
+            correctAnswerTimer = 2f;
+            runClicked = false;
+        }       
     }
 
     void reset()
