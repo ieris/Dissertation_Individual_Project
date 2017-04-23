@@ -11,7 +11,7 @@ public class movingPlatformTwo : MonoBehaviour
     void Update()
     {
         //Debug.Log(colliding);
-        if (colliding && player.transform.position.x == -4.75f)
+        if (player.transform.position.x == -4.75f)
         {
             if (!playerGoUp)
             {
@@ -41,7 +41,7 @@ public class movingPlatformTwo : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision col)
+    /*void OnCollisionEnter(Collision col)
     {
         Debug.Log(name + " collided");
         if (col.gameObject.tag == "movingPlatformTwo")
@@ -55,5 +55,5 @@ public class movingPlatformTwo : MonoBehaviour
     void OnCollisionExit(Collision col)
     {
         colliding = false;
-    }
+    }*/
 }

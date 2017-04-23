@@ -25,6 +25,7 @@ public class levelFiveTutorial : MonoBehaviour
 
     void Start()
     {
+
         //hide tutorial box
         tutorialBox.GetComponent<MeshRenderer>().enabled = true;
         tutorialBoxTwo.GetComponent<MeshRenderer>().enabled = false;

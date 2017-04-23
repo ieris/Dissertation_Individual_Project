@@ -2,16 +2,16 @@
 using System.Collections;
 
 public class movingPlatformOne : MonoBehaviour
-{ 
+{
     public GameObject player;
     public GameObject platformOne;
-    public bool colliding = false;
+    public bool movePlatformOne = true;
     public bool playerGoUp = false;
 
-	void Update ()
+    void Update()
     {
-        Debug.Log(colliding);
-        if (colliding && player.transform.position.x == -7.75f)
+        //Debug.Log(colliding);
+        if (player.transform.position.x == -7.75f && movePlatformOne)
         {
             if (!playerGoUp)
             {
@@ -42,7 +42,7 @@ public class movingPlatformOne : MonoBehaviour
         }
     }
 
-    public void OnCollisionEnter(Collision col)
+    /*public void OnCollisionEnter(Collision col)
     {
         Debug.Log(name + " collided");
         if (col.gameObject.tag == "movingPlatformOne")
@@ -54,5 +54,5 @@ public class movingPlatformOne : MonoBehaviour
     public void OnCollisionExit(Collision col)
     {
         colliding = false;
-    }
+    }*/
 }

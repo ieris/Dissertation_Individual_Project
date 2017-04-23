@@ -6,6 +6,9 @@ using System;
 
 public class FinalLevel : MonoBehaviour
 {
+    //Tutorial references
+    finalLevelTutorial tutorial;
+
     //user input
     private InputField input;
     private string inputCopy;
@@ -38,12 +41,21 @@ public class FinalLevel : MonoBehaviour
     private string objectToMove;
     private string loopLength;
 
+    //correct answer
+    public GameObject correctAnswerBox;
+    public Text correctAnswerText;
+    public Button correctAnswerDismissButton;
+    public Text correctAnswerDismissButtonText;
+
+    private float correctAnswerTimer = 2f;
+
     //platform movement back and forth
     private bool movingPlatformOneBool = true;
     private bool movingPlatformTwoBool = false;
     private bool playerBool = false;
 
     //levelComplete
+    private bool runClicked = false;
     public bool stopPlatformOne = false;
     public bool stopPlatformTwo = false;
     private bool inputEntered = false;
@@ -59,10 +71,12 @@ public class FinalLevel : MonoBehaviour
 
     void Start ()
     {
+        tutorial = GameObject.FindObjectOfType(typeof(finalLevelTutorial)) as finalLevelTutorial;
         input = GetComponent<InputField>();
         run.onClick.AddListener(onRunClick);
         resetButton.onClick.AddListener(onResetClick);
         dismissErrorButton.onClick.AddListener(onDismissClick);
+        correctAnswerDismissButton.onClick.AddListener(onCorrectAnswerDismiss);
 
         //hide error/hint box
         errorBox.GetComponent<MeshRenderer>().enabled = false;
@@ -74,26 +88,60 @@ public class FinalLevel : MonoBehaviour
 
         //Store original object coordinates
         playerPos = player.transform.position;
+
+        //correct answer
+        correctAnswerBox.GetComponent<MeshRenderer>().enabled = false;
+        correctAnswerText.GetComponent<Text>().enabled = false;
+        correctAnswerDismissButton.GetComponent<Image>().enabled = false;
+        correctAnswerDismissButtonText.GetComponent<Text>().enabled = false;
+
+        //tutorial pop-ups
+        //tutorial.taskOne();
     }
 	
 	void Update ()
-    {       
-        if(movingPlatformOne.transform.position.y == movingPlatformTwo.transform.position.y)
+    {
+        if (movingPlayerRightIfStatement || partOneDone || partTwoDone || partThreeDone || partFourDone)
         {
-            Debug.Log("NOW!");
-        }
-        if (inputEntered == false)
-        {
-            //player.transform.position += Vector3.down * 0.75f * Time.deltaTime;
+            if (correctAnswerTimer >= 0f)
+            {
+                correctAnswerTimer -= Time.deltaTime;               
+
+                //show correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = true;
+                correctAnswerText.GetComponent<Text>().enabled = true;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = true;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = true;
+
+                //hide error/hint box
+                errorBox.GetComponent<MeshRenderer>().enabled = false;
+                errorTitle.GetComponent<Text>().enabled = false;
+                errorTitleUnderline.GetComponent<Text>().enabled = false;
+                errorMessage.GetComponent<Text>().enabled = false;
+                dismissErrorButton.GetComponent<Button>().enabled = false;
+                dissmissErrorButtonText.GetComponent<Text>().enabled = false;
+            }
+            else
+            {
+                //input.GetComponent<InputField>().interactable = true;
+
+                //hide correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = false;
+                correctAnswerText.GetComponent<Text>().enabled = false;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = false;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = false;
+            }
         }
 
-        if (movingPlayerRightIfStatement)
+        if (movingPlayerRightIfStatement && !partOneDone)
         {
-            if(((movingPlatformOne.transform.position.y <= movingPlatformTwo.transform.position.y) && (movingPlatformOne.transform.position.y > 6.49f) && player.transform.position.x < -4.7))
+            if((movingPlatformOne.transform.position.y <= movingPlatformTwo.transform.position.y) && (movingPlatformOne.transform.position.y >= 6.43f))
             {
-                inputEntered = true;
-                //stopPlatformOne = true;
-                Destroy(player.GetComponent<Rigidbody>());
+                player.transform.position = new Vector3(player.transform.position.x, 11, movingPlatformOne.transform.position.z);
+                movingPlatformOne.transform.position = new Vector3(movingPlatformOne.transform.position.x, movingPlatformTwo.transform.position.y, movingPlatformOne.transform.position.z);
+                Debug.Log("coordinate");
+                //mpo.movePlatformOne = false;
+                //Destroy(player.GetComponent<Rigidbody>());
                 Debug.Log("loop " + loopLength);
                 //Move player right until for loop ends
 
@@ -101,8 +149,9 @@ public class FinalLevel : MonoBehaviour
                 {
                     loopLength = "2";
                 }
-                if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
+                if (player.transform.position.x < playerPos.x + Convert.ToInt32(loopLength) + 1)
                 {
+                    Debug.Log("--> moving to the right :" + (player.transform.position.x + (Convert.ToInt32(loopLength) + 1)));
                     player.transform.position += Vector3.right * 1f * Time.deltaTime;
                                        
                     //Destroy(player.GetComponent<Rigidbody>());
@@ -112,32 +161,35 @@ public class FinalLevel : MonoBehaviour
                 Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
                 if (player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1))
                 {
-                    player.AddComponent<Rigidbody>();
-                    player.transform.position = new Vector3(playerPos.x + (Convert.ToInt32(loopLength) + 1), player.transform.position.y, player.transform.position.z);
+                    input.GetComponent<InputField>().interactable = true;
+                    //player.AddComponent<Rigidbody>();
+                    player.transform.position = new Vector3(playerPos.x + (Convert.ToInt32(loopLength) + 1), player.transform.position.y, 0);
                     Debug.Log(player.transform.position);
 
                     playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
                     loopLength = "0";
-                    input.text = "";
 
-                    inputEntered = false;
                     partOneDone = true;
+                    Debug.Log("part one done is: " + partOneDone);
+                    tutorial.hideTutorial();
+                    tutorial.taskTwoActive = true;
                     movingPlayerRightIfStatement = false;
                     //movingPlayerRightIfStatement2 = false;
                 }
             }           
         }
-        if(movingPlayerRightIfStatement2)
+        if(movingPlayerRightIfStatement2 && !partTwoDone)
         {
             Debug.Log("x is correct? > -4.9 " + (player.transform.position.x > -4.9f));
             Debug.Log("stationary platform y: " + platform.transform.position.y);
             Debug.Log("inline to second and third: " + (movingPlatformTwo.transform.position.y <= platform.transform.position.y));
             if ((movingPlatformTwo.transform.position.y <= platform.transform.position.y) && (movingPlatformTwo.transform.position.y > 3.2f) && (player.transform.position.x >= -4.75f))
             {
+                player.transform.position = new Vector3(player.transform.position.x, 7.75f, movingPlatformTwo.transform.position.z);
+                movingPlatformTwo.transform.position = new Vector3(movingPlatformTwo.transform.position.x, platform.transform.position.y, movingPlatformTwo.transform.position.z);
                 Debug.Log("inline to second and third: " + (movingPlatformTwo.transform.position.y <= platform.transform.position.y));
-                inputEntered = true;
                 //stopPlatformOne = true;
-                Destroy(player.GetComponent<Rigidbody>());
+                //Destroy(player.GetComponent<Rigidbody>());
                 Debug.Log("loop " + loopLength);
                 //Move player right until for loop ends
                 if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
@@ -151,27 +203,29 @@ public class FinalLevel : MonoBehaviour
                 Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
                 if (player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1))
                 {
-                    player.AddComponent<Rigidbody>();
-                    player.transform.position = new Vector3(playerPos.x + (Convert.ToInt32(loopLength) + 1), player.transform.position.y, player.transform.position.z);
+                    input.GetComponent<InputField>().interactable = true;
+                    //player.AddComponent<Rigidbody>();
+                    player.transform.position = new Vector3(playerPos.x + (Convert.ToInt32(loopLength) + 1), player.transform.position.y, 0);
                     Debug.Log(player.transform.position);
 
                     playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
                     loopLength = "0";
-                    input.text = "";
 
                     //Destroy(player.GetComponent<Rigidbody>());
                     //movingPlayerRight2 = false;
                     //partOneDone = false;
                         partTwoDone = true;
+                        tutorial.taskThreeActive = true;
+                    tutorial.hideTutorial();
                         movingPlayerRightIfStatement2 = false;
                         //movingPlayerRight = false;
                         //movingPlayerRightIfStatement = false;
-                        inputEntered = false;
                 }
             }
         }
-        if (movingPlayerRight3)
+        if (movingPlayerRight3 && partTwoDone)
         {
+            Debug.Log("_______________________________partThreeeee");
             //stopPlatformOne = true;
             Destroy(player.GetComponent<Rigidbody>());
             Debug.Log("loop " + loopLength);
@@ -186,17 +240,18 @@ public class FinalLevel : MonoBehaviour
             Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
             if (player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
-                player.AddComponent<Rigidbody>();
-                player.transform.position = new Vector3(playerPos.x + (Convert.ToInt32(loopLength) + 1), player.transform.position.y, player.transform.position.z);
+                input.GetComponent<InputField>().interactable = true;
+                //player.AddComponent<Rigidbody>();
+                player.transform.position = new Vector3(playerPos.x + (Convert.ToInt32(loopLength) + 1), player.transform.position.y, 0);
                 Debug.Log(player.transform.position);
 
                 playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
                 loopLength = "0";
-                input.text = "";
 
                 inputEntered = false;
                 partThreeDone = true;
                 //movingPlayerRight = false;
+                tutorial.hideTutorial();
                 movingPlayerRightIfStatement = false;
                 //movingPlayerRightIfStatement2 = false;
             }
@@ -205,6 +260,8 @@ public class FinalLevel : MonoBehaviour
 
     void onRunClick()
     {
+        runClicked = true;
+
         //hide error/hint box
         errorBox.GetComponent<MeshRenderer>().enabled = false;
         errorTitle.GetComponent<Text>().enabled = false;
@@ -215,21 +272,21 @@ public class FinalLevel : MonoBehaviour
 
         Debug.Log("Button was clicked!");
 
-        if(movingPlayerRightIfStatement == false && !partOneDone)
+        if (!partOneDone && runClicked)
         {
             movePlayer();
         }
-        if (movingPlayerRightIfStatement == false && movingPlayerRightIfStatement2 == false)
+        if (partOneDone && !partTwoDone && runClicked)
         {
+            Debug.Log("__________________part two");
             movePlayerPartTwo();
         }
-        if(partTwoDone)
+        if (partTwoDone && runClicked)
         {
             movePlayerPartThree();
         }
-        if(partThreeDone)
+        if (partThreeDone && runClicked)
         {
-
             Debug.Log("GAME OVER");
         }
     }
@@ -250,8 +307,14 @@ public class FinalLevel : MonoBehaviour
         dissmissErrorButtonText.GetComponent<Text>().enabled = false;
     }
 
+    void onCorrectAnswerDismiss()
+    {
+        correctAnswerTimer = 0f;
+    }
+
     void movePlayer()
     {
+        Debug.Log("11111 one");
         inputCopy = input.text;
         inputCopy = Regex.Replace(inputCopy, @"\s", string.Empty);  //remove spaces
 
@@ -262,6 +325,7 @@ public class FinalLevel : MonoBehaviour
             Debug.Log("Input field is empty");
 
             //show error/hint box
+            tutorial.hideTutorial();
             errorBox.GetComponent<MeshRenderer>().enabled = true;
             errorTitle.GetComponent<Text>().enabled = true;
             errorTitleUnderline.GetComponent<Text>().enabled = true;
@@ -277,6 +341,7 @@ public class FinalLevel : MonoBehaviour
             Debug.Log("The function is unfinished");
 
             //show error/hint box
+            tutorial.hideTutorial();
             errorBox.GetComponent<MeshRenderer>().enabled = true;
             errorTitle.GetComponent<Text>().enabled = true;
             errorTitleUnderline.GetComponent<Text>().enabled = true;
@@ -286,11 +351,42 @@ public class FinalLevel : MonoBehaviour
 
             errorMessage.text = "The function is unfinished.";
         }
+        else if (inputCopy.Contains("platformOne") == false)
+        {
+            Debug.Log("variable name does not exist");
+
+            //show error/hint box
+            tutorial.hideTutorial();
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "The variable type 'platformOne' is missing.";
+        }
+        else if (inputCopy.Contains("platformTwo") == false)
+        {
+            Debug.Log("variable name does not exist");
+
+            //show error/hint box
+            tutorial.hideTutorial();
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "The variable type 'platformTwo' is missing.";
+        }
         else if (inputCopy.Contains("player") == false)
         {
             Debug.Log("variable name does not exist");
 
             //show error/hint box
+            tutorial.hideTutorial();
             errorBox.GetComponent<MeshRenderer>().enabled = true;
             errorTitle.GetComponent<Text>().enabled = true;
             errorTitleUnderline.GetComponent<Text>().enabled = true;
@@ -303,6 +399,7 @@ public class FinalLevel : MonoBehaviour
         else if (inputCopy.Substring(inputCopy.Length - 1, 1) != "}")
         {
             //show error/hint box
+            tutorial.hideTutorial();
             errorBox.GetComponent<MeshRenderer>().enabled = true;
             errorTitle.GetComponent<Text>().enabled = true;
             errorTitleUnderline.GetComponent<Text>().enabled = true;
@@ -312,9 +409,10 @@ public class FinalLevel : MonoBehaviour
 
             errorMessage.text = "Are you missing a curly bracket?";
         }
-        else if ((Regex.IsMatch(inputCopy, @"if\(([\w]+)\.[y]==[\w]+.y\){for\(int[\w]=0;i<\d;i\+\+\){[\w]+.x\+\+;}}") == false))
+        else if ((Regex.IsMatch(inputCopy, @"if\((platformOne)\.[y]==[platformTwo]+.y\){for\(int[\w]=0;i<\d;i\+\+\){[\w]+.x\+\+;}}") == false))
         {
             //show error/hint box
+            tutorial.hideTutorial();
             errorBox.GetComponent<MeshRenderer>().enabled = true;
             errorTitle.GetComponent<Text>().enabled = true;
             errorTitleUnderline.GetComponent<Text>().enabled = true;
@@ -326,7 +424,7 @@ public class FinalLevel : MonoBehaviour
         }
 
         //Check if moving player using the if statement
-        if (Regex.IsMatch(inputCopy, @"if\(([\w]+)\.[y]==[\w]+.y\){for\(int[\w]=0;i<\d;i\+\+\){[\w]+.x\+\+;}}"))        
+        if (Regex.IsMatch(inputCopy, @"if\((platformOne)\.[y]==[platformTwo]+.y\){for\(int[\w]=0;i<\d;i\+\+\){[\w]+.x\+\+;}}"))        
         {            
             Debug.Log("Move player if statement! :D");
             //If statement object
@@ -353,7 +451,10 @@ public class FinalLevel : MonoBehaviour
             Debug.Log("object to move: " + objectToMove);
             Debug.Log("object name2: " + objectName2);
             Debug.Log("loop length: " + loopLength);
+            correctAnswerTimer = 2f;
             movingPlayerRightIfStatement = true;
+            input.GetComponent<InputField>().interactable = false;
+            tutorial.hideTutorial();
         }
         //Check if for loop if moving player using a simple for loop
         /*else if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(\s*[\w]+\S\.([x])\+\+\;)*\s*}"))    //match regex player.y=100;
@@ -382,22 +483,122 @@ public class FinalLevel : MonoBehaviour
                 Debug.Log("variable name does not exist");
             }
         }   */
+        runClicked = false;
     }
 
     void movePlayerPartTwo()
     {
+        Debug.Log("222222 partTwoo");
         inputCopy = input.text;
         inputCopy = Regex.Replace(inputCopy, @"\s", string.Empty);  //remove spaces
 
         Debug.Log(inputCopy);
 
-        if (input == null)
+        if (inputCopy == "")
         {
             Debug.Log("Input field is empty");
+
+            //show error/hint box
+            tutorial.hideTutorial();
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Input field is empty.";
+
+        }
+        else if (inputCopy.Length < 4)
+        {
+            Debug.Log("The function is unfinished");
+
+            //show error/hint box
+            tutorial.hideTutorial();
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "The function is unfinished.";
+        }
+        else if (inputCopy.Contains("platformTwo") == false)
+        {
+            Debug.Log("variable name does not exist");
+
+            //show error/hint box
+            tutorial.hideTutorial();
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "The variable type 'platformTwo' is missing.";
+        }
+        else if (inputCopy.Contains("platformThree") == false)
+        {
+            Debug.Log("variable name does not exist");
+
+            //show error/hint box
+            tutorial.hideTutorial();
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "The variable type 'platformThree' is missing.";
+        }
+        else if (inputCopy.Contains("player") == false)
+        {
+            Debug.Log("variable name does not exist");
+
+            //show error/hint box
+            tutorial.hideTutorial();
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "The variable type 'player' is missing.";
+        }
+        else if (inputCopy.Substring(inputCopy.Length - 1, 1) != "}")
+        {
+            //show error/hint box
+            tutorial.hideTutorial();
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Are you missing a curly bracket?";
+        }
+        else if ((Regex.IsMatch(inputCopy, @"if\((platformTwo)\.[y]==[platformThree]+.y\){for\(int[\w]=0;i<\d;i\+\+\){[\w]+.x\+\+;}}") == false))
+        {
+            //show error/hint box
+            tutorial.hideTutorial();
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Expression does not match.";
         }
 
         //Check if moving player using the if statement
-        if (Regex.IsMatch(inputCopy, @"if\(([\w]+)\.[y]==[\w]+.y\){for\(int[\w]=0;i<\d;i\+\+\){[\w]+.x\+\+;}}"))    //match regex if(platformOne.y==platformTwo.y){for(inti=0;i<2;i++){player.x++;}}
+        if (Regex.IsMatch(inputCopy, @"if\((platformTwo)\.[y]==[platformThree]+.y\){for\(int[\w]=0;i<\d;i\+\+\){[\w]+.x\+\+;}}"))    //match regex if(platformOne.y==platformTwo.y){for(inti=0;i<2;i++){player.x++;}}
         {
             Debug.Log("Move player if statement! :D");
             //If statement object
@@ -425,6 +626,9 @@ public class FinalLevel : MonoBehaviour
             Debug.Log("object name2: " + objectName2);
             Debug.Log("loop length: " + loopLength);
             movingPlayerRightIfStatement2 = true;
+            correctAnswerTimer = 2f;
+            tutorial.hideTutorial();
+            input.GetComponent<InputField>().interactable = false;
         }
         //Check if for loop if moving player using a simple for loop
         /*else if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(\s*[\w]+\S\.([x])\+\+\;)*\s*}"))    //match regex player.y=100;
@@ -453,18 +657,87 @@ public class FinalLevel : MonoBehaviour
                 Debug.Log("variable name does not exist");
             }
         }*/
+        runClicked = false;
     }
 
     void movePlayerPartThree()
     {
+        Debug.Log("333333 three");
         inputCopy = input.text;
         inputCopy = Regex.Replace(inputCopy, @"\s", string.Empty);  //remove spaces
 
         Debug.Log(inputCopy);
-
-        if (input == null)
+        if (inputCopy == "")
         {
             Debug.Log("Input field is empty");
+
+            //show error/hint box
+            tutorial.hideTutorial();
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Input field is empty.";
+
+        }
+        else if (inputCopy.Length < 4)
+        {
+            Debug.Log("The function is unfinished");
+
+            //show error/hint box
+            tutorial.hideTutorial();
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "The function is unfinished.";
+        }
+        else if (inputCopy.Contains("player") == false)
+        {
+            Debug.Log("variable name does not exist");
+
+            //show error/hint box
+            tutorial.hideTutorial();
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "The variable type 'player' is missing.";
+        }
+        else if (inputCopy.Substring(inputCopy.Length - 1, 1) != "}")
+        {
+            //show error/hint box
+            tutorial.hideTutorial();
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Are you missing a curly bracket?";
+        }
+        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\+\+\;)*\s*}") == false))
+        {
+            //show error/hint box
+            tutorial.hideTutorial();
+            errorBox.GetComponent<MeshRenderer>().enabled = true;
+            errorTitle.GetComponent<Text>().enabled = true;
+            errorTitleUnderline.GetComponent<Text>().enabled = true;
+            errorMessage.GetComponent<Text>().enabled = true;
+            dismissErrorButton.GetComponent<Button>().enabled = true;
+            dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+            errorMessage.text = "Expression does not match.";
         }
 
         //Check if moving player using the if statement
@@ -496,17 +769,12 @@ public class FinalLevel : MonoBehaviour
             Debug.Log("object name2: " + objectName2);
             Debug.Log("loop length: " + loopLength);
 
-            //Check if correct variable name is used
-            //if (objectToMove == "player")
-            //{
-                //Debug.Log("let's move the player! :D");
-                movingPlayerRight3 = true;
-            //}
-            //else
-            //{
-            //    Debug.Log("cannot move this");
-            //}
+            movingPlayerRight3 = true;
+            correctAnswerTimer = 2f;
+            input.GetComponent<InputField>().interactable = false;
+            tutorial.hideTutorial();
         }
+        runClicked = false;
     }
 
     void reset()
