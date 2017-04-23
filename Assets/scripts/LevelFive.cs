@@ -6,6 +6,9 @@ using System;
 
 public class LevelFive : MonoBehaviour
 {
+    //Tutorial references
+    levelFiveTutorial tutorial;
+
     //user input
     private InputField input;
     private string inputCopy;
@@ -20,6 +23,13 @@ public class LevelFive : MonoBehaviour
     private Vector3 playerPos;
 
     private float timer = 1f;
+
+    //correct answer
+    public GameObject correctAnswerBox;
+    public Text correctAnswerText;
+    public Button correctAnswerDismissButton;
+    public Text correctAnswerDismissButtonText;
+    private float correctAnswerTimer = 2f;
 
     //error prompting objects
     public GameObject errorBox;
@@ -51,6 +61,7 @@ public class LevelFive : MonoBehaviour
 
     void Start ()
     {
+        tutorial = GameObject.FindObjectOfType(typeof(levelFiveTutorial)) as levelFiveTutorial;
         input = GetComponent<InputField>();
         run.onClick.AddListener(onRunClick);
         resetButton.onClick.AddListener(onResetClick);
@@ -66,10 +77,53 @@ public class LevelFive : MonoBehaviour
 
         //Store original object coordinates
         playerPos = player.transform.position;
+
+        //correct answer
+        correctAnswerBox.GetComponent<MeshRenderer>().enabled = false;
+        correctAnswerText.GetComponent<Text>().enabled = false;
+        correctAnswerDismissButton.GetComponent<Image>().enabled = false;
+        correctAnswerDismissButtonText.GetComponent<Text>().enabled = false;
+
+        //tutorial pop-ups
+        tutorial.tutorialCounter0();
     }
 	
 	void Update ()
     {
+        if (partOneDone)
+        {
+            if (correctAnswerTimer >= 0f)
+            {
+                correctAnswerTimer -= Time.deltaTime;
+
+                //input.GetComponent<InputField>().interactable = false;
+
+                //show correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = true;
+                correctAnswerText.GetComponent<Text>().enabled = true;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = true;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = true;
+
+                //hide error/hint box
+                errorBox.GetComponent<MeshRenderer>().enabled = false;
+                errorTitle.GetComponent<Text>().enabled = false;
+                errorTitleUnderline.GetComponent<Text>().enabled = false;
+                errorMessage.GetComponent<Text>().enabled = false;
+                dismissErrorButton.GetComponent<Button>().enabled = false;
+                dissmissErrorButtonText.GetComponent<Text>().enabled = false;
+            }
+            else
+            {
+                //input.GetComponent<InputField>().interactable = true;
+
+                //hide correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = false;
+                correctAnswerText.GetComponent<Text>().enabled = false;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = false;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = false;
+            }
+
+        }
         //Move the platform back and forth
         if (!back && platformReachedPosition == false)
         {
@@ -382,6 +436,7 @@ public class LevelFive : MonoBehaviour
             Debug.Log("object name2: " + objectName2);
             Debug.Log("loop length: " + loopLength);
             partOneDone = true;
+            correctAnswerTimer = 2f;
         }
         runClicked = false;
     }
