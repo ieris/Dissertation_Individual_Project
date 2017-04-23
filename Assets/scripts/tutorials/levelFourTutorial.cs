@@ -175,7 +175,7 @@ public class levelFourTutorial : MonoBehaviour
         tutorialMessage.GetComponent<Text>().enabled = true;
         dismissTutorialButton.GetComponent<Image>().enabled = true;
         dismissTutorialButtonText.GetComponent<Text>().enabled = true;
-        tutorialMessage.text = "Now let's call the function we just made and move 'platformOne' up by 2 units!\n\nmoveUp(platformOne,2);";
+        tutorialMessage.text = "Now let's call the function we just made and move 'platformOne' up by 2 units!\n\nmoveUp(platformOne, 2);";
 
         tutorialMessage.fontSize = 22;
         tutorialMessage.GetComponent<RectTransform>().sizeDelta = new Vector2(260, 30);
@@ -223,9 +223,9 @@ public class levelFourTutorial : MonoBehaviour
         tutorialMessage.GetComponent<Text>().enabled = true;
         dismissTutorialButton.GetComponent<Image>().enabled = true;
         dismissTutorialButtonText.GetComponent<Text>().enabled = true;
-        tutorialMessage.text = "All we need to do is call the function we made again like so:\n\nmoveUp(platformTwo, 2);";
+        tutorialMessage.text = "All we need to do is call the function we made again like so:\n\nmoveUp(platformTwo, 2); \n\nmoveUp(platformThree, 2);";
 
-        tutorialMessage.fontSize = 22;
+        tutorialMessage.fontSize = 21;
         tutorialMessage.GetComponent<RectTransform>().sizeDelta = new Vector2(260, 30);
         tutorialMessage.GetComponent<RectTransform>().anchoredPosition = new Vector3(-385, 200, 0);
 

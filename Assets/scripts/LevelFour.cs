@@ -110,6 +110,14 @@ public class LevelFour : MonoBehaviour
                 correctAnswerText.GetComponent<Text>().enabled = true;
                 correctAnswerDismissButton.GetComponent<Image>().enabled = true;
                 correctAnswerDismissButtonText.GetComponent<Text>().enabled = true;
+
+                //hide error/hint box
+                errorBox.GetComponent<MeshRenderer>().enabled = false;
+                errorTitle.GetComponent<Text>().enabled = false;
+                errorTitleUnderline.GetComponent<Text>().enabled = false;
+                errorMessage.GetComponent<Text>().enabled = false;
+                dismissErrorButton.GetComponent<Button>().enabled = false;
+                dissmissErrorButtonText.GetComponent<Text>().enabled = false;
             }
             else
             {
@@ -135,6 +143,14 @@ public class LevelFour : MonoBehaviour
                 correctAnswerText.GetComponent<Text>().enabled = true;
                 correctAnswerDismissButton.GetComponent<Image>().enabled = true;
                 correctAnswerDismissButtonText.GetComponent<Text>().enabled = true;
+
+                //hide error/hint box
+                errorBox.GetComponent<MeshRenderer>().enabled = false;
+                errorTitle.GetComponent<Text>().enabled = false;
+                errorTitleUnderline.GetComponent<Text>().enabled = false;
+                errorMessage.GetComponent<Text>().enabled = false;
+                dismissErrorButton.GetComponent<Button>().enabled = false;
+                dissmissErrorButtonText.GetComponent<Text>().enabled = false;
             }
             else
             {
@@ -182,10 +198,14 @@ public class LevelFour : MonoBehaviour
         {
             Debug.Log("moving moving moving");
             //Move up until for loop ends
+            if(movingPlatformPos.y + (Convert.ToInt32(intValue)) > 9)
+            {
+                intValue = "2";
+            }
             if (platformToMove.transform.position.y < movingPlatformPos.y + (Convert.ToInt32(intValue)))
             {
                 platformToMove.transform.position += Vector3.up * 1f * Time.deltaTime;
-                input.GetComponent<InputField>().interactable = false;
+                input.GetComponent<InputField>().interactable = false;                         
             }
             
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
@@ -203,23 +223,15 @@ public class LevelFour : MonoBehaviour
                 //Check if the movingPlatform is in the correct position
                 if (platformToMove.transform.position.y == 9f)
                 {
-                    if(platformCounter == 0)
+                    if (partTwoDone)
                     {
-                        tutorial.taskTwo();
-                    }
-                    if (platformCounter == 1)
-                    {
-                        tutorial.taskThree();
-                    }
-                    if(platformCounter >= 2)
-                    {
-                        if(tutorial.taskThreeActive)
+                        if(tutorial.taskThreeAnswerActive == false)
                         {
-                            tutorial.taskThreeAnswer();
+                            tutorial.taskThree();
                         }
                         else
                         {
-                            tutorial.taskThree();
+                            tutorial.taskThreeAnswer();
                         }
                     }
                     platformCounter++;
@@ -230,7 +242,9 @@ public class LevelFour : MonoBehaviour
 
             if(platformCounter == 3)
             {
+                input.text = "";
                 partThreeDone = true;
+                Debug.Log("PART THREE DONE!");
                 tutorial.taskFour();
             }
         }
@@ -267,6 +281,7 @@ public class LevelFour : MonoBehaviour
         //right
         if (partThreeDone && movingPlayer)
         {
+            Debug.Log("part three done & moving player");
             //Move up until for loop ends
             if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
@@ -301,6 +316,11 @@ public class LevelFour : MonoBehaviour
         runClicked = true;
         Debug.Log("Button was clicked!");
 
+        if (partThreeDone && runClicked)
+        {
+            Debug.Log("part three is done");
+            movePlayer();
+        }
         if (partOneDone == false && runClicked)
         {
             makeFunction();
@@ -309,18 +329,13 @@ public class LevelFour : MonoBehaviour
         {
             movePlatform();
         }
-        if(partTwoDone && platformCounter < 3 && runClicked)
+        if(!partThreeDone && partTwoDone && platformCounter < 3 && runClicked)
         {
             Debug.Log("part two and counter < 3");
             movePlatform();
             //partTwoDone = false;
             //Debug.Log("Complete!");
-        }
-        if (partThreeDone && runClicked)
-        {
-            Debug.Log("part three is done");
-            movePlayer();
-        }
+        }        
     }
 
     void onResetClick()
@@ -432,7 +447,7 @@ public class LevelFour : MonoBehaviour
 
             errorMessage.text = "Are you missing a curly bracket?";
         }
-        else if ((Regex.IsMatch(inputCopy, @"void[\w]+\([object]+[platform]+\,int(\w)\){for\(int(\w*)\s?=\s?[0]\s?\;\s*\2\s*[<]?=?\s*\1\s*\;((\s*\2([++])\5)|(\s*\2\s*=\s*\2\s*[+/*-]\s*[1-9]))\s*\)\s*{[platform]+\S\.([y])\+\+;}}") == false))
+        else if ((Regex.IsMatch(inputCopy, @"void[\w]+\([object]+[platform]+\,int(x)\){for\(int(\w*)\s?=\s?[0]\s?\;\s*\2\s*[<]?=?\s*x-1\s*\;((\s*\2([++])\5)|(\s*\2\s*=\s*\2\s*[+/*-]\s*[1-9]))\s*\)\s*{[platform]+\S\.([y])\+\+;}}") == false))
         {
             //show error/hint box
             errorBox.GetComponent<MeshRenderer>().enabled = true;
@@ -448,7 +463,7 @@ public class LevelFour : MonoBehaviour
         Debug.Log(inputCopy);
 
         //Check if for loop if statement matches: moving platform going down
-        if (Regex.IsMatch(inputCopy, @"void[\w]+\([object]+[platform]+\,int(\w)\){for\(int(\w*)\s?=\s?[0]\s?\;\s*\2\s*[<]?=?\s*\1\s*\;((\s*\2([++])\5)|(\s*\2\s*=\s*\2\s*[+/*-]\s*[1-9]))\s*\)\s*{[platform]+\S\.([y])\+\+;}}"))    //match regex voidmoveUp(objectplatform,intx){for(inti=0;i<x;i++){platform.y++;}}
+        if (Regex.IsMatch(inputCopy, @"void[\w]+\([object]+[platform]+\,int(x)\){for\(int(\w*)\s?=\s?[0]\s?\;\s*\2\s*[<]?=?\s*x-1\s*\;((\s*\2([++])\5)|(\s*\2\s*=\s*\2\s*[+/*-]\s*[1-9]))\s*\)\s*{[platform]+\S\.([y])\+\+;}}"))    //match regex voidmoveUp(objectplatform,intx){for(inti=0;i<x;i++){platform.y++;}}
         {
             /*int objectNamePos = inputCopy.IndexOf("{");
             objectName = inputCopy.Substring(objectNamePos + 1, inputCopy.Length - 7 - objectNamePos);*/
@@ -602,28 +617,24 @@ public class LevelFour : MonoBehaviour
                         Debug.Log("platform to move eposition is 3: " + movingPlatformPos);
                     }
 
-                    if (platformCounter == 0)
+                    partTwoDone = true;
+                    correctAnswerTimer = 2f;
+                    if (platformCounter >= 1)
                     {
-                        tutorial.taskTwo();
-                    }
-                    if (platformCounter == 1)
-                    {
-                        tutorial.taskThree();
-                    }
-                    if (platformCounter >= 2)
-                    {
-                        if (tutorial.taskThreeActive)
-                        {
-                            tutorial.taskThreeAnswer();
-                        }
-                        else
+                        if (tutorial.taskThreeAnswerActive == false)
                         {
                             tutorial.taskThree();
                         }
+                        else
+                        {
+                            tutorial.taskThreeAnswer();
+                        }
                     }
-                    correctAnswerTimer = 2f;
-                    tutorial.taskTwo();
-                    input.text = "";
+                    else
+                    {
+                        tutorial.taskTwo();
+                    }
+                    //input.text = "";
                 }
                 else
                 {
