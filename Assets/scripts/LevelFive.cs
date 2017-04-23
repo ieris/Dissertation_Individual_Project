@@ -90,13 +90,13 @@ public class LevelFive : MonoBehaviour
 	
 	void Update ()
     {
-        if (partOneDone)
+        if (partOneDone || partTwoDone)
         {
             if (correctAnswerTimer >= 0f)
             {
                 correctAnswerTimer -= Time.deltaTime;
 
-                //input.GetComponent<InputField>().interactable = false;
+                input.GetComponent<InputField>().interactable = false;
 
                 //show correct answer
                 correctAnswerBox.GetComponent<MeshRenderer>().enabled = true;
@@ -113,9 +113,7 @@ public class LevelFive : MonoBehaviour
                 dissmissErrorButtonText.GetComponent<Text>().enabled = false;
             }
             else
-            {
-                //input.GetComponent<InputField>().interactable = true;
-
+            {                
                 //hide correct answer
                 correctAnswerBox.GetComponent<MeshRenderer>().enabled = false;
                 correctAnswerText.GetComponent<Text>().enabled = false;
@@ -128,7 +126,7 @@ public class LevelFive : MonoBehaviour
         if (!back && platformReachedPosition == false)
         {
             //Debug.Log("right");
-            movingPlatform.transform.position += Vector3.right * 0.75f * Time.deltaTime;
+            movingPlatform.transform.position += Vector3.right * 1.25f * Time.deltaTime;
 
             if (movingPlatform.transform.position.x >= -0.75f)
             {
@@ -146,7 +144,7 @@ public class LevelFive : MonoBehaviour
         if (back && platformReachedPosition == false)
         {
             //Debug.Log("left");
-            movingPlatform.transform.position += Vector3.left * 0.75f * Time.deltaTime;
+            movingPlatform.transform.position += Vector3.left * 1.25f * Time.deltaTime;
 
             if (movingPlatform.transform.position.x <= -7.75f)
             {
@@ -158,7 +156,7 @@ public class LevelFive : MonoBehaviour
         if (!playerBack && platformReachedPosition == false)
         {
             //Debug.Log("right");
-            player.transform.position += Vector3.right * 0.75f * Time.deltaTime;
+            player.transform.position += Vector3.right * 1.25f * Time.deltaTime;
 
             if(player.transform.position.x == platformOne.transform.position.x)
             {
@@ -173,7 +171,7 @@ public class LevelFive : MonoBehaviour
         if (playerBack && platformReachedPosition == false)
         {
             //Debug.Log("left");
-            player.transform.position += Vector3.left * 0.75f * Time.deltaTime;
+            player.transform.position += Vector3.left * 1.25f * Time.deltaTime;
 
             if (player.transform.position.x <= -7.75f)
             {
@@ -187,8 +185,10 @@ public class LevelFive : MonoBehaviour
             //Moving platform position
             if (movingPlatform.transform.position.x >= -0.78f)
             {
-                platformReachedPosition = true;
-                Debug.Log("platform reached position");
+                //partOneDone = false;
+                platformReachedPosition = true;              
+                input.GetComponent<InputField>().interactable = true;
+                //Debug.Log("platform reached position");
                 //Move up until for loop ends                
             }
         }
@@ -197,6 +197,16 @@ public class LevelFive : MonoBehaviour
             if(player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
                 player.transform.position += Vector3.right * 1f * Time.deltaTime;
+                /*if(tutorial.taskTwoAnswerActive)
+                {
+                    tutorial.taskTwoAnswer();
+                    movingPlayerPartTwo = false;
+                }
+                else
+                {
+                    tutorial.taskTwo();
+                    movingPlayerPartTwo = false;
+                }*/
             }
 
             if(player.transform.position.x >= 4f)
@@ -215,12 +225,16 @@ public class LevelFive : MonoBehaviour
             {
                 player.transform.position += Vector3.right * 1f * Time.deltaTime;
                 partTwoDone = true;
+                
+                //partTwoDone = false;
             }
 
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
             //Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
             if (player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
+                //tutorial.taskTwoAnswer();
+
                 //player.transform.position = new Vector3(playerPos.x + (Convert.ToInt32(loopLength) + 1), player.transform.position.y, player.transform.position.z);
                 //Debug.Log(player.transform.position);
 
@@ -228,6 +242,7 @@ public class LevelFive : MonoBehaviour
                 Debug.Log("player position: " + playerPos.x);
                 if (player.transform.position.x >= 4f)
                 {
+                    platformReachedPosition = false;
                     partThreeDone = true;
                     Application.LoadLevel("FinalLevel");
                     input.text = "";
@@ -257,6 +272,16 @@ public class LevelFive : MonoBehaviour
         if (partOneDone)
         {
             movingPlayer = true;
+            if (tutorial.taskTwoActive)
+            {
+                Debug.Log("active");
+                tutorial.taskTwoAnswer();
+            }
+            else
+            {
+                Debug.Log("not active");
+                tutorial.taskTwo();
+            }
         }
         if (partTwoDone && runClicked)
         {
@@ -532,6 +557,7 @@ public class LevelFive : MonoBehaviour
             Debug.Log("object name: " + objectName);
             Debug.Log("loop length: " + loopLength);
             movingPlayerPartTwo = true;
+            //tutorial.taskTwoAnswer();
             runClicked = false;
         }
     }
