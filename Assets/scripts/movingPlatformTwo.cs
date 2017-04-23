@@ -10,7 +10,7 @@ public class movingPlatformTwo : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(colliding);
+        //Debug.Log(colliding);
         if (colliding && player.transform.position.x == -4.75f)
         {
             if (!playerGoUp)

@@ -87,6 +87,7 @@
     <Compile Include="Assets\scripts\levelTwo\FallingPlatformTwo.cs" />
     <Compile Include="Assets\scripts\movingPlatformOne.cs" />
     <Compile Include="Assets\scripts\movingPlatformTwo.cs" />
+    <Compile Include="Assets\scripts\tutorials\finalLevelTutorial.cs" />
     <Compile Include="Assets\scripts\tutorials\levelFiveTutorial.cs" />
     <Compile Include="Assets\scripts\tutorials\levelFourTutorial.cs" />
     <Compile Include="Assets\scripts\tutorials\levelOneTutorial.cs" />
