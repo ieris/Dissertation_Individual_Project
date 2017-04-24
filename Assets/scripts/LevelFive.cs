@@ -90,7 +90,7 @@ public class LevelFive : MonoBehaviour
 	
 	void Update ()
     {
-        if (partOneDone || partTwoDone)
+        if (partOneDone)
         {
             if (correctAnswerTimer >= 0f)
             {
@@ -120,7 +120,37 @@ public class LevelFive : MonoBehaviour
                 correctAnswerDismissButton.GetComponent<Image>().enabled = false;
                 correctAnswerDismissButtonText.GetComponent<Text>().enabled = false;
             }
+        }
+        if (partTwoDone)
+        {
+            if (correctAnswerTimer >= 0f)
+            {
+                correctAnswerTimer -= Time.deltaTime;
 
+                input.GetComponent<InputField>().interactable = false;
+
+                //show correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = true;
+                correctAnswerText.GetComponent<Text>().enabled = true;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = true;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = true;
+
+                //hide error/hint box
+                errorBox.GetComponent<MeshRenderer>().enabled = false;
+                errorTitle.GetComponent<Text>().enabled = false;
+                errorTitleUnderline.GetComponent<Text>().enabled = false;
+                errorMessage.GetComponent<Text>().enabled = false;
+                dismissErrorButton.GetComponent<Button>().enabled = false;
+                dissmissErrorButtonText.GetComponent<Text>().enabled = false;
+            }
+            else
+            {
+                //hide correct answer
+                correctAnswerBox.GetComponent<MeshRenderer>().enabled = false;
+                correctAnswerText.GetComponent<Text>().enabled = false;
+                correctAnswerDismissButton.GetComponent<Image>().enabled = false;
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = false;
+            }
         }
         //Move the platform back and forth
         if (!back && platformReachedPosition == false)
@@ -305,6 +335,17 @@ public class LevelFive : MonoBehaviour
         dissmissErrorButtonText.GetComponent<Text>().enabled = false;
     }
 
+    public void dismissError()
+    {
+        //hide error/hint box
+        errorBox.GetComponent<MeshRenderer>().enabled = false;
+        errorTitle.GetComponent<Text>().enabled = false;
+        errorTitleUnderline.GetComponent<Text>().enabled = false;
+        errorMessage.GetComponent<Text>().enabled = false;
+        dismissErrorButton.GetComponent<Button>().enabled = false;
+        dissmissErrorButtonText.GetComponent<Text>().enabled = false;
+    }
+
     void movePlayer()
     {
         inputCopy = input.text;
@@ -394,7 +435,7 @@ public class LevelFive : MonoBehaviour
 
             errorMessage.text = "Are you missing a curly bracket?";
         }
-        else if ((Regex.IsMatch(inputCopy, @"if\(([\w]+)\.[x][+]\1.width==[\w]+.x\){for\(int[\w]=0;i<\d;i\+\+\){[\w]+.x\+\+;}}") == false))
+        else if ((Regex.IsMatch(inputCopy, @"if\((movingPlatform).[x][+]\1.width==(platformOne)+.x\){for\(int[\w]=0;i<\d;i\+\+\){(player)+.x\+\+;}}") == false))
         {
             //show error/hint box
             errorBox.GetComponent<MeshRenderer>().enabled = true;
@@ -433,7 +474,7 @@ public class LevelFive : MonoBehaviour
             }
         }*/
         //Check if for loop if statement matches: moving platform going up
-        if (Regex.IsMatch(inputCopy, @"if\(([\w]+)\.[x][+]\1.width==[\w]+.x\){for\(int[\w]=0;i<\d;i\+\+\){[\w]+.x\+\+;}}"))    //match regex if(movingPlatform.x+movingPlatform.width==platformOne.x){for(inti=0;i<2;i++){player.x++;}}
+        if (Regex.IsMatch(inputCopy, @"if\((movingPlatform).[x][+]\1.width==(platformOne)+.x\){for\(int[\w]=0;i<\d;i\+\+\){(player)+.x\+\+;}}"))    //match regex if(movingPlatform.x+movingPlatform.width==platformOne.x){for(inti=0;i<2;i++){player.x++;}}
         {
             Debug.Log("MATCHES!");
             //If statement object
@@ -557,6 +598,7 @@ public class LevelFive : MonoBehaviour
             Debug.Log("object name: " + objectName);
             Debug.Log("loop length: " + loopLength);
             movingPlayerPartTwo = true;
+            correctAnswerTimer = 2f;
             //tutorial.taskTwoAnswer();
             runClicked = false;
         }

@@ -84,6 +84,17 @@ public class LevelThree : MonoBehaviour
         tutorial.taskOne();
     }
 
+    public void dismissError()
+    {
+        //hide error/hint box
+        errorBox.GetComponent<MeshRenderer>().enabled = false;
+        errorTitle.GetComponent<Text>().enabled = false;
+        errorTitleUnderline.GetComponent<Text>().enabled = false;
+        errorMessage.GetComponent<Text>().enabled = false;
+        dismissErrorButton.GetComponent<Button>().enabled = false;
+        dissmissErrorButtonText.GetComponent<Text>().enabled = false;
+    }
+
     void Update ()
     {
         if (movingPlatformLower)

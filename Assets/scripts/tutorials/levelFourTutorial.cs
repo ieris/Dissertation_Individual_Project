@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class levelFourTutorial : MonoBehaviour
 {
+    LevelFour fl;
+
     //tutorial prompting objects
     public GameObject tutorialBox;
     public GameObject tutorialBoxTwo;
@@ -28,6 +30,8 @@ public class levelFourTutorial : MonoBehaviour
 
     void Start()
     {
+        fl = GameObject.FindObjectOfType(typeof(LevelFour)) as LevelFour;
+
         //hide tutorial box
         tutorialBox.GetComponent<MeshRenderer>().enabled = false;
         tutorialBoxTwo.GetComponent<MeshRenderer>().enabled = false;
@@ -61,6 +65,7 @@ public class levelFourTutorial : MonoBehaviour
     {
         if (taskOneActive)
         {
+            fl.dismissError();
             Debug.Log("hint button");
             //hideTutorial();
             /*tutorialBox.GetComponent<MeshRenderer>().enabled = true;
@@ -97,10 +102,12 @@ public class levelFourTutorial : MonoBehaviour
         }
         if(taskThreeActive)
         {
+            fl.dismissError();
             taskThreeAnswer();
         }
         if (taskFourActive)
         {
+            fl.dismissError();
             taskFourAnswer();
         }
     }

@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class levelTwoTutorial : MonoBehaviour
 {
+    LevelTwo fl;
+
     //tutorial prompting objects
     public GameObject tutorialBox;
     public GameObject tutorialBoxTwo;
@@ -17,6 +19,8 @@ public class levelTwoTutorial : MonoBehaviour
 
     void Start()
     {
+        fl = GameObject.FindObjectOfType(typeof(LevelTwo)) as LevelTwo;
+
         //hide tutorial box
         tutorialBox.GetComponent<MeshRenderer>().enabled = false;
         tutorialBoxTwo.GetComponent<MeshRenderer>().enabled = false;
@@ -42,6 +46,8 @@ public class levelTwoTutorial : MonoBehaviour
 
     void onHintClick()
     {
+        fl.dismissError();
+
         tutorialBox.GetComponent<MeshRenderer>().enabled = true;
         //tutorialBoxTwo.GetComponent<MeshRenderer>().enabled = true;
 
@@ -92,7 +98,7 @@ public class levelTwoTutorial : MonoBehaviour
         tutorialMessage.GetComponent<Text>().enabled = true;
         dismissTutorialButton.GetComponent<Image>().enabled = true;
         dismissTutorialButtonText.GetComponent<Text>().enabled = true;
-        tutorialMessage.text = "Now let's move the box and apply the speed variable inside the for loop. Have a go:\n\nfor(int i = 0; i < 9; i++)\n{\n\tbox.x += 1 * speed;\n}\n\n";
+        tutorialMessage.text = "Now let's move the box and apply the speed variable inside the for loop. Have a go:\n\nfor(int i = 0; i < 10; i++)\n{\n\tbox.x += 1 * speed;\n}\n\n";
     }
     
     public void hideTutorial()

@@ -257,7 +257,7 @@ public class LevelTwo : MonoBehaviour
         //right
         if (movingPlayerRightWithSpeed)
         {
-            Debug.Log("moving player to the right");
+            Debug.Log("moving player to the right " + playerPos.x + " loop length " + loopLength);
 
             //Move up until for loop ends
             if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
@@ -340,6 +340,17 @@ public class LevelTwo : MonoBehaviour
     }
 
     void onDismissClick()
+    {
+        //hide error/hint box
+        errorBox.GetComponent<MeshRenderer>().enabled = false;
+        errorTitle.GetComponent<Text>().enabled = false;
+        errorTitleUnderline.GetComponent<Text>().enabled = false;
+        errorMessage.GetComponent<Text>().enabled = false;
+        dismissErrorButton.GetComponent<Button>().enabled = false;
+        dissmissErrorButtonText.GetComponent<Text>().enabled = false;
+    }
+
+    public void dismissError()
     {
         //hide error/hint box
         errorBox.GetComponent<MeshRenderer>().enabled = false;
@@ -508,7 +519,7 @@ public class LevelTwo : MonoBehaviour
 
             //Find how long the loop will run for in the string
             int loopLengthPos = inputCopy.IndexOf("<");
-            loopLength = inputCopy.Substring(loopLengthPos + 1, 1);
+            loopLength = inputCopy.Substring(loopLengthPos + 1, 2);
             movingPlayerLeft = true;
             correctAnswerTimer = 2f;
             runClicked = false;
@@ -523,7 +534,7 @@ public class LevelTwo : MonoBehaviour
 
             //Find how long the loop will run for in the string
             int loopLengthPos = inputCopy.IndexOf("<");
-            loopLength = inputCopy.Substring(loopLengthPos + 1, 1);
+            loopLength = inputCopy.Substring(loopLengthPos + 1, 2);
 
             Debug.Log("object name: " + objectName);
             Debug.Log("loop length: " + loopLength);
@@ -593,7 +604,7 @@ public class LevelTwo : MonoBehaviour
 
             errorMessage.text = "Are you missing a curly bracket?";
         }
-        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{box\.([x])\+\=[1]\*speed;}")) == false)
+        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{box\.([x])\+\=[1]\*speed;}")) == false)
         {
             //show error/hint box
             errorBox.GetComponent<MeshRenderer>().enabled = true;
@@ -607,13 +618,14 @@ public class LevelTwo : MonoBehaviour
         }
 
         //Check if for loop if statement matches: moving platform going down
-        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{box\.([x])\+\=[1]\*speed;}"))    //match regex box.y+=100;
+        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{box\.([x])\+\=[1]\*speed;}"))    //match regex box.y+=100;
         {
             Debug.Log("3rd part");
 
             //Find how long the loop will run for in the string
             int loopLengthPos = inputCopy.IndexOf("<");
-            loopLength = inputCopy.Substring(loopLengthPos + 1, 1);
+            loopLength = inputCopy.Substring(loopLengthPos + 1, 2);
+            playerPos = new Vector3(-8, 8, 0);
             movingPlayerRightWithSpeed = true;
             Debug.Log("loop length: " + loopLength);
             correctAnswerTimer = 2f;

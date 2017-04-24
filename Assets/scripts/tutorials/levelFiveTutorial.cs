@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class levelFiveTutorial : MonoBehaviour
 {
+    LevelFive fl;
     //tutorial prompting objects
     public GameObject tutorialBox;
     public GameObject tutorialBoxTwo;
@@ -25,7 +26,7 @@ public class levelFiveTutorial : MonoBehaviour
 
     void Start()
     {
-
+        fl = GameObject.FindObjectOfType(typeof(LevelFive)) as LevelFive;
         //hide tutorial box
         tutorialBox.GetComponent<MeshRenderer>().enabled = true;
         tutorialBoxTwo.GetComponent<MeshRenderer>().enabled = false;
@@ -103,12 +104,15 @@ public class levelFiveTutorial : MonoBehaviour
     {
         if(taskTwoActive)
         {
+            fl.dismissError();
             taskTwoAnswer();
         }
         
 
         if (taskOneActive)
         {
+            fl.dismissError();
+
             if (tutorialCounter == 0)
             {
                 tutorialCounter0();

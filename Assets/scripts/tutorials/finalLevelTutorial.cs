@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class finalLevelTutorial : MonoBehaviour {
+public class finalLevelTutorial : MonoBehaviour
+{
+    FinalLevel fl;
 
     //tutorial prompting objects
     public GameObject tutorialBox;
@@ -24,6 +26,7 @@ public class finalLevelTutorial : MonoBehaviour {
 
     void Start()
     {
+        fl = GameObject.FindObjectOfType(typeof(FinalLevel)) as FinalLevel;
         //hide tutorial box
         tutorialBox.GetComponent<MeshRenderer>().enabled = false;
         tutorialBoxTwo.GetComponent<MeshRenderer>().enabled = true;
@@ -52,18 +55,22 @@ public class finalLevelTutorial : MonoBehaviour {
     {               
         if (taskThreeActive)
         {
+            fl.dismissError();
             taskThree();
         }
         else if (taskTwoActive)
         {
+            fl.dismissError();
             taskTwo();
         }
         else if (taskOneActive)
         {
+            fl.dismissError();
             taskOne();
         }
         else
-        { 
+        {
+            fl.dismissError();
             taskOne();
         }
     }
@@ -96,7 +103,7 @@ public class finalLevelTutorial : MonoBehaviour {
         tutorialMessage.GetComponent<Text>().enabled = true;
         dismissTutorialButton.GetComponent<Image>().enabled = true;
         dismissTutorialButtonText.GetComponent<Text>().enabled = true;
-        tutorialMessage.text = "We can repeat the same process using 'platformTwo' and 'platformThree':if(platformTwo.y == platformThree.y)\n{\n\tfor(int i = 0; i < 2; i++)\n\t{\n\t\tbox.x++;\n\t}\n}";
+        tutorialMessage.text = "We can repeat the same process using 'platformTwo' and 'platformThree':\n\nif(platformTwo.y == platformThree.y)\n{\n\tfor(int i = 0; i < 2; i++)\n\t{\n\t\tbox.x++;\n\t}\n}";
     }
 
     public void taskThree()
@@ -123,6 +130,7 @@ public class finalLevelTutorial : MonoBehaviour {
         //hide tutorial box
         tutorialBox.GetComponent<MeshRenderer>().enabled = false;
         tutorialBoxTwo.GetComponent<MeshRenderer>().enabled = false;
+        tutorialBoxThree.GetComponent<MeshRenderer>().enabled = false;
 
         tutorialTitle.GetComponent<Text>().enabled = false;
         tutorialUnderline.GetComponent<Text>().enabled = false;

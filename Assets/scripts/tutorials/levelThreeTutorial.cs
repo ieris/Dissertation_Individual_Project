@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class levelThreeTutorial : MonoBehaviour
 {
+    LevelThree fl;
+
     //tutorial prompting objects
     public GameObject tutorialBox;
     public GameObject tutorialBoxTwo;
@@ -19,6 +21,8 @@ public class levelThreeTutorial : MonoBehaviour
 
     void Start()
     {
+        fl = GameObject.FindObjectOfType(typeof(LevelThree)) as LevelThree;
+
         //hide tutorial box
         tutorialBox.GetComponent<MeshRenderer>().enabled = true;
         tutorialBoxTwo.GetComponent<MeshRenderer>().enabled = false;
@@ -44,6 +48,8 @@ public class levelThreeTutorial : MonoBehaviour
 
     void onHintClick()
     {
+        fl.dismissError();
+
         tutorialBox.GetComponent<MeshRenderer>().enabled = true;
         //tutorialBoxTwo.GetComponent<MeshRenderer>().enabled = true;
 
