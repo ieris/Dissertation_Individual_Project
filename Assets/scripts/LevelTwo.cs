@@ -619,19 +619,19 @@ public class LevelTwo : MonoBehaviour
         player.transform.position = new Vector3(-8f, 8f, 0f);
         player.transform.rotation = Quaternion.identity;
 
-        fp1.transform.position = new Vector3(-5.25f, 7f, 0f);
+        fp1.transform.position = new Vector3(-5.25f, 7f, 0.15f);
         fp1.transform.rotation = Quaternion.identity;
         Destroy(fp1.GetComponent<Rigidbody>());
 
-        fp2.transform.position = new Vector3(-3.25f, 7f, 0f);
+        fp2.transform.position = new Vector3(-3.25f, 7f, 0.15f);
         fp2.transform.rotation = Quaternion.identity;
         Destroy(fp2.GetComponent<Rigidbody>());
 
-        fp3.transform.position = new Vector3(-1.25f, 7f, 0f);
+        fp3.transform.position = new Vector3(-1.25f, 7f, 0.15f);
         fp3.transform.rotation = Quaternion.identity;
         Destroy(fp3.GetComponent<Rigidbody>());
 
-        fp4.transform.position = new Vector3(0.75f, 7f, 0f);
+        fp4.transform.position = new Vector3(0.75f, 7f, 0.15f);
         fp4.transform.rotation = Quaternion.identity;
         Destroy(fp4.GetComponent<Rigidbody>());
 

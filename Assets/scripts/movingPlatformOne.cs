@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class movingPlatformOne : MonoBehaviour
 {
@@ -15,7 +16,6 @@ public class movingPlatformOne : MonoBehaviour
         {
             if (!playerGoUp)
             {
-                //Debug.Log("left");
                 platformOne.transform.position += Vector3.down * 0.75f * Time.deltaTime;
                 player.transform.position += Vector3.down * 0.75f * Time.deltaTime;
 
@@ -41,18 +41,4 @@ public class movingPlatformOne : MonoBehaviour
             }
         }
     }
-
-    /*public void OnCollisionEnter(Collision col)
-    {
-        Debug.Log(name + " collided");
-        if (col.gameObject.tag == "movingPlatformOne")
-        {
-            colliding = true;
-        }
-    }
-
-    public void OnCollisionExit(Collision col)
-    {
-        colliding = false;
-    }*/
 }
