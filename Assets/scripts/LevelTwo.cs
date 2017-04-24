@@ -102,7 +102,7 @@ public class LevelTwo : MonoBehaviour
                 errorBox.GetComponent<MeshRenderer>().enabled = false;
                 errorTitle.GetComponent<Text>().enabled = false;
                 errorTitleUnderline.GetComponent<Text>().enabled = false;
-                errorMessage.GetComponent<Text>().enabled = false;
+                errorMessage.GetComponent<Text>().enabled = false;                
             }
             else
             {
@@ -126,16 +126,17 @@ public class LevelTwo : MonoBehaviour
                 correctAnswerBox.GetComponent<MeshRenderer>().enabled = true;
                 correctAnswerText.GetComponent<Text>().enabled = true;
                 correctAnswerDismissButton.GetComponent<Image>().enabled = true;
-                correctAnswerDismissButtonText.GetComponent<Text>().enabled = true;
-                correctAnswerText.text = "Correct!";
+                correctAnswerDismissButtonText.GetComponent<Text>().enabled = true;                
 
                 errorBox.GetComponent<MeshRenderer>().enabled = false;
                 errorTitle.GetComponent<Text>().enabled = false;
                 errorTitleUnderline.GetComponent<Text>().enabled = false;
                 errorMessage.GetComponent<Text>().enabled = false;
+
+                
             }
             else
-            {
+            {                
                 input.GetComponent<InputField>().interactable = true;
 
                 //hide correct answer
@@ -162,9 +163,15 @@ public class LevelTwo : MonoBehaviour
                 errorTitle.GetComponent<Text>().enabled = false;
                 errorTitleUnderline.GetComponent<Text>().enabled = false;
                 errorMessage.GetComponent<Text>().enabled = false;
+
+                if (correctAnswerTimer <= 2f)
+                {
+                    correctAnswerText.text = "Variable created.";
+                }
             }
             else
             {
+                correctAnswerText.text = "Correct!";
                 //hide correct answer
                 correctAnswerBox.GetComponent<MeshRenderer>().enabled = false;
                 correctAnswerText.GetComponent<Text>().enabled = false;
@@ -451,7 +458,7 @@ public class LevelTwo : MonoBehaviour
 
             errorMessage.text = "Input field is empty.";
         }
-        else if (!inputCopy.Contains("player"))
+        else if (!inputCopy.Contains("box"))
         {
             Debug.Log("variable name does not exist");
 
@@ -463,7 +470,7 @@ public class LevelTwo : MonoBehaviour
             dismissErrorButton.GetComponent<Button>().enabled = true;
             dissmissErrorButtonText.GetComponent<Text>().enabled = true;
 
-            errorMessage.text = "The variable 'player' is missing.";
+            errorMessage.text = "The variable 'box' is missing.";
         }
         else if (inputCopy.Substring(inputCopy.Length - 1, 1) != "}")
         {
@@ -477,8 +484,8 @@ public class LevelTwo : MonoBehaviour
 
             errorMessage.text = "Are you missing a curly bracket?";
         }
-        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\-\-\;)*\s*}")) == false 
-        && (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\+\+\;)*\s*}")) == false)
+        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\-\-\;)*\s*}")) == false 
+        && (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\+\+\;)*\s*}")) == false)
         {
             //show error/hint box
             errorBox.GetComponent<MeshRenderer>().enabled = true;
@@ -492,7 +499,7 @@ public class LevelTwo : MonoBehaviour
         }
 
         //Check if for loop if statement matches: moving platform going down
-        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\-\-\;)*\s*}"))    //match regex player.y+=100;
+        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\-\-\;)*\s*}"))    //match regex box.y+=100;
         {
             //Find the object name in the string
             int objectNamePos = inputCopy.IndexOf("{");
@@ -508,7 +515,7 @@ public class LevelTwo : MonoBehaviour
             Debug.Log("loop length: " + loopLength);
         }
         //Check if for loop if statement matches: moving platform going up
-        else if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\+\+\;)*\s*}"))    //match regex player.y=100;
+        else if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\+\+\;)*\s*}"))    //match regex box.y=100;
         {
             //Find the object name in the string
             int objectNamePos = inputCopy.IndexOf("{");
@@ -546,7 +553,7 @@ public class LevelTwo : MonoBehaviour
 
             errorMessage.text = "Input field is empty.";
         }
-        else if (!inputCopy.Contains("player"))
+        else if (!inputCopy.Contains("box"))
         {
             Debug.Log("variable name does not exist");
 
@@ -558,7 +565,7 @@ public class LevelTwo : MonoBehaviour
             dismissErrorButton.GetComponent<Button>().enabled = true;
             dissmissErrorButtonText.GetComponent<Text>().enabled = true;
 
-            errorMessage.text = "The variable 'player' is missing.";
+            errorMessage.text = "The variable 'box' is missing.";
         }
         else if (!inputCopy.Contains("speed"))
         {
@@ -586,7 +593,7 @@ public class LevelTwo : MonoBehaviour
 
             errorMessage.text = "Are you missing a curly bracket?";
         }
-        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{player\.([x])\+\=[1]\*speed;}")) == false)
+        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{box\.([x])\+\=[1]\*speed;}")) == false)
         {
             //show error/hint box
             errorBox.GetComponent<MeshRenderer>().enabled = true;
@@ -600,7 +607,7 @@ public class LevelTwo : MonoBehaviour
         }
 
         //Check if for loop if statement matches: moving platform going down
-        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{player\.([x])\+\=[1]\*speed;}"))    //match regex player.y+=100;
+        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{box\.([x])\+\=[1]\*speed;}"))    //match regex box.y+=100;
         {
             Debug.Log("3rd part");
 

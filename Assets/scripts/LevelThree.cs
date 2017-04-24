@@ -412,7 +412,7 @@ public class LevelThree : MonoBehaviour
 
             errorMessage.text = "Input field is empty.";
         }
-        else if (!inputCopy.Contains("player"))
+        else if (!inputCopy.Contains("box"))
         {
             Debug.Log("variable name does not exist");
 
@@ -424,7 +424,7 @@ public class LevelThree : MonoBehaviour
             dismissErrorButton.GetComponent<Button>().enabled = true;
             dissmissErrorButtonText.GetComponent<Text>().enabled = true;
 
-            errorMessage.text = "The variable 'player' is missing.";
+            errorMessage.text = "The variable 'box' is missing.";
         }
         else if (inputCopy.Substring(inputCopy.Length - 1, 1) != "}")
         {
@@ -438,8 +438,8 @@ public class LevelThree : MonoBehaviour
 
             errorMessage.text = "Are you missing a curly bracket?";
         }
-        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\-\-\;)*\s*}") == false)
-        && ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\+\+\;)*\s*}") == false)))
+        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\-\-\;)*\s*}") == false)
+        && ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\+\+\;)*\s*}") == false)))
         {
             //show error/hint box
             errorBox.GetComponent<MeshRenderer>().enabled = true;
@@ -453,7 +453,7 @@ public class LevelThree : MonoBehaviour
         }
 
         //Check if for loop if statement matches: moving platform going down
-        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\-\-\;)*\s*}"))    //match regex player.x--;
+        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\-\-\;)*\s*}"))    //match regex box.x--;
         {
             Debug.Log("moving left");
             //Find the object name in the string
@@ -473,7 +473,7 @@ public class LevelThree : MonoBehaviour
             correctAnswerTimer = 2f;
         }
         //Check if for loop if statement matches: moving platform going down
-        else if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\+\+\;)*\s*}"))    //match regex player.x++;
+        else if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\+\+\;)*\s*}"))    //match regex box.x++;
         {
             Debug.Log("moving right");
             //Find the object name in the string

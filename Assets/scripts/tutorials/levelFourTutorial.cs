@@ -247,7 +247,7 @@ public class levelFourTutorial : MonoBehaviour
         tutorialMessage.GetComponent<Text>().enabled = true;
         dismissTutorialButton.GetComponent<Image>().enabled = true;
         dismissTutorialButtonText.GetComponent<Text>().enabled = true;
-        tutorialMessage.text = "You know what to do now. Let's make the player walk. If you get stuck you can click the lightbulb button above.";
+        tutorialMessage.text = "You know what to do now. Let's make the box move. If you get stuck you can click the lightbulb button above.";
 
         tutorialMessage.fontSize = 22;
         tutorialMessage.GetComponent<RectTransform>().sizeDelta = new Vector2(260, 30);
@@ -269,7 +269,7 @@ public class levelFourTutorial : MonoBehaviour
         tutorialMessage.GetComponent<Text>().enabled = true;
         dismissTutorialButton.GetComponent<Image>().enabled = true;
         dismissTutorialButtonText.GetComponent<Text>().enabled = true;
-        tutorialMessage.text = "We need to move the player by 9 units so let's put 'i < 8' inside the for loop like so:\n\nfor(int i = 0; i < 8; i++)\n{\n\tplayer.x++;\n}";
+        tutorialMessage.text = "We need to move the box by 9 units so let's put 'i < 8' inside the for loop like so:\n\nfor(int i = 0; i < 8; i++)\n{\n\tbox.x++;\n}";
 
         tutorialMessage.fontSize = 22;
         tutorialMessage.GetComponent<RectTransform>().sizeDelta = new Vector2(260, 30);

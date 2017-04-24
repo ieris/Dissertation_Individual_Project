@@ -658,7 +658,7 @@ public class LevelFour : MonoBehaviour
         inputCopy = input.text;
         inputCopy = Regex.Replace(inputCopy, @"\s", string.Empty);  //remove spaces
 
-        if (!inputCopy.Contains("player"))
+        if (!inputCopy.Contains("box"))
         {
             Debug.Log("variable name does not exist");
 
@@ -670,7 +670,7 @@ public class LevelFour : MonoBehaviour
             dismissErrorButton.GetComponent<Button>().enabled = true;
             dissmissErrorButtonText.GetComponent<Text>().enabled = true;
 
-            errorMessage.text = "The variable 'player' is missing.";
+            errorMessage.text = "The variable 'box' is missing.";
         }
         else if (inputCopy.Substring(inputCopy.Length - 1, 1) != "}")
         {
@@ -684,7 +684,7 @@ public class LevelFour : MonoBehaviour
 
             errorMessage.text = "Are you missing a curly bracket?";
         }
-        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\-\-\;)*\s*}") == false))       
+        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\-\-\;)*\s*}") == false))       
         {
             //show error/hint box
             errorBox.GetComponent<MeshRenderer>().enabled = true;
@@ -698,7 +698,7 @@ public class LevelFour : MonoBehaviour
         }
 
         //Check if for loop if statement matches: moving platform going down
-        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\+\+\;)*\s*}"))    //match regex player.x--;
+        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\+\+\;)*\s*}"))    //match regex box.x--;
         {
             Debug.Log("moving left");
             //Find the object name in the string

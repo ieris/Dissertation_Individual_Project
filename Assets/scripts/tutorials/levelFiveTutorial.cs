@@ -179,7 +179,7 @@ public class levelFiveTutorial : MonoBehaviour
         tutorialMessage.GetComponent<Text>().enabled = true;
         dismissTutorialButton.GetComponent<Image>().enabled = true;
         dismissTutorialButtonText.GetComponent<Text>().enabled = true;
-        tutorialMessage.text = "We need check when the 'movingPlatform' is next to 'platformOne'. To get the correct x coordinate, we add the x and width of the 'movingPlatform'. When it matches 'platformOne' x coordinate, the player will begin to move.";
+        tutorialMessage.text = "We need check when the 'movingPlatform' is next to 'platformOne'. To get the correct x coordinate, we add the x and width of the 'movingPlatform'. When it matches 'platformOne' x coordinate, the box will begin to move.";
         previousButton.GetComponent<Image>().enabled = true;
     }
 
@@ -224,7 +224,7 @@ public class levelFiveTutorial : MonoBehaviour
         tutorialMessage.GetComponent<Text>().enabled = true;
         dismissTutorialButton.GetComponent<Image>().enabled = true;
         dismissTutorialButtonText.GetComponent<Text>().enabled = true;
-        tutorialMessage.text = "Try it out:\n\nif(movingPlatform.x + movingPlatform.width == platformOne.x)\n{\n\tfor(int i = 0; i < 2; i++)\n\t{\n\t\tplayer.x++;\n\t}\n}";
+        tutorialMessage.text = "Try it out:\n\nif(movingPlatform.x + movingPlatform.width == platformOne.x)\n{\n\tfor(int i = 0; i < 2; i++)\n\t{\n\t\tbox.x++;\n\t}\n}";
 
         tutorialBox.transform.localScale = new Vector3(0.98f, 1, -0.68f);
         tutorialBox.transform.position = new Vector3(-4.37f, 12.86f, -1);
@@ -276,7 +276,7 @@ public class levelFiveTutorial : MonoBehaviour
         tutorialMessage.GetComponent<Text>().enabled = true;
         dismissTutorialButton.GetComponent<Image>().enabled = true;
         dismissTutorialButtonText.GetComponent<Text>().enabled = true;
-        tutorialMessage.text = "We need to move about 3 steps. So lets use this code:\nfor(int i = 0; i < 2; i++)\n{\n\tplayer.x++;\n}";
+        tutorialMessage.text = "We need to move about 3 steps. So lets use this code:\nfor(int i = 0; i < 2; i++)\n{\n\tbox.x++;\n}";
     }
 
     public void hideTutorial()

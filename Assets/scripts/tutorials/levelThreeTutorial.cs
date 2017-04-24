@@ -100,7 +100,7 @@ public class levelThreeTutorial : MonoBehaviour
         tutorialMessage.GetComponent<Text>().enabled = true;
         dismissTutorialButton.GetComponent<Image>().enabled = true;
         dismissTutorialButtonText.GetComponent<Text>().enabled = true;
-        tutorialMessage.text = "We need to move the player by 9 units so let's put 'i < 8' inside the for loop like so:\n\nfor(int i = 0; i < 8; i++)\n{\n\tplayer.x++;\n}";
+        tutorialMessage.text = "We need to move the box by 9 units so let's put 'i < 8' inside the for loop like so:\n\nfor(int i = 0; i < 8; i++)\n{\n\tbox.x++;\n}";
     }
 
     public void hideTutorial()

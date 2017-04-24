@@ -80,7 +80,7 @@ public class finalLevelTutorial : MonoBehaviour {
         tutorialMessage.GetComponent<Text>().enabled = true;
         dismissTutorialButton.GetComponent<Image>().enabled = true;
         dismissTutorialButtonText.GetComponent<Text>().enabled = true;
-        tutorialMessage.text = "We can check when 'platformOne' is at the same height as 'platformTwo'. When they match, we just need to walk off like so:\n\nif(platformOne.y == platformTwo.y)\n{\n\tfor(int i = 0; i < 2; i++)\n\t{\n\t\tplayer.x++;\n\t}\n}";
+        tutorialMessage.text = "We can check when 'platformOne' is at the same height as 'platformTwo'. When they match, we just need to walk off like so:\n\nif(platformOne.y == platformTwo.y)\n{\n\tfor(int i = 0; i < 2; i++)\n\t{\n\t\tbox.x++;\n\t}\n}";
     }
 
     public void taskTwo()
@@ -96,7 +96,7 @@ public class finalLevelTutorial : MonoBehaviour {
         tutorialMessage.GetComponent<Text>().enabled = true;
         dismissTutorialButton.GetComponent<Image>().enabled = true;
         dismissTutorialButtonText.GetComponent<Text>().enabled = true;
-        tutorialMessage.text = "We can repeat the same process using 'platformTwo' and 'platformThree':if(platformTwo.y == platformThree.y)\n{\n\tfor(int i = 0; i < 2; i++)\n\t{\n\t\tplayer.x++;\n\t}\n}";
+        tutorialMessage.text = "We can repeat the same process using 'platformTwo' and 'platformThree':if(platformTwo.y == platformThree.y)\n{\n\tfor(int i = 0; i < 2; i++)\n\t{\n\t\tbox.x++;\n\t}\n}";
     }
 
     public void taskThree()
@@ -114,7 +114,7 @@ public class finalLevelTutorial : MonoBehaviour {
         tutorialMessage.GetComponent<Text>().enabled = true;
         dismissTutorialButton.GetComponent<Image>().enabled = true;
         dismissTutorialButtonText.GetComponent<Text>().enabled = true;
-        tutorialMessage.text = "Now all that's left is to get to the exit:\n\nfor(int i = 0; i < 3; i++)\n{\n\tplayer.x++;\n}";
+        tutorialMessage.text = "Now all that's left is to get to the exit:\n\nfor(int i = 0; i < 3; i++)\n{\n\tbox.x++;\n}";
     }
 
     public void hideTutorial()

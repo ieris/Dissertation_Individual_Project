@@ -381,7 +381,7 @@ public class FinalLevel : MonoBehaviour
 
             errorMessage.text = "The variable type 'platformTwo' is missing.";
         }
-        else if (inputCopy.Contains("player") == false)
+        else if (inputCopy.Contains("box") == false)
         {
             Debug.Log("variable name does not exist");
 
@@ -394,7 +394,7 @@ public class FinalLevel : MonoBehaviour
             dismissErrorButton.GetComponent<Button>().enabled = true;
             dissmissErrorButtonText.GetComponent<Text>().enabled = true;
 
-            errorMessage.text = "The variable type 'player' is missing.";
+            errorMessage.text = "The variable type 'box' is missing.";
         }
         else if (inputCopy.Substring(inputCopy.Length - 1, 1) != "}")
         {
@@ -555,7 +555,7 @@ public class FinalLevel : MonoBehaviour
 
             errorMessage.text = "The variable type 'platformThree' is missing.";
         }
-        else if (inputCopy.Contains("player") == false)
+        else if (inputCopy.Contains("box") == false)
         {
             Debug.Log("variable name does not exist");
 
@@ -568,7 +568,7 @@ public class FinalLevel : MonoBehaviour
             dismissErrorButton.GetComponent<Button>().enabled = true;
             dissmissErrorButtonText.GetComponent<Text>().enabled = true;
 
-            errorMessage.text = "The variable type 'player' is missing.";
+            errorMessage.text = "The variable type 'box' is missing.";
         }
         else if (inputCopy.Substring(inputCopy.Length - 1, 1) != "}")
         {
@@ -698,7 +698,7 @@ public class FinalLevel : MonoBehaviour
 
             errorMessage.text = "The function is unfinished.";
         }
-        else if (inputCopy.Contains("player") == false)
+        else if (inputCopy.Contains("box") == false)
         {
             Debug.Log("variable name does not exist");
 
@@ -711,7 +711,7 @@ public class FinalLevel : MonoBehaviour
             dismissErrorButton.GetComponent<Button>().enabled = true;
             dissmissErrorButtonText.GetComponent<Text>().enabled = true;
 
-            errorMessage.text = "The variable type 'player' is missing.";
+            errorMessage.text = "The variable type 'box' is missing.";
         }
         else if (inputCopy.Substring(inputCopy.Length - 1, 1) != "}")
         {
@@ -726,7 +726,7 @@ public class FinalLevel : MonoBehaviour
 
             errorMessage.text = "Are you missing a curly bracket?";
         }
-        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\+\+\;)*\s*}") == false))
+        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\+\+\;)*\s*}") == false))
         {
             //show error/hint box
             tutorial.hideTutorial();
@@ -741,9 +741,9 @@ public class FinalLevel : MonoBehaviour
         }
 
         //Check if moving player using the if statement
-        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(player\.([x])\+\+\;)*\s*}"))    //match regex if(platformOne.y==platformTwo.y){for(inti=0;i<2;i++){player.x++;}}
+        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\+\+\;)*\s*}"))    //match regex if(platformOne.y==platformTwo.y){for(inti=0;i<2;i++){box.x++;}}
         {
-            Debug.Log("Move player if statement! :D");
+            Debug.Log("Move box if statement! :D");
             //If statement object
             int objectNamePos = inputCopy.IndexOf("(");
             int dotPos = inputCopy.IndexOf(".");
