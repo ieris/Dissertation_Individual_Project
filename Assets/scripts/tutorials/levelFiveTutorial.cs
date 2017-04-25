@@ -280,7 +280,7 @@ public class levelFiveTutorial : MonoBehaviour
         tutorialMessage.GetComponent<Text>().enabled = true;
         dismissTutorialButton.GetComponent<Image>().enabled = true;
         dismissTutorialButtonText.GetComponent<Text>().enabled = true;
-        tutorialMessage.text = "We need to move about 3 steps. So lets use this code:\nfor(int i = 0; i < 2; i++)\n{\n\tbox.x++;\n}";
+        tutorialMessage.text = "We need to move about 2 steps. So lets use this code:\nfor(int i = 0; i < 1; i++)\n{\n\tbox.x++;\n}";
     }
 
     public void hideTutorial()

@@ -167,7 +167,7 @@ public class FinalLevel : MonoBehaviour
                     Debug.Log(player.transform.position);
 
                     playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
-                    loopLength = "0";
+                    //loopLength = "0";
 
                     partOneDone = true;
                     Debug.Log("part one done is: " + partOneDone);
@@ -209,7 +209,7 @@ public class FinalLevel : MonoBehaviour
                     Debug.Log(player.transform.position);
 
                     playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
-                    loopLength = "0";
+                    //loopLength = "0";
 
                     //Destroy(player.GetComponent<Rigidbody>());
                     //movingPlayerRight2 = false;
@@ -240,19 +240,21 @@ public class FinalLevel : MonoBehaviour
             Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
             if (player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
+                movingPlayerRight3 = false;
                 input.GetComponent<InputField>().interactable = true;
                 //player.AddComponent<Rigidbody>();
                 player.transform.position = new Vector3(playerPos.x + (Convert.ToInt32(loopLength) + 1), player.transform.position.y, 0);
                 Debug.Log(player.transform.position);
 
                 playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
-                loopLength = "0";
+                //loopLength = "0";
 
-                inputEntered = false;
-                partThreeDone = true;
-                //movingPlayerRight = false;
-                tutorial.hideTutorial();
-                movingPlayerRightIfStatement = false;
+                if (player.transform.position.x >= 4f)
+                {
+                    partThreeDone = true;                    
+                    tutorial.hideTutorial();
+                    movingPlayerRight3 = false;
+                }
                 //movingPlayerRightIfStatement2 = false;
             }
         }        
@@ -285,7 +287,7 @@ public class FinalLevel : MonoBehaviour
         {
             movePlayerPartThree();
         }
-        if (partThreeDone && runClicked)
+        if (partThreeDone)
         {
             Debug.Log("GAME OVER");
         }
@@ -737,7 +739,7 @@ public class FinalLevel : MonoBehaviour
 
             errorMessage.text = "Are you missing a curly bracket?";
         }
-        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\+\+\;)*\s*}") == false))
+        else if ((Regex.IsMatch(inputCopy, @"^(?!{\S)for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\+\+\;)*\s*}") == false))
         {
             //show error/hint box
             tutorial.hideTutorial();
@@ -752,7 +754,7 @@ public class FinalLevel : MonoBehaviour
         }
 
         //Check if moving player using the if statement
-        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\+\+\;)*\s*}"))    //match regex if(platformOne.y==platformTwo.y){for(inti=0;i<2;i++){box.x++;}}
+        if (Regex.IsMatch(inputCopy, @"^(?!{\S)for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\+\+\;)*\s*}"))    //match regex if(platformOne.y==platformTwo.y){for(inti=0;i<2;i++){box.x++;}}
         {
             Debug.Log("Move box if statement! :D");
             //If statement object

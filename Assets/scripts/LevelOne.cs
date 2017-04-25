@@ -326,7 +326,7 @@ public class LevelOne : MonoBehaviour
             dismissErrorButton.GetComponent<Button>().enabled = true;
             dissmissErrorButtonText.GetComponent<Text>().enabled = true;
 
-            errorMessage.text = "Variable name does not exist.";
+            errorMessage.text = "The 'box' variable is missing.";
         }
         else if (inputCopy.Substring(inputCopy.Length - 1, 1) != ";")
         {

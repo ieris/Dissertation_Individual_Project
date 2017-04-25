@@ -435,7 +435,7 @@ public class LevelFive : MonoBehaviour
 
             errorMessage.text = "Are you missing a curly bracket?";
         }
-        else if ((Regex.IsMatch(inputCopy, @"if\((movingPlatform).[x][+]\1.width==(platformOne)+.x\){for\(int[\w]=0;i<\d;i\+\+\){(player)+.x\+\+;}}") == false))
+        else if ((Regex.IsMatch(inputCopy, @"if\((movingPlatform).[x][+]\1.width==(platformOne)+.x\){for\(int[\w]=0;i<\d;i\+\+\){(box)+.x\+\+;}}") == false))
         {
             //show error/hint box
             errorBox.GetComponent<MeshRenderer>().enabled = true;
@@ -474,7 +474,7 @@ public class LevelFive : MonoBehaviour
             }
         }*/
         //Check if for loop if statement matches: moving platform going up
-        if (Regex.IsMatch(inputCopy, @"if\((movingPlatform).[x][+]\1.width==(platformOne)+.x\){for\(int[\w]=0;i<\d;i\+\+\){(player)+.x\+\+;}}"))    //match regex if(movingPlatform.x+movingPlatform.width==platformOne.x){for(inti=0;i<2;i++){player.x++;}}
+        if (Regex.IsMatch(inputCopy, @"if\((movingPlatform).[x][+]\1.width==(platformOne)+.x\){for\(int[\w]=0;i<\d;i\+\+\){(box)+.x\+\+;}}"))    //match regex if(movingPlatform.x+movingPlatform.width==platformOne.x){for(inti=0;i<2;i++){player.x++;}}
         {
             Debug.Log("MATCHES!");
             //If statement object
@@ -567,7 +567,7 @@ public class LevelFive : MonoBehaviour
 
             errorMessage.text = "Are you missing a curly bracket?";
         }
-        else if ((Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\+\+\;)*\s*}") == false))
+        else if ((Regex.IsMatch(inputCopy, @"^(?!{\S)for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\+\+\;)*\s*}") == false))
         {
             //show error/hint box
             errorBox.GetComponent<MeshRenderer>().enabled = true;
@@ -580,7 +580,7 @@ public class LevelFive : MonoBehaviour
             errorMessage.text = "Expression does not match.";
         }
 
-        if (Regex.IsMatch(inputCopy, @"for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\+\+\;)*\s*}"))    //match regex if(movingPlatform.x+movingPlatform.width==platformOne.x){for(inti=0;i<2;i++){player.x++;}}
+        if (Regex.IsMatch(inputCopy, @"^(?!{\S)for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\+\+\;)*\s*}"))    //match regex if(movingPlatform.x+movingPlatform.width==platformOne.x){for(inti=0;i<2;i++){player.x++;}}
         {
             Debug.Log("moving right again");
             //Find the object name in the string

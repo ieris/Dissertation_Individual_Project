@@ -189,6 +189,17 @@ public class LevelTwo : MonoBehaviour
             {
                 player.transform.position += Vector3.left * 1f * Time.deltaTime;
                 //correctAnswerTimer = 2f;
+
+                if (player.transform.position.y <= 3.25f)
+                {
+                    movingPlayerLeft = false;
+                    partOneDone = true;
+                    tutorial.taskTwo();
+                    input.text = "";
+                    runClicked = false;
+                    reset();
+                    Debug.Log("Part Two done! :D");
+                }
             }
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
             Debug.Log(player.transform.position.x <= playerPos.x + (Convert.ToInt32(loopLength) + 1));
@@ -225,6 +236,17 @@ public class LevelTwo : MonoBehaviour
                 player.transform.position += Vector3.right * 1f * Time.deltaTime;
                 input.GetComponent<InputField>().interactable = false;
                 //correctAnswerTimer = 2f;
+
+                if (player.transform.position.y <= 3.25f)
+                {
+                    movingPlayerRight = false;
+                    partOneDone = true;
+                    tutorial.taskTwo();
+                    input.text = "";
+                    runClicked = false;
+                    reset();
+                    Debug.Log("Part Two done! :D");
+                }
             }
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
             Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
@@ -273,6 +295,16 @@ public class LevelTwo : MonoBehaviour
                     Application.LoadLevel("LevelThree");
                     Debug.Log("Part Two done! :D");
                 }
+                if (player.transform.position.y <= 3.25f)
+                {
+                    tutorial.taskTwo();
+                    input.text = "";
+                    runClicked = false;
+                    partTwoDone = false;
+                    movingPlayerRightWithSpeed = false;
+                    reset();
+                    Debug.Log("Part Two done! :D");
+                }
             }
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
             Debug.Log(player.transform.position.x >= playerPos.x + (Convert.ToInt32(loopLength) + 1));
@@ -290,11 +322,11 @@ public class LevelTwo : MonoBehaviour
                 if (player.transform.position.y <= 2f)
                 {
                     Debug.Log("ddddd Part one done! :D");
-                    partTwoDone = true;
+                    partTwoDone = false;
                     reset();
                     tutorial.hideTutorial();
                     tutorial.taskTwo();
-                    movingPlayerRight = false;
+                    movingPlayerRightWithSpeed = false;
                     Debug.Log("part one done is: " + partOneDone);
                 }
 
