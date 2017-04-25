@@ -121,7 +121,7 @@ public class finalLevelTutorial : MonoBehaviour
         tutorialMessage.GetComponent<Text>().enabled = true;
         dismissTutorialButton.GetComponent<Image>().enabled = true;
         dismissTutorialButtonText.GetComponent<Text>().enabled = true;
-        tutorialMessage.text = "Now all that's left is to get to the exit:\n\nfor(int i = 0; i < 3; i++)\n{\n\tbox.x++;\n}";
+        tutorialMessage.text = "Now all that's left is to get to the exit:\n\nfor(int i = 0; i < 4; i++)\n{\n\tbox.x++;\n}";
     }
 
     public void hideTutorial()

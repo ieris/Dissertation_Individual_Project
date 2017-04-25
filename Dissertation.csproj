@@ -81,6 +81,8 @@
     <Compile Include="Assets\scripts\LevelOne.cs" />
     <Compile Include="Assets\scripts\LevelThree.cs" />
     <Compile Include="Assets\scripts\LevelTwo.cs" />
+    <Compile Include="Assets\scripts\beginScript.cs" />
+    <Compile Include="Assets\scripts\exitScript.cs" />
     <Compile Include="Assets\scripts\levelTwo\FallingPlatformFour.cs" />
     <Compile Include="Assets\scripts\levelTwo\FallingPlatformOne.cs" />
     <Compile Include="Assets\scripts\levelTwo\FallingPlatformThree.cs" />

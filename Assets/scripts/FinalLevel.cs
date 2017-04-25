@@ -233,6 +233,16 @@ public class FinalLevel : MonoBehaviour
             if (player.transform.position.x < playerPos.x + (Convert.ToInt32(loopLength) + 1))
             {
                 player.transform.position += Vector3.right * 1f * Time.deltaTime;
+
+                if (player.transform.position.x >= 2.75f)
+                {
+                    Debug.Log("DONE");
+                    Application.LoadLevel("GameFinished");
+                    partThreeDone = true;
+                    tutorial.hideTutorial();
+                    movingPlayerRight3 = false;
+
+                }
                 //Destroy(player.GetComponent<Rigidbody>());
             }
             //Check if the player is in the correct position
@@ -249,11 +259,14 @@ public class FinalLevel : MonoBehaviour
                 playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
                 //loopLength = "0";
 
-                if (player.transform.position.x >= 4f)
+                if (player.transform.position.x >= 2.75f)
                 {
+                    Debug.Log("DONE");
+                    Application.LoadLevel("GameFinished");
                     partThreeDone = true;                    
                     tutorial.hideTutorial();
                     movingPlayerRight3 = false;
+                    
                 }
                 //movingPlayerRightIfStatement2 = false;
             }
