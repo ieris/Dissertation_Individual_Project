@@ -63,6 +63,10 @@ public class LevelFour : MonoBehaviour
     private bool runClicked = false;
     private int platformCounter = 0;
 
+    private bool platformOneMoved = false;
+    private bool platformTwoMoved = false;
+    private bool platformThreeMoved = false;
+
 
     // Use this for initialization
     void Start()
@@ -130,7 +134,7 @@ public class LevelFour : MonoBehaviour
                 correctAnswerDismissButtonText.GetComponent<Text>().enabled = false;
             }
         }
-        if(partTwoDone)
+        if (partTwoDone)
         {
             if (correctAnswerTimer >= 0f)
             {
@@ -198,16 +202,16 @@ public class LevelFour : MonoBehaviour
         {
             Debug.Log("moving moving moving");
             //Move up until for loop ends
-            if(movingPlatformPos.y + (Convert.ToInt32(intValue)) > 9)
+            if (movingPlatformPos.y + (Convert.ToInt32(intValue)) > 9)
             {
                 intValue = "2";
             }
             if (platformToMove.transform.position.y < movingPlatformPos.y + (Convert.ToInt32(intValue)))
             {
                 platformToMove.transform.position += Vector3.up * 1f * Time.deltaTime;
-                input.GetComponent<InputField>().interactable = false;                         
+                input.GetComponent<InputField>().interactable = false;
             }
-            
+
             //When coordinate is met, set it to that coordinate (ensuring it's an int)
             //Debug.Log(platformToMove.transform.position.y >= movingPlatformPos.y + (Convert.ToInt32(intValue)));
             if (platformToMove.transform.position.y >= movingPlatformPos.y + (Convert.ToInt32(intValue)))
@@ -225,7 +229,7 @@ public class LevelFour : MonoBehaviour
                 {
                     if (partTwoDone)
                     {
-                        if(tutorial.taskThreeAnswerActive == false)
+                        if (tutorial.taskThreeAnswerActive == false)
                         {
                             tutorial.taskThree();
                         }
@@ -240,7 +244,7 @@ public class LevelFour : MonoBehaviour
                 }
             }
 
-            if(platformCounter == 3)
+            if (platformCounter == 3)
             {
                 input.text = "";
                 partThreeDone = true;
@@ -306,7 +310,7 @@ public class LevelFour : MonoBehaviour
                 movingPlayerRight = false;
                 playerPos.x = playerPos.x + (Convert.ToInt32(loopLength) + 1);
                 loopLength = "0";
-                input.text = "";               
+                input.text = "";
             }
         }
     }
@@ -329,13 +333,13 @@ public class LevelFour : MonoBehaviour
         {
             movePlatform();
         }
-        if(!partThreeDone && partTwoDone && platformCounter < 3 && runClicked)
+        if (!partThreeDone && partTwoDone && platformCounter < 3 && runClicked)
         {
             Debug.Log("part two and counter < 3");
             movePlatform();
             //partTwoDone = false;
             //Debug.Log("Complete!");
-        }        
+        }
     }
 
     void onResetClick()
@@ -404,7 +408,7 @@ public class LevelFour : MonoBehaviour
 
             errorMessage.text = "The function is unfinished.";
         }
-        else if(inputCopy.Substring(0,4) != "void")
+        else if (inputCopy.Substring(0, 4) != "void")
         {
             Debug.Log("The function must start with 'void'");
 
@@ -493,12 +497,12 @@ public class LevelFour : MonoBehaviour
             partOneDone = true;
             //tutorial.taskTwo();           
             //if(tutorial.tas)
-            if(tutorial.taskThreeActive)
+            if (tutorial.taskThreeActive)
             {
                 Debug.Log("task three is active = task three");
                 tutorial.taskThree();
             }
-            else if(tutorial.taskThreeAnswerActive)
+            else if (tutorial.taskThreeAnswerActive)
             {
                 Debug.Log("task three answer is active = task three answer");
                 tutorial.taskThreeAnswer();
@@ -535,7 +539,7 @@ public class LevelFour : MonoBehaviour
             errorMessage.text = "Input field is empty.";
 
         }
-        else if(inputCopy.Length < 4)
+        else if (inputCopy.Length < 4)
         {
             Debug.Log("The function is unfinished");
 
@@ -609,27 +613,73 @@ public class LevelFour : MonoBehaviour
                     objectName = inputCopy.Substring(objectNamePos + 1, inputCopy.Length - 5 - objectNamePos);
                     Debug.Log("object to move is: " + objectName);
 
-                    if (inputCopy.Contains("platformOne") && platformCounter < 3 && platformOne.transform.position.y != 9)
+                    //Error checks
+                    if (platformOneMoved && inputCopy.Contains("platformOne"))
                     {
+                        //show error/hint box
+                        errorBox.GetComponent<MeshRenderer>().enabled = true;
+                        errorTitle.GetComponent<Text>().enabled = true;
+                        errorTitleUnderline.GetComponent<Text>().enabled = true;
+                        errorMessage.GetComponent<Text>().enabled = true;
+                        dismissErrorButton.GetComponent<Button>().enabled = true;
+                        dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+                        errorMessage.text = "The object 'platformOne' has already been moved.";
+                    }
+                    if (platformTwoMoved && inputCopy.Contains("platformTwo"))
+                    {
+                        //show error/hint box
+                        errorBox.GetComponent<MeshRenderer>().enabled = true;
+                        errorTitle.GetComponent<Text>().enabled = true;
+                        errorTitleUnderline.GetComponent<Text>().enabled = true;
+                        errorMessage.GetComponent<Text>().enabled = true;
+                        dismissErrorButton.GetComponent<Button>().enabled = true;
+                        dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+                        errorMessage.text = "The object 'platformTwo' has already been moved.";
+                    }
+                    if (platformThreeMoved && inputCopy.Contains("platformThree"))
+                    {
+                        //show error/hint box
+                        errorBox.GetComponent<MeshRenderer>().enabled = true;
+                        errorTitle.GetComponent<Text>().enabled = true;
+                        errorTitleUnderline.GetComponent<Text>().enabled = true;
+                        errorMessage.GetComponent<Text>().enabled = true;
+                        dismissErrorButton.GetComponent<Button>().enabled = true;
+                        dissmissErrorButtonText.GetComponent<Text>().enabled = true;
+
+                        errorMessage.text = "The object 'platformThree' has already been moved.";
+                    }
+                    if (platformOneMoved == false && inputCopy.Contains("platformOne") && platformCounter < 3 && platformOne.transform.position.y != 9)
+                    {
+                        Debug.Log("YES");
                         platformToMove = platformOne;
                         movingPlatformPos = platformToMove.transform.position;
+                        partTwoDone = true;
+                        correctAnswerTimer = 2f;
+                        platformOneMoved = true;
                         Debug.Log("platform to move eposition is 1: " + movingPlatformPos);
                     }
-                    else if (inputCopy.Contains("platformTwo") && platformCounter < 3 && platformTwo.transform.position.y != 9)
+                    else if (platformTwoMoved == false && inputCopy.Contains("platformTwo") && platformCounter < 3 && platformTwo.transform.position.y != 9)
                     {
                         platformToMove = platformTwo;
                         movingPlatformPos = platformToMove.transform.position;
                         Debug.Log("platform to move eposition is 2: " + movingPlatformPos);
+                        partTwoDone = true;
+                        correctAnswerTimer = 2f;
+                        platformTwoMoved = true;
+
                     }
-                    else if (inputCopy.Contains("platformThree") && platformCounter < 3 && platformThree.transform.position.y != 9)
+                    else if (platformThreeMoved == false && inputCopy.Contains("platformThree") && platformCounter < 3 && platformThree.transform.position.y != 9)
                     {
                         platformToMove = platformThree;
                         movingPlatformPos = platformToMove.transform.position;
+                        partTwoDone = true;
+                        correctAnswerTimer = 2f;
+                        platformThreeMoved = true;
                         Debug.Log("platform to move eposition is 3: " + movingPlatformPos);
                     }
 
-                    partTwoDone = true;
-                    correctAnswerTimer = 2f;
                     if (platformCounter >= 1)
                     {
                         if (tutorial.taskThreeAnswerActive == false)
@@ -695,7 +745,7 @@ public class LevelFour : MonoBehaviour
 
             errorMessage.text = "Are you missing a curly bracket?";
         }
-        else if ((Regex.IsMatch(inputCopy, @"^(?!{\S)for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\-\-\;)*\s*}") == false))       
+        else if ((Regex.IsMatch(inputCopy, @"^(?!{\S)for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\-\-\;)*\s*}") == false))
         {
             //show error/hint box
             errorBox.GetComponent<MeshRenderer>().enabled = true;
@@ -709,7 +759,7 @@ public class LevelFour : MonoBehaviour
         }
 
         //Check if for loop if statement matches: moving platform going down
-        if (Regex.IsMatch(inputCopy, @"^(?!{\S)for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*[1-9]\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\+\+\;)*\s*}"))    //match regex box.x--;
+        if (Regex.IsMatch(inputCopy, @"^(?!{\S)for\(int(\w*)\s?=\s?[0]\s?\;\s*\1\s*[<]?=?\s*\d{1,2}\s*\;((\s*\1([++])\4)|(\s*\1\s*=\s*\1\s*[+/*-]\s*\d{1,15}))\s*\)\s*{(box\.([x])\+\+\;)*\s*}"))    //match regex box.x--;
         {
             Debug.Log("moving left");
             //Find the object name in the string
@@ -720,7 +770,7 @@ public class LevelFour : MonoBehaviour
             //Find how long the loop will run for in the string
             int loopLengthPos = inputCopy.IndexOf("<");
             Debug.Log(loopLength);
-            loopLength = inputCopy.Substring(loopLengthPos + 1, 1);
+            loopLength = inputCopy.Substring(loopLengthPos + 1, 2);
             Debug.Log(loopLength);
 
             Debug.Log("object name: " + objectName);

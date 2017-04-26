@@ -89,7 +89,7 @@ public class levelFourTutorial : MonoBehaviour
                 tutorialMessage.GetComponent<Text>().enabled = true;*/
                 tutorialCounter1();
             }
-            if(tutorialCounter == 2)
+            if (tutorialCounter == 2)
             {
                 tutorialCounter2();
             }
@@ -100,7 +100,7 @@ public class levelFourTutorial : MonoBehaviour
                 tutorialCounter3();
             }
         }
-        if(taskThreeActive)
+        if (taskThreeActive)
         {
             fl.dismissError();
             taskThreeAnswer();
@@ -276,7 +276,7 @@ public class levelFourTutorial : MonoBehaviour
         tutorialMessage.GetComponent<Text>().enabled = true;
         dismissTutorialButton.GetComponent<Image>().enabled = true;
         dismissTutorialButtonText.GetComponent<Text>().enabled = true;
-        tutorialMessage.text = "We need to move the box by 9 units so let's put 'i < 8' inside the for loop like so:\n\nfor(int i = 0; i < 8; i++)\n{\n\tbox.x++;\n}";
+        tutorialMessage.text = "We need to move the box by 12 units so let's put 'i < 11' inside the for loop like so:\n\nfor(int i = 0; i < 11; i++)\n{\n\tbox.x++;\n}";
 
         tutorialMessage.fontSize = 22;
         tutorialMessage.GetComponent<RectTransform>().sizeDelta = new Vector2(260, 30);
@@ -356,7 +356,7 @@ public class levelFourTutorial : MonoBehaviour
         tutorialMessage.GetComponent<RectTransform>().anchoredPosition = new Vector3(-353, 200, 0);
         tutorialBoxThree.GetComponent<MeshRenderer>().enabled = true;
         tutorialCounterText.GetComponent<RectTransform>().anchoredPosition = new Vector3(-234.6f, -124.9f, 0);
-        nextButton.GetComponent<RectTransform>() .anchoredPosition = new Vector3(-287.3f, -120.86f, 0);
+        nextButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-287.3f, -120.86f, 0);
         previousButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-408.3f, -120.86f, 0);
 
         //tutorialBoxTwo.transform.localScale = new Vector3(0.7f, 1, -0.82f);
